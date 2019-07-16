@@ -176,7 +176,7 @@ contract N_Vote{
     }
 
     //处理提议
-    function process(uint256 proposalIndex) public ownShares{
+    function process(uint256 proposalIndex) public {
         //提议首先要存在
         require(proposalIndex<proposalQueue.length,"proposal does not exist");
         Proposal storage proposal = proposalQueue[proposalIndex];
