@@ -4,12 +4,12 @@ import "./FundPool.sol";
 /// @title 自治合约
 /// @author viko
 /// @notice 发起提议，投票，处理提议等
-contract N_Vote{
+contract Vote{
     /// @notice 合约的拥有者
     address owner;
 
     /// @notice 与此合约绑定的资金池的合约
-    N_FundPool fundPool;
+    FundPool fundPool;
 
     /// @notice 一个提议有14天的投票窗口期
     uint votingPeriodLength = 14 days;
@@ -188,7 +188,7 @@ contract N_Vote{
         _;
     }
 
-    constructor(address _owner,N_FundPool _fundPool) public{
+    constructor(address _owner,FundPool _fundPool) public{
         owner = _owner;
         fundPool = _fundPool;
     }
@@ -521,7 +521,8 @@ contract N_Vote{
         if(proposal.approveVotes>proposal.refuseVotes){
             proposal.pass = true;
             //处理要执行的脚本
-             (bool success,bytes memory data) = proposal.execContract.call(proposal.execScript);
+             (bool success,) = proposal.execContract.call(proposal.execScript);
+             require(success, "call failed");
         }
         emit OnProcess(proposalIndex,2,proposal.pass);
     }
@@ -593,7 +594,8 @@ contract N_Vote{
         cur_clearingProposal.clearingList[msg.sender] += shares;
         cur_clearingProposal.totalShares += shares;
         //这里要告知fundpool合约需要锁定股东的股份
-        (bool success,bytes memory data) = address(fundPool).call(abi.encodeWithSignature("unsafe_lockFnd(address,uint256)",msg.sender,cur_clearingProposal.index));
+        (bool success,) = address(fundPool).call(abi.encodeWithSignature("unsafe_lockFnd(address,uint256)",msg.sender,cur_clearingProposal.index));
+        require(success, "call failed");
         emit OnVoteClearingProposal(cur_clearingProposal.index,msg.sender,shares);
     }
 
@@ -615,7 +617,8 @@ contract N_Vote{
             clearingValue[cur_clearingProposal.index] = value;
             totalClearingVlaue+=value;
             //去fundpool合约中算钱
-            (bool success,bytes memory data) = address(fundPool).call(abi.encodeWithSignature("unsafe_clearing(address,uint256)",cur_clearingProposal.totalShares,cur_clearingProposal.index));
+            (bool success,) = address(fundPool).call(abi.encodeWithSignature("unsafe_clearing(address,uint256)",cur_clearingProposal.totalShares,cur_clearingProposal.index));
+            require(success, "call failed");
         }
         //标示已经处理
         cur_clearingProposal.process = true;
@@ -648,7 +651,8 @@ contract N_Vote{
         require(clearingProposal.pass = false,"need proposal failed");
         require(now > clearingProposal.startTime + clearingVotingPeriodLehgth, "it's within the expiry date");
         require(cur_clearingProposal.process == false, "needs proposals have not been addressed");
-        (bool success,bytes memory data) =address(fundPool).call(abi.encodeWithSignature("unsafe_unLockFnd(address,uint256)",msg.sender,clearingProposalIndex));
+        (bool success,) =address(fundPool).call(abi.encodeWithSignature("unsafe_unLockFnd(address,uint256)",msg.sender,clearingProposalIndex));
+        require(success, "call failed");
         clearingProposal.clearingList[msg.sender] = 0;
     }
 
@@ -659,7 +663,10 @@ contract N_Vote{
         require(clearingProposal.pass = true,"need proposal pass");
         require(now > clearingProposal.startTime + clearingVotingPeriodLehgth, "it's within the expiry date");
         require(cur_clearingProposal.process == false, "needs proposals have not been addressed");
-        (bool success,bytes memory data) = address(fundPool).call(abi.encodeWithSignature("unsafe_getClearingValue(address,uint256)",msg.sender,clearingProposalIndex));
+        (bool success,) = address(fundPool).call(
+            abi.encodeWithSignature("unsafe_getClearingValue(address,uint256)",msg.sender,clearingProposalIndex)
+        );
+        require(success, "call failed");
         uint256 shares = clearingProposal.clearingList[msg.sender];
         uint256 totalShares = clearingProposal.totalShares;
         uint256 totalValue = clearingValue[clearingProposalIndex];

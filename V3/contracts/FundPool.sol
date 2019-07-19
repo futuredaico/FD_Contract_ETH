@@ -5,7 +5,7 @@ import "./Vote.sol";
 /// @author viko
 /// @notice 你可以进行股份的众筹，出售，购买，交易。
 /// @dev 最开始可以设置一个预期众筹目前和众筹时的股价，众筹期内购买的价格都是一样的。众筹如果未达标，原路返回所有的钱。如果达标了，开始根据购买曲线和出售曲线进行购买和出售操作。
-contract N_FundPool{
+contract FundPool{
     ///@notice 购买时的斜率
     uint256 public slope = 10**12;
 
@@ -49,7 +49,7 @@ contract N_FundPool{
     uint256 public totalSendToVote = 0;
 
     /// @notice 自治合约
-    N_Vote vote;
+    Vote vote;
 
     /// @notice 众筹期间募集的eth
     mapping (address=>uint256) public crowdFundingEth;
@@ -118,7 +118,7 @@ contract N_FundPool{
         slope = s;
         alpha = a;
         beta = b;
-        vote = new N_Vote(owner,this);
+        vote = new Vote(owner,this);
     }
 
     /// @notice 判断是不是合约的所有者

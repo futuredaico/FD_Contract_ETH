@@ -4,12 +4,12 @@ import "./FundPool.sol";
 /// @title 自治合约
 /// @author viko
 /// @notice 发起提议，投票，处理提议等
-contract N_Vote{
+contract Vote{
     /// @notice 合约的拥有者
     address owner;
 
     /// @notice 与此合约绑定的资金池的合约
-    N_FundPool fundPool;
+    FundPool fundPool;
 
     /// @notice 一个提议有14天的投票窗口期
     uint votingPeriodLength = 14 days;
@@ -150,7 +150,7 @@ contract N_Vote{
         _;
     }
 
-    constructor(address _owner,N_FundPool _fundPool) public{
+    constructor(address _owner,FundPool _fundPool) public{
         owner = _owner;
         fundPool = _fundPool;
     }
