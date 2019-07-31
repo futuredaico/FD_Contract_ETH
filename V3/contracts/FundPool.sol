@@ -7,22 +7,22 @@ import "./Vote.sol";
 /// @dev 最开始可以设置一个预期众筹目前和众筹时的股价，众筹期内购买的价格都是一样的。众筹如果未达标，原路返回所有的钱。如果达标了，开始根据购买曲线和出售曲线进行购买和出售操作。
 contract FundPool{
     ///@notice 购买时的斜率
-    uint256 public slope = 10**12;
+    uint256 public slope;
 
     /// @notice 投资者购买时所使用的分子，意味着7成进入储备，3成进入自治；
-    uint256 public alpha = 700;
+    uint256 public alpha;
 
     /// @notice 项目盈利时购买使用的分子
-    uint256 public beta = 800;
+    uint256 public beta;
 
     /// @notice 众筹时的每股价格
-    uint256 public crowdFundPrice = 1;
+    uint256 public crowdFundPrice;
 
-    /// @notice 众筹的天数 单位是天
-    uint256 public crowdFundDays = 30;
+    /// @notice 众筹的时间
+    uint256 public crowdFundDuringTime;
 
     /// @notice 众筹的目标
-    uint256 public crowdFundMoney = 10000;
+    uint256 public crowdFundMoney;
 
     /// @notice 众筹开始时间
     uint256 public crowdFundStartTime;
@@ -30,11 +30,11 @@ contract FundPool{
     /// @notice 是否处于众筹期间
     bool public during_crowdfunding = true;
 
-    /// @notice 项目名称
-    string public name;
-
     /// @notice fnd发行的总量
     uint256 public totalSupply = 0;
+
+    /// @notice fnd预发行数量
+    uint256 public preSupply;
 
     /// @notice 合约的拥有着
     address public owner;
@@ -43,19 +43,19 @@ contract FundPool{
     bool public started = false;
 
     /// @notice 当前储备池中的存款
-    uint256 public sellReserve = 0;
+    uint256 public sellReserve;
 
     /// @notice 发送给项目方的钱总数
-    uint256 public totalSendToVote = 0;
+    uint256 public totalSendToVote;
 
     /// @notice 自治合约
-    Vote vote;
+    Vote public vote;
 
     /// @notice 众筹期间募集的eth
     mapping (address=>uint256) public crowdFundingEth;
 
     /// @notice 记录每个地址拥有的fnd数量
-    mapping(address=>uint256) public balances;
+    mapping(address=>uint256) balances;
 
     /// @notice 记录每个地址拥有的锁定的fnd的数量
     mapping(uint256 => mapping(address=>uint256)) public lock_balances;
@@ -64,7 +64,7 @@ contract FundPool{
     mapping (uint256 => uint256) clearingValue;
 
     /// @notice 清退的fnd的数量
-    mapping (uint256 => uint256)  clearingTotalFnd;
+    mapping (uint256 => uint256) clearingTotalFnd;
 
     /* events */
     /// @notice 购买
@@ -101,24 +101,22 @@ contract FundPool{
     );
 
     /// @notice 构造函数
-    /// @param _name 项目的名称，d 众筹的天数，m 众筹的目标资金
-    constructor(string memory _name,uint256 d,uint256 m,uint256 s,uint256 a, uint256 b) public{
+    /// @param _duringTime 众筹的时间，_money 众筹的目标资金
+    constructor(uint256 _duringTime,uint256 _money,uint256 _slope,uint256 _alpha, uint256 _beta) public{
+        //projectFactoryAddress = _addr;
         owner = msg.sender;
-        require(bytes(_name).length > 0,"name cant be empty");
-        require(d > 0, "d need greater than 0");
-        require(m > 0, "m need greater than 0");
-        require(s > 0, "s need greater than 0");
-        require(a > 0, "a need greater than 0");
-        require(b > 0, "b need greater than 0");
-        name = _name;
-        crowdFundDays = d;
-        crowdFundMoney = m;
+        require(_duringTime > 0, "d need greater than 0");
+        require(_money > 0, "m need greater than 0");
+        require(_slope > 0, "s need greater than 0");
+        require(_alpha > 0, "a need greater than 0");
+        require(_beta > 0, "b need greater than 0");
+        crowdFundDuringTime = _duringTime;
+        crowdFundMoney = _money;
         crowdFundStartTime = now;
-        crowdFundPrice = sqrt(2 * m * 1000 / slope) / 2;
-        slope = s;
-        alpha = a;
-        beta = b;
-        vote = new Vote(owner,this);
+        slope = _slope;
+        alpha = _alpha;
+        beta = _beta;
+        crowdFundPrice = sqrt(2 * _money * 1000 / _slope) / 2 * _slope / 1000;
     }
 
     /// @notice 判断是不是合约的所有者
@@ -131,6 +129,12 @@ contract FundPool{
     modifier isStart(){
         require(started == true,"need start");
         _;
+    }
+
+    /// @notice 设置vote合约
+    function unsafe_setVote(Vote _vote) public{
+        require(address(vote) == address(0), "first init");
+        vote = _vote;
     }
 
     /// @notice 获取vote合约
@@ -149,6 +153,7 @@ contract FundPool{
         require(started == false,"cant start");
         balances[who] += amount;
         totalSupply += amount;
+        preSupply += amount;
         emit OnPreMint(who,amount);
     }
 
@@ -170,25 +175,24 @@ contract FundPool{
         beta = _beta;
     }
 
-    /// @notice 开根号的计算方法
-    /// @param x 要开根的数
-    /// @return 开根之后的数
-    function sqrt(uint256 x) private pure returns(uint256){
-        uint256 z = (x + 1) / 2;
-        uint256 y = x;
-        while(z < y){
-            y = z;
-            z = (x / z + z) / 2;
-        }
-        return y;
+    /// @notice  获取某个地址拥有的股份数量
+    function getBalance(address _addr) public view returns(uint256){
+        return balances[_addr];
+    }
+
+    /// @notice 管理员重新设置管理员  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// @param _addr 新的管理员
+    function reinstallOwner(address _addr)public returns(bool){ //isOwner(){
+        owner = _addr;
+        return true;
     }
 
     /// @notice 众筹失败，清退
     /// @dev 如果在众筹阶段，是不允许清退的
     function windingUp() public isStart() {
-        require(now - crowdFundStartTime > 30 days,"need beyond the corwdfunding period");
-        require(during_crowdfunding == true,"need corwdfunding");
         require(crowdFundingEth[msg.sender] > 0,"need has eth");
+        require(during_crowdfunding == true,"need corwdfunding");
+        require(now - crowdFundStartTime > crowdFundDuringTime, "need beyond the corwdfunding period");
         uint256 value = crowdFundingEth[msg.sender];
         msg.sender.transfer(value);
         crowdFundingEth[msg.sender] = 0;
@@ -201,52 +205,54 @@ contract FundPool{
         uint256 invest = msg.value;
         require(invest > 0,"value need more than 0");
         require(during_crowdfunding == true,"need corwdfunding");
-        uint256 all = invest * 1000 + sellReserve;
+        require(now - crowdFundStartTime <= crowdFundDuringTime,"need in the corwdfunding period");
+        uint256 all = invest * 1000 + sellReserve + totalSendToVote;
         if(all < crowdFundMoney * 1000){//如果没有达到众筹要求
             uint256 fndAmount = invest / crowdFundPrice;
             balances[msg.sender] += fndAmount;
             totalSupply += fndAmount;
-            sellReserve += invest * 1000;
+            sellReserve += alpha * invest;
+            //发给项目池用作发展的钱
+            totalSendToVote += (1000 - alpha) * invest;
         }
         else if(all == crowdFundMoney * 1000){//如果正好达到众筹要求
             during_crowdfunding = false;
             uint256 fndAmount = invest / crowdFundPrice;
             balances[msg.sender] += fndAmount;
             totalSupply += fndAmount;
-            sellReserve += invest * 1000;
-            address(vote).transfer(sellReserve);
-            totalSendToVote = sellReserve;
-            sellReserve = 0;
+            sellReserve += invest * alpha;
+            totalSendToVote += (1000 - alpha) * invest;
+            address(vote).transfer(totalSendToVote / 1000);
         }
         else if(needBack){//如果超出了众筹要求且超出部分要求退回
             during_crowdfunding = false;
-            uint256 needValue = crowdFundMoney * 1000 - sellReserve;
+            uint256 needValue = crowdFundMoney - (sellReserve + totalSendToVote) / 1000;
             uint256 fndAmount = needValue / crowdFundPrice;
             balances[msg.sender] += fndAmount;
             totalSupply += fndAmount;
             msg.sender.transfer(invest - needValue);
-            sellReserve += needValue * 1000;
-            address(vote).transfer(sellReserve);
-            totalSendToVote = sellReserve;
-            sellReserve = 0;
+            sellReserve += needValue * alpha;
+            totalSendToVote += (1000 - alpha) * needValue;
+            address(vote).transfer(totalSendToVote / 1000);
         }
         else{//超出了众筹要求，超出部分不需要退回，继续走曲线购买
             during_crowdfunding = false;
-            uint256 needValue = crowdFundMoney - sellReserve;
+            uint256 needValue = crowdFundMoney - (sellReserve + totalSendToVote) / 1000;
             uint256 fndAmount = needValue / crowdFundPrice;
-            fndAmount += sqrt(2 * (invest - needValue) * 1000 / slope + totalSupply * totalSupply) - totalSupply;
-            balances[msg.sender] += fndAmount;
             totalSupply += fndAmount;
-            uint256 sendToVote = (1000 - alpha) * (invest - needValue);
-            address(vote).transfer(sendToVote);
-            totalSendToVote += sendToVote;
-            sellReserve += (invest - sendToVote) * 1000;
+            uint256 fndAmount2 = sqrt(2 * (invest - needValue) * 1000 / slope + totalSupply * totalSupply) - totalSupply;
+            totalSupply += fndAmount2;
+            balances[msg.sender] = balances[msg.sender] + fndAmount + fndAmount2;
+            sellReserve += invest * alpha;
+            totalSendToVote += (1000 - alpha) * invest;
+            address(vote).transfer(totalSendToVote / 1000);
         }
     }
 
     /// @notice 投资者购买
-    function buy() public payable isStart() {
+    function buy() public payable isStart(){
         require(msg.value > 0,"value need more than 0");
+        require(during_crowdfunding == false,"need not during crowdfunding");
         uint256 invest = msg.value;
         uint256 fndAmount = sqrt(2 * invest * 1000 / slope + totalSupply * totalSupply) - totalSupply;
         balances[msg.sender] += fndAmount;
@@ -254,22 +260,10 @@ contract FundPool{
         //存在本合约储备池里的钱
         sellReserve += alpha * invest;
         //发给项目池用作发展的钱
-        uint256 sendToVote = (1000-alpha) * invest;
+        uint256 sendToVote = (1000 - alpha) * invest;
         totalSendToVote += sendToVote;
         sendToVote /= 1000;
-        if(during_crowdfunding == false){//如果不在众筹期了，转部分钱给vote
-            address(vote).transfer(sendToVote);
-        }
-        else if(totalSendToVote+sellReserve>=crowdFundMoney * 1000){
-            require(now - crowdFundStartTime <= 30 days,"Beyond the during_crowdfunding period");
-            during_crowdfunding = false;
-            address(vote).transfer(totalSendToVote/1000);
-        }
-        else{
-            crowdFundingEth[msg.sender] += msg.value;
-            require(now - crowdFundStartTime <= 30 days,"Beyond the during_crowdfunding period");
-        }
-
+        address(vote).transfer(sendToVote);
         emit OnBuy(msg.sender,msg.value,fndAmount);
     }
 
@@ -361,5 +355,21 @@ contract FundPool{
         uint256 fndAmount = lock_balances[clearingProposalIndex][who];
         uint256 value = fndAmount * clearingValue[clearingProposalIndex] / clearingTotalFnd[clearingProposalIndex] / 1000;
         address(who).transfer(value);
+    }
+
+    /// @notice 开根号的计算方法
+    /// @param x 要开根的数
+    /// @return 开根之后的数
+    function sqrt(uint256 x) private pure returns(uint256){
+        uint256 z = (x + 1) / 2;
+        uint256 y = x;
+        while(z < y){
+            y = z;
+            z = (x / z + z) / 2;
+        }
+        return y;
+    }
+
+    function() external payable{
     }
 }

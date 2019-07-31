@@ -8,9 +8,6 @@ contract Vote{
     /// @notice 合约的拥有者
     address owner;
 
-    /// @notice 与此合约绑定的资金池的合约
-    FundPool fundPool;
-
     /// @notice 一个提议有14天的投票窗口期
     uint votingPeriodLength = 14 days;
 
@@ -31,6 +28,12 @@ contract Vote{
 
     /// @notice 所有清退的退款总额
     uint256 totalClearingVlaue;
+
+    /// @notice 与此合约绑定的资金池的合约
+    FundPool public fundPool;
+
+    /// @notice 管理合约地址
+    //address public projectFactoryAddress;
 
     /// @notice 当前的清算提议  同时期应该只允许一个清算提议
     ClearingProposal public cur_clearingProposal;
@@ -183,13 +186,30 @@ contract Vote{
         bool pass
     );
 
+    event OnTest(address u);
+
+    /// @notice 判断是不是合约的所有者
+    modifier isOwner() {
+        require(owner == msg.sender, "limited authority");
+        _;
+    }
+
     modifier ownShares() {
         require(getSharesOf(msg.sender)>0, "need has shares");
         _;
     }
 
-    constructor(address _owner,FundPool _fundPool) public{
-        owner = _owner;
+    constructor() public{
+        owner = msg.sender;
+    }
+
+    function getBalance() public view returns(uint256){
+        return address(this).balance;
+    }
+
+    /// @notice 设置vote合约
+    function unsafe_setFundPool(FundPool _fundPool) public{
+        require(address(fundPool) == address(0),"first init");
         fundPool = _fundPool;
     }
 
@@ -255,12 +275,11 @@ contract Vote{
     /// @param _address 需要查询的地址
     function getSharesOf(address _address)
     public
-    view
     returns(uint256){
         address who = _address;
         if(who == address(0))
             who = msg.sender;
-        return fundPool.balances(who);
+        return fundPool.getBalance(who);
     }
 
     /// @notice 申请提议
@@ -433,7 +452,7 @@ contract Vote{
         msg.sender.transfer(canGetMoney);
         emit OnGetMoney(proposalIndex,canGetMoney, proposal.tap.totalMoney,now);
     }
-
+    /*
     /// @notice 发起通用提议
     /// @dev 任何股东都可以发起通过的提议，但是最好经过现在审核
     function applyCommonProposal(
@@ -525,43 +544,6 @@ contract Vote{
              require(success, "call failed");
         }
         emit OnProcess(proposalIndex,2,proposal.pass);
-    }
-
-    /// @notice 终止提议
-    /// @param proposalIndex 提议的序号
-    function abortCommonProposal(uint256 proposalIndex) public ownShares(){
-        //提议首先要存在
-        require(proposalIndex<commonProposalQueue.length,"proposal does not exist");
-        Proposal_Common storage proposal = commonProposalQueue[proposalIndex];
-        //提出终止的人必须是发起人
-        require(proposal.proposer == msg.sender,"sender should be proposer");
-        //必须还处于有效期内
-        require(now <= proposal.startTime + votingPeriodLength,"time out");
-        //没有被一票否决
-        require(proposal.oneTicketRefuse == false,"proposal has been oneTicketRefuse");
-        //没有被终止过
-        require(proposal.abort == false,"proposal has been aborted");
-
-        proposal.abort = true;
-        emit OnAbort(proposalIndex,2);
-    }
-
-    /// @notice 一票否决
-    /// @dev 只有合约管理者拥有此权限
-    /// @param proposalIndex 提议的序号
-    function oneTicketRefuseCommonProposal(uint256 proposalIndex) public ownShares() {
-        //只有管理员有一票否决权
-        require(owner == msg.sender,"sender should be owner");
-        //提议首先要存在
-        require(proposalIndex<commonProposalQueue.length,"proposal does not exist");
-        Proposal_Common storage proposal = commonProposalQueue[proposalIndex];
-        //没有被终止
-        require(proposal.abort == false,"proposal has been aborted");
-        //也没有被一票否决
-        require(proposal.oneTicketRefuse == false,"proposal has been oneTicketRefuse");
-
-        proposal.oneTicketRefuse = true;
-        emit OnOneTicketRefuse(proposalIndex,2);
     }
 
     /// @notice 发起清算提议
@@ -675,7 +657,7 @@ contract Vote{
         totalClearingVlaue -= value;
         clearingProposal.clearingList[msg.sender] = 0;
     }
-
+    */
     function() external payable{
     }
 }
