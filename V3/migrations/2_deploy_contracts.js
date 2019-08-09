@@ -1,11 +1,11 @@
 const ProjectFactory = artifacts.require("ProjectFactory");
-const FundPool = artifacts.require("FundPool");
-const Vote = artifacts.require("Vote");
+const TradeFundPool = artifacts.require("TradeFundPool");
+const GovernFundPool = artifacts.require("GovernFundPool");
 
 module.exports = function(deployer) {
     deployer.deploy(ProjectFactory);
-    deployer.deploy(FundPool,30*24*60*60,Math.pow(10,20).toString(),1000*Math.pow(10,9),300,800);
-    deployer.deploy(Vote);
+    deployer.deploy(TradeFundPool,30*24*60*60,Math.pow(10,20).toString(),1000*Math.pow(10,9),300,800);
+    deployer.deploy(GovernFundPool);
     /*
     .then(()=>{
         FundPool.unsafe_setVote(Vote.address);

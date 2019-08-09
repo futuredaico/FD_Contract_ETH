@@ -1,6 +1,6 @@
 pragma solidity >=0.4.22 <0.6.0;
-import "./FundPool.sol";
-import "./Vote.sol";
+import "./TradeFundPool.sol";
+import "./GovernFundPool.sol";
 
 /// @title 工厂合约
 /// @author viko
@@ -11,8 +11,8 @@ contract ProjectFactory{
         uint256 index;
         address creater;
         string projectName;
-        address fundPoolContract;
-        address voteContract;
+        address tradeFundPoolAddress;
+        address governFundPoolAddress;
     }
 
     address owner;
@@ -25,8 +25,8 @@ contract ProjectFactory{
         uint256 index,
         address creater,
         string  projectName,
-        address fundPoolAddress,
-        address voteAddress
+        address tradeFundPoolAddress,
+        address governFundPoolAddress
     );
 
     /// @notice 判断是不是合约的所有者
@@ -42,19 +42,19 @@ contract ProjectFactory{
     /// @notice 创建一个工程
     /// @dev 创建工程等于创建了两个合约，一个是vote合约，一个是fundpool合约。两个合约的hash用event的方式抛出。
     /// @param _name 需要传入项目的名称，_days 项目需要众筹的总耗时，_money 项目众筹的资金
-    function createProject(string memory _name,FundPool _fundpool,Vote _vote) public isOwner(){
+    function createProject(string memory _name,TradeFundPool _tradeFundpool,GovernFundPool _governFundPool) public isOwner(){
         Project memory project = Project({
             index:projectQueue.length,
             creater : msg.sender,
             projectName : _name,
-            fundPoolContract : address(_fundpool),
-            voteContract:address(_vote)
+            tradeFundPoolAddress : address(_tradeFundpool),
+            governFundPoolAddress:address(_governFundPool)
         });
         projectQueue.push(project);
         //耦合
-        _fundpool.unsafe_setVote(_vote);
-        _vote.unsafe_setFundPool(_fundpool);
-        emit OnCreate(project.index,project.creater,project.projectName,project.fundPoolContract,project.voteContract);
+        _tradeFundpool.unsafe_setGovernFundPool(_governFundPool);
+        _governFundPool.unsafe_setTradeFundPool(_tradeFundpool);
+        emit OnCreate(project.index,project.creater,project.projectName,project.tradeFundPoolAddress,project.governFundPoolAddress);
     }
 
     /// @notice 获取已经创立的项目数
@@ -70,15 +70,15 @@ contract ProjectFactory{
     returns(
         address creater,
         string memory name,
-        address fundPoolContract,
-        address voteContract
+        address tradeFundPoolAddress,
+        address governFundPoolAddress
         )
     {
         require(_index < projectQueue.length, "out of range");
         Project memory project = projectQueue[_index];
         creater = project.creater;
         name = project.projectName;
-        fundPoolContract = project.fundPoolContract;
-        voteContract = project.voteContract;
+        tradeFundPoolAddress = project.tradeFundPoolAddress;
+        governFundPoolAddress = project.governFundPoolAddress;
     }
 }

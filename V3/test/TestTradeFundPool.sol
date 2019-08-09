@@ -2,9 +2,9 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
-import "../contracts/FundPool.sol";
+import "../contracts/TradeFundPool.sol";
 
-contract TestFundPool {
+contract TestTradeFundPool {
     uint public initialBalance = 150 ether;
     event test (bool b);
 
@@ -48,25 +48,25 @@ contract TestFundPool {
 
     /// @notice 更新缓存的数据
     function refreshParams(string memory s) private{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
-        Vote voteIns = Vote(DeployedAddresses.Vote());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
+        GovernFundPool governFundPoolIns = GovernFundPool(DeployedAddresses.GovernFundPool());
         M memory m = M({
-        fundPoolCrowdFundMoney : fundPoolIns.crowdFundMoney(),
-        fundPoolCrowdPrice : fundPoolIns.crowdFundPrice(),
-        slope : fundPoolIns.slope(),
-        alpha : fundPoolIns.alpha(),
-        beta : fundPoolIns.beta(),
-        crowdFundDuringTime : fundPoolIns.crowdFundDuringTime(),
-        totalSupply : fundPoolIns.totalSupply(),
-        preSupply : fundPoolIns.preSupply(),
-        balance_fnd_this : fundPoolIns.getBalance(address(this)),
-        balance_fnd_origin : fundPoolIns.getBalance(address(tx.origin)),
+        fundPoolCrowdFundMoney : tradeFundPoolIns.crowdFundMoney(),
+        fundPoolCrowdPrice : tradeFundPoolIns.crowdFundPrice(),
+        slope : tradeFundPoolIns.slope(),
+        alpha : tradeFundPoolIns.alpha(),
+        beta : tradeFundPoolIns.beta(),
+        crowdFundDuringTime : tradeFundPoolIns.crowdFundDuringTime(),
+        totalSupply : tradeFundPoolIns.totalSupply(),
+        preSupply : tradeFundPoolIns.preSupply(),
+        balance_fnd_this : tradeFundPoolIns.getBalance(address(this)),
+        balance_fnd_origin : tradeFundPoolIns.getBalance(address(tx.origin)),
         balance_eth_this : address(this).balance,
-        balance_eth_vote : address(voteIns).balance,
-        balance_eth_fundPool : address(fundPoolIns).balance,
-        sellReserve : fundPoolIns.sellReserve(),
-        totalSendToVote : fundPoolIns.totalSendToVote(),
-        during_crowdfunding : fundPoolIns.during_crowdfunding()
+        balance_eth_vote : address(governFundPoolIns).balance,
+        balance_eth_fundPool : address(tradeFundPoolIns).balance,
+        sellReserve : tradeFundPoolIns.sellReserve(),
+        totalSendToVote : tradeFundPoolIns.totalSendToVote(),
+        during_crowdfunding : tradeFundPoolIns.during_crowdfunding()
         });
         map[s] = m;
     }
@@ -74,48 +74,48 @@ contract TestFundPool {
 
     /// @notice 出于权限问题，重新设置fundpool的owner。
     function testReinstallOwner() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
-        bool r = fundPoolIns.reinstallOwner(address(this));
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
+        bool r = tradeFundPoolIns.reinstallOwner(address(this));
         Assert.equal(r,true,"reinstall owner failed");
     }
 
     /// @notice 设置vote合约
     function testSetVote() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
-        Vote voteIns = Vote(DeployedAddresses.Vote());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
+        GovernFundPool GovernFundPoolIns = GovernFundPool(DeployedAddresses.GovernFundPool());
         bool r;
-        (r,) = address(fundPoolIns).call(abi.encodeWithSignature("unsafe_setVote(address)",address(voteIns)));
-        Assert.equal(r,true,"first set vote failed");
+        (r,) = address(tradeFundPoolIns).call(abi.encodeWithSignature("unsafe_setGovernFundPool(address)",address(GovernFundPoolIns)));
+        Assert.equal(r,true,"first set govern failed");
 
-        (r,) = address(fundPoolIns).call(abi.encodeWithSignature("unsafe_setVote(address)",address(voteIns)));
-        Assert.isFalse(r,"fundpool cant set vote again");
+        (r,) = address(tradeFundPoolIns).call(abi.encodeWithSignature("unsafe_setGovernFundPool(address)",address(GovernFundPoolIns)));
+        Assert.isFalse(r,"fundpool cant set govern again");
 
-        address voteAddr = fundPoolIns.getVoteContract();
-        Assert.equal(address(voteIns),voteAddr,"vote contract is wrong");
+        address voteAddr = tradeFundPoolIns.getGovernFundPoolAddress();
+        Assert.equal(address(GovernFundPoolIns),voteAddr,"govern contract is wrong");
     }
 
     /// @notice 设置斜率
     function testSetSlope() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
         uint256 _slope = 10 ** 12;
-        fundPoolIns.setSlope(_slope);
-        Assert.equal(fundPoolIns.slope(),_slope,"set slope failed");
+        tradeFundPoolIns.setSlope(_slope);
+        Assert.equal(tradeFundPoolIns.slope(),_slope,"set slope failed");
     }
 
     /// @notice 设置储备分钱的比例
     function testSetAlpha() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
         uint256 _alpha = 300;
-        fundPoolIns.setAlpha(_alpha);
-        Assert.equal(fundPoolIns.alpha(),_alpha,"set alpha failed");
+        tradeFundPoolIns.setAlpha(_alpha);
+        Assert.equal(tradeFundPoolIns.alpha(),_alpha,"set alpha failed");
     }
 
     /// @notice 设置回购储备分钱的比例
     function testSetBeta() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
         uint256 _beta = 800;
-        fundPoolIns.setBeta(_beta);
-        Assert.equal(fundPoolIns.beta(),_beta,"set beta failed");
+        tradeFundPoolIns.setBeta(_beta);
+        Assert.equal(tradeFundPoolIns.beta(),_beta,"set beta failed");
     }
 
     /// @notice 验证合约参数
@@ -132,48 +132,48 @@ contract TestFundPool {
 
     /// @notice 预发售股份
     function testPreMint() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
         bool r;
-        (r,) =address(fundPoolIns).call(abi.encodeWithSignature("preMint(address,uint256)",tx.origin,100));
+        (r,) =address(tradeFundPoolIns).call(abi.encodeWithSignature("preMint(address,uint256)",tx.origin,100));
         Assert.equal(r,true,"need true");
 
-        uint256 balance = fundPoolIns.getBalance(tx.origin);
+        uint256 balance = tradeFundPoolIns.getBalance(tx.origin);
         Assert.equal(balance,100,"fnd amount is wrong");
     }
 
     /// @notice 没有开始的时候 合约某些方法是禁止调用的
     function testSomeFuncWhenNoBeginning() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
         bool r;
-        (r,) = address(fundPoolIns).call.value(10000)(abi.encodeWithSignature("crowdfunding(bool)",false));
+        (r,) = address(tradeFundPoolIns).call.value(10000)(abi.encodeWithSignature("crowdfunding(bool)",false));
         Assert.isFalse(r,"need false");
 
-        (r,) = address(fundPoolIns).call(abi.encodeWithSignature("windingUp()"));
+        (r,) = address(tradeFundPoolIns).call(abi.encodeWithSignature("windingUp()"));
         Assert.isFalse(r,"need false");
 
-        (r,) = address(fundPoolIns).call.value(100000)(abi.encodeWithSignature("buy()"));
+        (r,) = address(tradeFundPoolIns).call.value(100000)(abi.encodeWithSignature("buy()"));
         Assert.isFalse(r,"need false");
 
-        (r,) = address(fundPoolIns).call(abi.encodeWithSignature("sell(uint256)",10));
+        (r,) = address(tradeFundPoolIns).call(abi.encodeWithSignature("sell(uint256)",10));
         Assert.isFalse(r,"need false");
 
-        (r,) = address(fundPoolIns).call(abi.encodeWithSignature("transfer(address,uint256)",address(fundPoolIns),10));
+        (r,) = address(tradeFundPoolIns).call(abi.encodeWithSignature("transfer(address,uint256)",address(tradeFundPoolIns),10));
         Assert.isFalse(r,"need false");
 
-        (r,) = address(fundPoolIns).call.value(100000)(abi.encodeWithSignature("revenue()"));
+        (r,) = address(tradeFundPoolIns).call.value(100000)(abi.encodeWithSignature("revenue()"));
         Assert.isFalse(r,"need false");
     }
 
     /// @notice 开始
     function testStart() public{
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
-        bool b = fundPoolIns.started();
+        bool b = tradeFundPoolIns.started();
         Assert.equal(b,false,"It shouldn't have started yet");
 
-        fundPoolIns.start();
+        tradeFundPoolIns.start();
 
-        b = fundPoolIns.started();
+        b = tradeFundPoolIns.started();
         Assert.equal(b,true,"It should have started yet");
     }
 
@@ -182,7 +182,7 @@ contract TestFundPool {
         ///先存50eth , 7 3分成的话  储备池15 自治池35
         uint256 value = 50 ether;
 
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //发送前参数情况
         refreshParams("c1_1");
@@ -192,7 +192,7 @@ contract TestFundPool {
         Assert.equal(m1.during_crowdfunding,true,"during_crowdfunding need true");
 
         //验证众筹后各个参数的情况
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",false));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",false));
         Assert.equal(r,true,"crowdfunding failed");
 
         //50eth可以购买到的fnd的数量  //223607
@@ -203,7 +203,7 @@ contract TestFundPool {
         M memory m2 = map["c1_2"];
 
         Assert.equal(m2.balance_eth_fundPool,value,"fundpool balance wrong"); //fund合约应该有50eth的余额
-        Assert.equal(m2.balance_eth_vote,0,"vote balance wrong");//vote合约内应该没有eth
+        Assert.equal(m2.balance_eth_vote,0,"govern balance wrong");//vote合约内应该没有eth
         Assert.equal(m2.sellReserve,value * 300,"sellReserve is wrong");//储备池记录的数额应该是15eth
         Assert.equal(m2.totalSendToVote,value * 700,"totalSendToVote is wrong");//自治池记录的数额应该是35eth
         Assert.equal(m2.balance_fnd_this,amount+m1.balance_fnd_this,"fnd amount is wrong");//验证fnd的数量对不对
@@ -219,7 +219,7 @@ contract TestFundPool {
     /// @notice 参与众筹 再加50eth 使目标刚好达成
     function _testCrowdfunding2() public payable{
         uint256 value = 50 ether;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //发送前参数情况
         refreshParams("c2_1");
@@ -229,7 +229,7 @@ contract TestFundPool {
         Assert.equal(m1.during_crowdfunding,true,"during_crowdfunding need true");
 
         //验证刚好达成目标的情况下，各个参数是否正常
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",false));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",false));
         Assert.equal(r,true,"crowdfunding failed");
 
         //发送后参数情况
@@ -241,7 +241,7 @@ contract TestFundPool {
 
         Assert.equal(m2.sellReserve,m1.fundPoolCrowdFundMoney * m1.alpha,"sellReserve is wrong");//储备合约中应该有30eth
         Assert.equal(m2.totalSendToVote,m1.fundPoolCrowdFundMoney * (1000 - m1.alpha),"totalSendToVote is wrong");//自治合约中应该有70eth
-        Assert.equal(m2.balance_eth_vote,70 ether,"vote balance wrong");//自治池中应该有70eth
+        Assert.equal(m2.balance_eth_vote,70 ether,"govern balance wrong");//自治池中应该有70eth
         Assert.equal(m2.balance_eth_fundPool,30 ether,"fundPool balance wrong");//储备池中应该有30eth
         Assert.equal(m2.balance_fnd_this,m1.balance_fnd_this+amount,"fnd amount is wrong");//验证该地址拥有的fnd的数量是否正确
         Assert.equal(m2.totalSupply,m1.totalSupply+amount,"totalSupply is wrong");
@@ -257,7 +257,7 @@ contract TestFundPool {
     function _testCrowdfunding3() public payable{
         uint256 value = 70 ether;
 
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //没有发送交易前合约的参数情况
         refreshParams("c3_1");
@@ -267,7 +267,7 @@ contract TestFundPool {
         Assert.equal(m1.during_crowdfunding,true,"during_crowdfunding need true");
 
         //验证刚好达成目标的情况下，各个参数是否正常
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",true));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",true));
         Assert.equal(r,true,"crowdfunding failed");
 
         //发送后参数情况
@@ -279,7 +279,7 @@ contract TestFundPool {
 
         Assert.equal(m2.sellReserve,m1.fundPoolCrowdFundMoney * m1.alpha,"sellReserve is wrong");//储备合约中应该有30eth
         Assert.equal(m2.totalSendToVote,m1.fundPoolCrowdFundMoney * (1000 - m1.alpha),"totalSendToVote is wrong");//自治合约中应该有70eth
-        Assert.equal(m2.balance_eth_vote,70 ether,"vote balance wrong");//自治池中应该有70eth
+        Assert.equal(m2.balance_eth_vote,70 ether,"govern balance wrong");//自治池中应该有70eth
         Assert.equal(m2.balance_eth_fundPool,30 ether,"fundPool balance wrong");//储备池中应该有30eth
         Assert.equal(m2.balance_fnd_this,m1.balance_fnd_this+amount,"fnd amount is wrong");//验证该地址拥有的fnd的数量是否正确
         Assert.equal(m2.totalSupply,m1.totalSupply+amount,"totalSupply is wrong");
@@ -294,7 +294,7 @@ contract TestFundPool {
     /// @notice 参与众筹 继50eth之后再加70eth 超过部分不要求退还
     function testCrowdfunding4() public payable{
         uint256 value = 70 ether;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //记录发交易之前的参数情况
         refreshParams("c4_1");
@@ -304,7 +304,7 @@ contract TestFundPool {
         Assert.equal(m1.during_crowdfunding,true,"during_crowdfunding need true");
 
         //验证各个参数是否正常
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",false));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("crowdfunding(bool)",false));
         Assert.equal(r,true,"crowdfunding failed");
 
         //70eth中50eth可以购买到的fnd的数量  //223607
@@ -326,7 +326,7 @@ contract TestFundPool {
 
         Assert.equal(m2.sellReserve,(value + 50 ether) * m1.alpha,"sellReserve is wrong");//储备合约中应该有36eth
         Assert.equal(m2.totalSendToVote,(value + 50 ether) * (1000 - m1.alpha),"totalSendToVote is wrong");//自治合约中应该有84eth
-        Assert.equal(m2.balance_eth_vote,(value + 50 ether) * (1000 - m1.alpha) / 1000,"vote balance wrong");//自治池中应该有84eth
+        Assert.equal(m2.balance_eth_vote,(value + 50 ether) * (1000 - m1.alpha) / 1000,"govern balance wrong");//自治池中应该有84eth
         Assert.equal(m2.balance_eth_fundPool,(value + 50 ether) * m1.alpha / 1000,"fundPool balance wrong");//储备池中应该有36eth
         Assert.equal(m2.balance_fnd_this,balance,"fnd amount is wrong");//验证该地址拥有的fnd的数量是否正确
         Assert.equal(m2.totalSupply,total,"totalSupply is wrong");
@@ -342,14 +342,14 @@ contract TestFundPool {
     /// @notice 此时众筹结束了 可以按照曲线正常购买  购买个0.5eth试试
     function testBuy() public payable{
         uint256 value = 0.5 ether;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //先记录合约当前的一些参数
         refreshParams("buy_1");
         M memory m1 = map["buy_1"];
 
         //买起来
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("buy()"));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("buy()"));
         Assert.equal(r,true,"buy failed");
 
         //事先预算 用value的值可以购买多少的fnd
@@ -363,7 +363,7 @@ contract TestFundPool {
         Assert.equal(m2.totalSupply,m1.totalSupply + _fndAmount,"totalSupply is wrong");//totalSupply
         Assert.equal(m2.sellReserve,m1.sellReserve + value * m1.alpha,"sellReserve is wrong "); //sellReserve
         Assert.equal(m2.totalSendToVote,m1.totalSendToVote + value * (1000 - m1.alpha),"sellReserve is wrong "); //sendtoVote
-        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote + value * (1000 - m1.alpha) / 1000,"balance of vote is wrong");
+        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote + value * (1000 - m1.alpha) / 1000,"balance of govern is wrong");
         Assert.equal(m2.balance_eth_fundPool,m1.balance_eth_fundPool + value * m1.alpha / 1000,"balance of fund is wrong");
 
         //用了0.5eth
@@ -373,14 +373,14 @@ contract TestFundPool {
     /// @notice 卖点fnd试试水
     function testSell() public payable{
         uint256 amount = 100;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //先记录合约当前的一些参数
         refreshParams("sell_1");
         M memory m1 = map["sell_1"];
 
         //卖
-        (bool r,) = address(fundPoolIns).call(abi.encodeWithSignature("sell(uint256)",amount));
+        (bool r,) = address(tradeFundPoolIns).call(abi.encodeWithSignature("sell(uint256)",amount));
         Assert.equal(r,true,"sell failed");
 
         Assert.equal(m1.sellReserve,36.15 ether * 1000,"sellReserve is wrong");
@@ -395,7 +395,7 @@ contract TestFundPool {
 
         Assert.equal(m2.balance_fnd_this,m1.balance_fnd_this - amount,"amount is wrong"); //拥有的fnd的数量应该减少了
         Assert.equal(m2.balance_eth_this,m1.balance_eth_this + value / 1000,"balance of this is wrong");//eth的数量增加了
-        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote,"balance of vote is wrong");//vote合约的钱没有涉及到 应该保持不变
+        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote,"balance of govern is wrong");//vote合约的钱没有涉及到 应该保持不变
         Assert.equal(m2.balance_eth_fundPool,m1.balance_eth_fundPool - value / 1000,"balance of fundPool is wrong");//fundpool合约内的钱应该减少了
         Assert.equal(m2.sellReserve,m1.sellReserve - value,"sellReserve is wrong");//存储池中的钱应该减少了
         Assert.equal(m2.totalSendToVote,m1.totalSendToVote,"sendToVote is wrong");//总体发给自治部分的钱应该没有变化
@@ -404,14 +404,14 @@ contract TestFundPool {
     /// @notice 再买一点试试
     function testBuy2() public payable{
         uint256 value = 0.125 ether;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //先记录合约当前的一些参数
         refreshParams("buy2_1");
         M memory m1 = map["buy2_1"];
 
         //买起来
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("buy()"));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("buy()"));
         Assert.equal(r,true,"buy failed");
 
         //事先预算 用value的值可以购买多少的fnd
@@ -426,7 +426,7 @@ contract TestFundPool {
         Assert.equal(m2.totalSupply,m1.totalSupply + _fndAmount,"totalSupply is wrong");//totalSupply
         Assert.equal(m2.sellReserve,m1.sellReserve + value * m1.alpha,"sellReserve is wrong "); //sellReserve
         Assert.equal(m2.totalSendToVote,m1.totalSendToVote + value * (1000 - m1.alpha),"sellReserve is wrong "); //sendtoVote
-        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote + value * (1000 - m1.alpha) / 1000,"balance of vote is wrong");
+        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote + value * (1000 - m1.alpha) / 1000,"balance of govern is wrong");
         Assert.equal(m2.balance_eth_fundPool,m1.balance_eth_fundPool + value * m1.alpha / 1000,"balance of fund is wrong");
 
         //用了0.5eth
@@ -436,14 +436,14 @@ contract TestFundPool {
     /// @notice 转让fnd
     function testTransfer() public{
         uint256 amount = 200;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //先记录合约当前的一些参数
         refreshParams("transfer_1");
         M memory m1 = map["transfer_1"];
 
         //转点钱出去
-        fundPoolIns.transfer(tx.origin,amount);
+        tradeFundPoolIns.transfer(tx.origin,amount);
 
         //发送交易之后合约的参数状况
         refreshParams("transfer_2");
@@ -456,14 +456,14 @@ contract TestFundPool {
     /// @notice 走利润回购接口购买fnd
     function testRevenue() public payable{
         uint256 value = 10 ether;
-        FundPool fundPoolIns = FundPool(DeployedAddresses.FundPool());
+        TradeFundPool tradeFundPoolIns = TradeFundPool(DeployedAddresses.TradeFundPool());
 
         //先记录合约当前的一些参数
         refreshParams("revenue_1");
         M memory m1 = map["revenue_1"];
 
         //买起来
-        (bool r,) = address(fundPoolIns).call.value(value)(abi.encodeWithSignature("revenue()"));
+        (bool r,) = address(tradeFundPoolIns).call.value(value)(abi.encodeWithSignature("revenue()"));
         Assert.equal(r,true,"buy failed");
 
         //发送交易之后合约的参数状况
@@ -477,7 +477,7 @@ contract TestFundPool {
         Assert.equal(m2.sellReserve,m1.sellReserve + value * m1.beta,"sellReserve is wrong");
         Assert.equal(m2.totalSendToVote,m1.totalSendToVote + value * (1000 - m1.beta),"totalSendToVote is wrong");
         Assert.equal(m2.balance_eth_fundPool,m1.balance_eth_fundPool + value * m1.beta / 1000,"balance of fund is wrong");
-        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote + value * (1000 - m1.beta) / 1000,"balance of vote is wrong");
+        Assert.equal(m2.balance_eth_vote,m1.balance_eth_vote + value * (1000 - m1.beta) / 1000,"balance of govern is wrong");
         Assert.equal(m2.totalSupply,m1.totalSupply + fndAmount,"totalSupply is wrong");
 
         Assert.equal(m2.balance_eth_fundPool + m2.balance_eth_this + m2.balance_eth_vote,150 ether,"eth lose");

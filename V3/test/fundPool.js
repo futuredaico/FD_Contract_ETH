@@ -1,17 +1,17 @@
 const ProjectFactory = artifacts.require("ProjectFactory");
-const FundPool = artifacts.require("FundPool");
-const Vote = artifacts.require("Vote");
+const TradeFundPool = artifacts.require("TradeFundPool");
+const VoteFundPool = artifacts.require("VoteFundPool");
 
-contract("FundPool Test",async(accounts)=>{
+contract("TradeFundPool Test",async(accounts)=>{
 
     it("should correct params",async ()=>{
-        let fundPoolIns = await FundPool.deployed();
-        let d = await fundPoolIns.crowdFundDuringTime();
-        let m = await fundPoolIns.crowdFundMoney();
-        let s = await fundPoolIns.slope();
-        let a = await fundPoolIns.alpha();
-        let b = await fundPoolIns.beta();
-        let p = await fundPoolIns.crowdFundPrice();
+        let tradeFundPoolIns = await TradeFundPool.deployed();
+        let d = await tradeFundPoolIns.crowdFundDuringTime();
+        let m = await tradeFundPoolIns.crowdFundMoney();
+        let s = await tradeFundPoolIns.slope();
+        let a = await tradeFundPoolIns.alpha();
+        let b = await tradeFundPoolIns.beta();
+        let p = await tradeFundPoolIns.crowdFundPrice();
         let _p = Math.sqrt(2 * m * 1000  / s );
         _p = parseInt(parseInt(_p) / 2) * s / 1000 ;
         console.log(p.toString());
@@ -25,51 +25,51 @@ contract("FundPool Test",async(accounts)=>{
     });
 
     it("should set vote correctly",async ()=>{
-        let fundPoolIns = await FundPool.deployed();
-        let voteIns = await Vote.deployed();
-        await fundPoolIns.unsafe_setVote(voteIns.address);
-        let address = await fundPoolIns.getVoteContract();
-        assert.equal(address,voteIns.address,"set vote failed");
+        let tradeFundPoolIns = await TradeFundPool.deployed();
+        let voteFundPoolIns = await VoteFundPool.deployed();
+        await tradeFundPoolIns.unsafe_setVote(voteFundPoolIns.address);
+        let address = await tradeFundPoolIns.getVoteContract();
+        assert.equal(address,voteFundPoolIns.address,"set vote failed");
     })
 
     it("should the game hasn't started yet", async ()=>{
-        let fundPoolIns = await FundPool.deployed();
-        let started = await fundPoolIns.started();
+        let tradeFundPoolIns = await TradeFundPool.deployed();
+        let started = await tradeFundPoolIns.started();
         assert.equal(started,false,"fund cant be start");
     });
 
     it("should start the game",async ()=>{
-        let fundPoolIns = await FundPool.deployed();
-        await fundPoolIns.start({from:accounts[0]});
-        let started = await fundPoolIns.started();
+        let tradeFundPoolIns = await TradeFundPool.deployed();
+        await tradeFundPoolIns.start({from:accounts[0]});
+        let started = await tradeFundPoolIns.started();
         assert.equal(started,true,"start failed");
     });
 
     it("should Crowdfunding 50 eth",async ()=>{
-        let fundPoolIns = await FundPool.deployed();
-        await fundPoolIns.crowdfunding(false,{value:50*Math.pow(10,18)});
-        let sellReserve = await fundPoolIns.sellReserve();
-        let totalSendToVote = await fundPoolIns.totalSendToVote();
+        let tradeFundPoolIns = await TradeFundPool.deployed();
+        await tradeFundPoolIns.crowdfunding(false,{value:50*Math.pow(10,18)});
+        let sellReserve = await tradeFundPoolIns.sellReserve();
+        let totalSendToVote = await tradeFundPoolIns.totalSendToVote();
         //console.log(sellReserve.toString());
         //console.log(totalSendToVote.toString());
-        let balance_fund = await fundPoolIns.getBalance();
+        let balance_fund = await tradeFundPoolIns.getBalance();
         console.log("balance_fund:"+balance_fund.toString());
-        assert.equal(balance_fund,50*Math.pow(10,18),"fundPoolIns balance wrong");
+        assert.equal(balance_fund,50*Math.pow(10,18),"tradeFundPoolIns balance wrong");
         assert.equal(sellReserve,15*1000*Math.pow(10,18),"sellReserve is worng");
         assert.equal(totalSendToVote,35*1000*Math.pow(10,18),"sellReserve is worng");
 
     });
 
     it("should Crowdfunding 50 eth",async ()=>{
-        let fundPoolIns = await FundPool.deployed();
-        let voteIns = await Vote.deployed();
-        await fundPoolIns.crowdfunding(false,{value:50*Math.pow(10,18)});
-        let sellReserve = await fundPoolIns.sellReserve();
-        let totalSendToVote = await fundPoolIns.totalSendToVote();
+        let tradeFundPoolIns = await TradeFundPool.deployed();
+        let voteFundPoolIns = await VoteFundPool.deployed();
+        await tradeFundPoolIns.crowdfunding(false,{value:50*Math.pow(10,18)});
+        let sellReserve = await tradeFundPoolIns.sellReserve();
+        let totalSendToVote = await tradeFundPoolIns.totalSendToVote();
         //console.log(sellReserve.toString());
         //console.log(totalSendToVote.toString());
-        let balance_fund = await fundPoolIns.getBalance();
-        let balance_vote = await voteIns.getBalance();
+        let balance_fund = await tradeFundPoolIns.getBalance();
+        let balance_vote = await voteFundPoolIns.getBalance();
         console.log("balance_fund:"+balance_fund.toString());
         console.log("balance_vote:"+balance_vote.toString());
         assert.equal(sellReserve,30*1000*Math.pow(10,18),"sellReserve is worng");

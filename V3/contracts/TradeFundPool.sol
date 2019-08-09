@@ -1,11 +1,11 @@
 pragma solidity >=0.4.22 <0.6.0;
-import "./Vote.sol";
+import "./GovernFundPool.sol";
 
 /// @title 资金池，用来接受eth并发行股份币
 /// @author viko
 /// @notice 你可以进行股份的众筹，出售，购买，交易。
 /// @dev 最开始可以设置一个预期众筹目前和众筹时的股价，众筹期内购买的价格都是一样的。众筹如果未达标，原路返回所有的钱。如果达标了，开始根据购买曲线和出售曲线进行购买和出售操作。
-contract FundPool{
+contract TradeFundPool{
     ///@notice 购买时的斜率
     uint256 public slope;
 
@@ -49,7 +49,7 @@ contract FundPool{
     uint256 public totalSendToVote;
 
     /// @notice 自治合约
-    Vote public vote;
+    GovernFundPool public governFundPool;
 
     /// @notice 众筹期间募集的eth
     mapping (address=>uint256) public crowdFundingEth;
@@ -57,8 +57,11 @@ contract FundPool{
     /// @notice 记录每个地址拥有的fnd数量
     mapping(address=>uint256) balances;
 
-    /// @notice 记录每个地址拥有的锁定的fnd的数量
-    mapping(uint256 => mapping(address=>uint256)) public lock_balances;
+    /// @notice 记录每个地址允许别人用的数量
+    mapping(address => mapping(address => uint256)) allowance;
+
+    /// @notice 记录每个地址拥有的锁定的fnd的数量---清退用
+    mapping(uint256 => mapping(address=>uint256)) public lock_balances_clearing;
 
     /// @notice 清退锁定的存款
     mapping (uint256 => uint256) clearingValue;
@@ -131,17 +134,35 @@ contract FundPool{
         _;
     }
 
-    /// @notice 设置vote合约
-    function unsafe_setVote(Vote _vote) public{
-        require(address(vote) == address(0), "first init");
-        vote = _vote;
+    /// @notice  获取某个地址拥有的股份数量
+    function getBalance(address _addr) public view returns(uint256){
+        return balances[_addr];
     }
 
-    /// @notice 获取vote合约
-    /// @return vote合约的地址
-    function getVoteContract() public view returns(address){
-        return address(vote);
+    /// @notice 获取govern合约
+    /// @return govern合约的地址
+    function getGovernFundPoolAddress() public view returns(address){
+        return address(governFundPool);
     }
+
+    /// @notice 查询可以获得多少fnd
+    function invoke_buy(uint256 invest) public pure returns(uint256){
+        uint256 fndAmount = sqrt(2 * invest * 1000 / slope + totalSupply * totalSupply) - totalSupply;
+        return fndAmount;
+    }
+
+    /// @notice 是不是自治资金池调用
+    modifier isGovernFundPool(address _addr){
+        require(_addr == address(governFundPool), "sender should be governFundPool contract");
+        _;
+    }
+
+    /// @notice 设置vote合约
+    function unsafe_setGovernFundPool(GovernFundPool _governFundPool) public{
+        require(address(governFundPool) == address(0), "first init");
+        governFundPool = _governFundPool;
+    }
+
 
     /// @notice 开始募资，一旦开始不能再停止
     function start() public isOwner() {
@@ -173,11 +194,6 @@ contract FundPool{
     /// @param _beta 新的比例
     function setBeta(uint256 _beta) public isOwner() {
         beta = _beta;
-    }
-
-    /// @notice  获取某个地址拥有的股份数量
-    function getBalance(address _addr) public view returns(uint256){
-        return balances[_addr];
     }
 
     /// @notice 管理员重新设置管理员  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -222,7 +238,7 @@ contract FundPool{
             totalSupply += fndAmount;
             sellReserve += invest * alpha;
             totalSendToVote += (1000 - alpha) * invest;
-            address(vote).transfer(totalSendToVote / 1000);
+            address(governFundPool).transfer(totalSendToVote / 1000);
         }
         else if(needBack){//如果超出了众筹要求且超出部分要求退回
             during_crowdfunding = false;
@@ -233,7 +249,7 @@ contract FundPool{
             msg.sender.transfer(invest - needValue);
             sellReserve += needValue * alpha;
             totalSendToVote += (1000 - alpha) * needValue;
-            address(vote).transfer(totalSendToVote / 1000);
+            address(governFundPool).transfer(totalSendToVote / 1000);
         }
         else{//超出了众筹要求，超出部分不需要退回，继续走曲线购买
             during_crowdfunding = false;
@@ -245,7 +261,7 @@ contract FundPool{
             balances[msg.sender] = balances[msg.sender] + fndAmount + fndAmount2;
             sellReserve += invest * alpha;
             totalSendToVote += (1000 - alpha) * invest;
-            address(vote).transfer(totalSendToVote / 1000);
+            address(governFundPool).transfer(totalSendToVote / 1000);
         }
     }
 
@@ -263,7 +279,7 @@ contract FundPool{
         uint256 sendToVote = (1000 - alpha) * invest;
         totalSendToVote += sendToVote;
         sendToVote /= 1000;
-        address(vote).transfer(sendToVote);
+        address(governFundPool).transfer(sendToVote);
         emit OnBuy(msg.sender,msg.value,fndAmount);
     }
 
@@ -287,14 +303,38 @@ contract FundPool{
     /// @notice 可以用这个合约来转移股份
     /// @dev 如果在众筹阶段，是不允许转移股份的
     /// @param to 转给谁，amount 转多少
-    function transfer(address to,uint256 amount) public payable isStart() {
-        require(amount > 0,"");
+    function transfer(address to,uint256 amount) public payable isStart() returns(bool){
+        return transferFrom(msg.sender, to, amount);
+    }
+
+    /// @notice 可以用这个合约来转移股份
+    /// @dev 如果在众筹阶段，是不允许转移股份的
+    /// @param from 谁出钱
+    /// @param to 转给谁
+    /// @param amount 转多少
+    function transferFrom(address from, address to, uint amount)
+        public returns (bool)
+    {
         require(!during_crowdfunding,"");
-        require(to != address(0),"");
-        require(to != msg.sender,"");
+        require(to != address(0) && from != address(0),"");
+        require(amount > 0,"");
+        require(balances[from] >= amount, "");
         require(balances[msg.sender] >= amount,"");
-        balances[msg.sender] -= amount;
-        balances[to] += amount;
+
+        if (from != msg.sender && allowance[from][msg.sender] != uint(-1)) {
+            require(allowance[from][msg.sender] >= amount, "");
+            allowance[from][msg.sender] = allowance[from][msg.sender] - amount;
+        }
+        balances[from] = balances[from] - amount;
+        balances[to] = balances[to] + amount;
+        return true;
+    }
+
+    /// @notice 用来批准第三方可以暂用自己部分的资金
+    function approve(address usr, uint amount) external returns (bool) {
+        allowance[msg.sender][usr] = amount;
+        emit Approval(msg.sender, usr, amount);
+        return true;
     }
 
     /// @notice 投资的项目盈利，用这个接口购买股份
@@ -309,39 +349,34 @@ contract FundPool{
         //发给项目池用作发展的钱
         uint256 sendToVote = (1000 - beta) * invest;
         totalSendToVote += sendToVote;
-        address(vote).transfer(sendToVote / 1000);
+        address(governFundPool).transfer(sendToVote / 1000);
         emit OnRevenue(msg.sender,msg.value,fndAmount);
     }
 
-    /// @notice 锁定某人的股份
+
+    /// @notice 锁定某人的股份(清退)
     /// @dev 只能允许vote合约调用
     /// @param who 锁定的地址
-    function unsafe_lockFnd(address who,uint256 clearingProposalIndex) public returns(bool){
-        //调用者必须是vote合约
-        require(msg.sender == address(vote), "sender should be vote contract");
+    function unsafe_lockFnd_clearing(address who,uint256 clearingProposalIndex) public isGovernFundPool(msg.sender) returns(bool){
         require(balances[who] > 0, "fnd need more than 0");
-        lock_balances[clearingProposalIndex][who] += balances[who];
+        lock_balances_clearing[clearingProposalIndex][who] += balances[who];
         balances[who] = 0;
         return true;
     }
 
-    /// @notice 解锁某地址的股份
-    /// @dev 只能vote合约调用  ??有没有必要判断提议失败与否
+    /// @notice 解锁某地址的股份(清退)
+    /// @dev 只能vote合约调用
     /// @param who 解锁的地址
-    function unsafe_unLockFnd(address who,uint256 clearingProposalIndex) public returns(bool){
-        //调用者必须是vote合约
-        require(msg.sender == address(vote),"sender should be vote contract");
-        require(lock_balances[clearingProposalIndex][who] > 0, "lock fnd need more than 0");
-        balances[who] += lock_balances[clearingProposalIndex][who];
-        lock_balances[clearingProposalIndex][who] = 0;
+    function unsafe_unLockFnd_clearing(address who,uint256 clearingProposalIndex) public isGovernFundPool(msg.sender) returns(bool){
+        require(lock_balances_clearing[clearingProposalIndex][who] > 0, "lock fnd need more than 0");
+        balances[who] += lock_balances_clearing[clearingProposalIndex][who];
+        lock_balances_clearing[clearingProposalIndex][who] = 0;
         return true;
     }
 
     /// @notice 把要清退的股份分离出储备池
     /// @param clearingShares 清退的股份数量
-    function unsafe_clearing(uint256 clearingShares,uint256 clearingProposalIndex)  public returns(bool){
-        //调用者必须是vote合约
-        require(msg.sender == address(vote),"sender should be vote contract");
+    function unsafe_clearing(uint256 clearingShares,uint256 clearingProposalIndex)  public  isGovernFundPool(msg.sender) returns(bool){
         clearingTotalFnd[clearingProposalIndex] = clearingShares;
         clearingValue[clearingProposalIndex] = clearingShares * sellReserve / totalSupply;
         sellReserve -= clearingValue[clearingProposalIndex];
@@ -349,9 +384,8 @@ contract FundPool{
     }
 
     /// @notice 获取清退的钱
-    function unsafe_getClearingValue(address payable who,uint256 clearingProposalIndex) public{
+    function unsafe_getClearingValue(address payable who,uint256 clearingProposalIndex) public isGovernFundPool(msg.sender){
         //调用者必须是vote合约
-        require(msg.sender == address(vote),"sender should be vote contract");
         uint256 fndAmount = lock_balances[clearingProposalIndex][who];
         uint256 value = fndAmount * clearingValue[clearingProposalIndex] / clearingTotalFnd[clearingProposalIndex] / 1000;
         address(who).transfer(value);

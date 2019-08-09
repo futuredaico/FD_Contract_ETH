@@ -1,5 +1,5 @@
 pragma solidity >=0.4.22 <0.6.0;
-import "./FundPool.sol";
+import "./TradeFundPool.sol";
 
 /// @title 自治合约
 /// @author viko
