@@ -1,9 +1,9 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./ITradeFundPool.sol";
+import "../Interface/ITradeFundPool.sol";
 import "../apps/FutureDaoApp.sol";
-import "../Curve/ICurve.sol";
-import "../lib/IERC20.sol";
+import "../Interface/ICurve.sol";
+import "../Interface/IERC20.sol";
 
 /// @title 资金池，用来接受eth并发行股份币
 /// @author viko
@@ -25,12 +25,6 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 是否处于众筹期间
     bool public during_crowdfunding = true;
 
-    /// @notice 曲线合约
-    ICurve public curve;
-
-    /// @notice 发行的股份币的合约地址
-    IERC20 public token;
-
     /// @notice 是否开始募资
     bool public started = false;
 
@@ -46,20 +40,30 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     bytes32 public constant FundPool_Start = keccak256("FundPool_Start");
     bytes32 public constant FundPool_PreMint = keccak256("FundPool_PreMint");
     bytes32 public constant FundPool_SendEth = keccak256("FundPool_SendEth");
+    //bytes32 public constant FundPool_crowdfunding = keccak256("FundPool_crowdfunding");
+
+    //////////////
+    //// 私有属性
+    //////////////
+    /// @notice 曲线合约
+    ICurve private curve;
+
+    /// @notice 发行的股份币的合约地址
+    IERC20 private token;
 
     /* events */
     /// @notice 购买
     event OnBuy(
         address who,
         uint256 ethAmount,
-        uint256 nfdAmount
+        uint256 fdtAmount
     );
 
     /// @notice 出售
     event OnSell(
         address who,
         uint256 ethAmount,
-        uint256 nfdAmount
+        uint256 fdtAmount
     );
 
     /// @notice 利润回购
@@ -77,7 +81,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 预挖矿
     event OnPreMint(
         address who,
-        uint256 nfdAmount
+        uint256 fdtAmount
     );
 
     /// @notice 构造函数
@@ -112,13 +116,31 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         _;
     }
 
+    /////////////////
+    ////查询 方法
+    ////////////////
+
+    /// @notice 查询曲线合约的地址
+    function getCurveAddress() public view returns(address) {
+        return address(curve);
+    }
+
+    /// @notice 查询股份币合约的地址
+    function getFdTokenAddress() public view returns(address){
+        return address(token);
+    }
+
+    /////////////////
+    ////合约操作方法
+    ////////////////
+
     /// @notice 开始募资，一旦开始不能再停止
     function start() public auth(FundPool_Start) {
         started = true;
     }
 
     /// @notice 预挖矿
-    function preMint(address who,uint256 amount) public auth(FundPool_PreMint) {
+    function preMint(address who,uint256 amount) public auth(FundPool_PreMint){
         require(started == false,"cant start");
         token.mint(who,amount);
         emit OnPreMint(who,amount);
@@ -133,7 +155,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         msg.sender.transfer(value);
         crowdFundingEth[msg.sender] = 0;
         //吧token也销毁了
-        token.burn(msg.sender,token.totalSupply(msg.sender));
+        token.burn(msg.sender,token.totalSupply());
         emit OnWindingUp(msg.sender,value);
     }
 
@@ -143,7 +165,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 invest = msg.value;
         require(invest > 0,"value need more than 0");
         require(now.sub(crowdFundStartTime) <= crowdFundDuringTime,"need in the corwdfunding period");
-        uint256 balance = address(this).balance();
+        uint256 balance = address(this).balance;
         if(balance < crowdFundMoney){//如果没有达到众筹要求
             uint256 fdtAmount = invest.div(crowdFundPrice);
             token.mint(msg.sender,fdtAmount);
@@ -159,7 +181,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         }
         else if(needBack){//如果超出了众筹要求且超出部分要求退回
             during_crowdfunding = false;
-            uint256 needValue = invest.sub(address(this).balance().sub(crowdFundMoney));
+            uint256 needValue = invest.sub(address(this).balance.sub(crowdFundMoney));
             uint256 fdtAmount = needValue.div(crowdFundPrice);
             token.mint(msg.sender,fdtAmount);
             //退还超出的eth
@@ -169,7 +191,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         }
         else{//超出了众筹要求，超出部分不需要退回，继续走曲线购买
             during_crowdfunding = false;
-            uint256 needValue = invest.sub(address(this).balance().sub(crowdFundMoney)); //crowdFundMoney - (sellReserve + totalSendToVote) / 1000;
+            uint256 needValue = invest.sub(address(this).balance.sub(crowdFundMoney));
             uint256 fdtAmount = needValue.div(crowdFundPrice);
             token.mint(msg.sender,fdtAmount);
             uint256 fdtAmount2 = curve.getBuyAmount(invest.sub(needValue),token.totalSupply());
@@ -192,7 +214,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
 
     /// @notice 投资者出售
     /// @dev 如果在众筹阶段，是不允许出售股份的
-    /// @param amount 出售的股份数
+    /// @param _amount 出售的股份数
     function sell(uint256 _amount) public isStart() isNotCrowdfunding(){
         require(_amount > 0,"amount need more than 0");
         uint256 withdraw = curve.getSellValue(_amount,sellReserve,token.totalSupply());
@@ -216,7 +238,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 动用合约的钱  需要权限验证
     function sendEth(address payable _who,uint256 _value) public isStart() isNotCrowdfunding() auth(FundPool_SendEth){
         //需要确保不能用到 储备池 中的钱
-        require(address(this).balance().sub(_value) > sellReserve, "not sufficient funds");
+        require(address(this).balance.sub(_value) > sellReserve, "not sufficient funds");
 
         _who.transfer(_value);
     }

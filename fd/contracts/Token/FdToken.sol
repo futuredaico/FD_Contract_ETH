@@ -1,6 +1,6 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "../lib/IERC20.sol";
+import "../Interface/IERC20.sol";
 import "../lib/SafeMath.sol";
 import "../lib/Context.sol";
 import "../apps/FutureDaoApp.sol";

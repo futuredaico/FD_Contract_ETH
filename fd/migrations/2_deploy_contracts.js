@@ -1,16 +1,14 @@
-const ProjectFactory = artifacts.require("ProjectFactory");
+const AppManager = artifacts.require("AppManager");
+const Co = artifacts.require("Co");
+const FdToken = artifacts.require("FdToken");
 const TradeFundPool = artifacts.require("TradeFundPool");
-const GovernFundPool = artifacts.require("GovernFundPool");
 
 module.exports = function(deployer) {
-    deployer.deploy(ProjectFactory);
-    deployer.deploy(TradeFundPool,30*24*60*60,Math.pow(10,20).toString(),1000*Math.pow(10,9),300,800);
-    deployer.deploy(GovernFundPool);
-    /*
-    .then(()=>{
-        FundPool.unsafe_setVote(Vote.address);
-        Vote.unsafe_setFundPool(FundPool.address);
-        ProjectFactory.createProject("NEL",FundPool.address,Vote.address);
-    });
-    */
+    deployer.deploy(AppManager).then(function() {
+        return deployer.deploy(Co,AppManager.address,1000*Math.pow(10,9),300).then(function(){
+            return deployer.deploy(FdToken,AppManager.address,"Vb",8,"V").then(function(){
+                return deployer.deploy(TradeFundPool,AppManager.address,FdToken.address,30*24*60*60,Math.pow(10,20).toString(),Co.address);
+            });
+        });
+      });
 };

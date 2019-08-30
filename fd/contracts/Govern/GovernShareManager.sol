@@ -1,9 +1,9 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./IGovernShareManager.sol";
+import "../Interface/IGovernShareManager.sol";
 import "../apps/FutureDaoApp.sol";
-import "../lib/IERC20.sol";
-import "../Financing/ITradeFundPool.sol";
+import "../Interface/IERC20.sol";
+import "../Interface/ITradeFundPool.sol";
 
 
 /// @title 自治管钱的合约

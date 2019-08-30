@@ -4,10 +4,11 @@ import "./VoteApp.sol";
 import "../Tap/Tap.sol";
 
 contract Vote_ApplyFund is VoteApp{
-    /// @notice 所有的提议
-    Proposal[] public proposalQueue;
 
     bytes32 public constant Vote_ApplyFund_OneTicketRefuseProposal = keccak256("Vote_ApplyFund_OneTicketRefuseProposal");
+
+    /// @notice 所有的提议
+    Proposal[] private proposalQueue;
 
     /// @notice 一个提议的结构
     struct Proposal{
@@ -16,16 +17,20 @@ contract Vote_ApplyFund is VoteApp{
         address proposer; //提议人
         uint256 approveVotes; //同意的票数
         uint256 refuseVotes; //否决的票数
-        uint256 startTime; //开始的时间
-        address payable recipient; //提议给谁gas
-        uint256 value; //提议所申请的钱
-        uint256 timeConsuming; //耗时 单位是天，例如30天，那就意味着所申请的钱需要这么多天才能领取完
+        STap sTap;
         bool process; //是否已经处理提议
         bool pass; //是否通过
         bool abort;//是否终止
         bool oneTicketRefuse;//是否被一票否决
         mapping(address => enumVoteResult) voteDetails;
         string detail; //提议的描述
+    }
+
+    struct STap {
+        uint256 startTime; //开始的时间
+        address payable recipient; //提议给谁gas
+        uint256 value; //提议所申请的钱
+        uint256 timeConsuming; //耗时 单位是天，例如30天，那就意味着所申请的钱需要这么多天才能领取完
     }
 
     /// @notice 申请提议
@@ -94,17 +99,19 @@ contract Vote_ApplyFund is VoteApp{
         require(_timeConsuming>=0,"_timeConsuming cant less than 0");
         //发起提议的人需要转给本合约一定的gas作为费用奖励处理者
         require(msg.value >= proposalFee + deposit, "need proposalFee");
-
+        STap memory _sTap = STap({
+            startTime : now,
+            recipient : _recipient,
+            value : _value,
+            timeConsuming : _timeConsuming
+        });
         Proposal memory proposal = Proposal({
             index : proposalQueue.length,
             proposalName : _name,
             proposer : msg.sender,
             approveVotes : 0,
             refuseVotes : 0,
-            startTime : now,
-            recipient : _recipient,
-            value : _value,
-            timeConsuming : _timeConsuming,
+            sTap : _sTap,
             process : false,
             pass : false,
             abort : false,
@@ -116,10 +123,10 @@ contract Vote_ApplyFund is VoteApp{
             proposal.index,
             proposal.proposalName,
             proposal.proposer,
-            proposal.startTime,
-            proposal.recipient,
-            proposal.value,
-            proposal.timeConsuming,
+            proposal.sTap.startTime,
+            proposal.sTap.recipient,
+            proposal.sTap.value,
+            proposal.sTap.timeConsuming,
             proposal.detail
         );
         proposalQueue.push(proposal);
@@ -130,7 +137,7 @@ contract Vote_ApplyFund is VoteApp{
         require(proposalIndex<proposalQueue.length,"proposal does not exist");
         Proposal storage proposal = proposalQueue[proposalIndex];
         //投票要在投票期内
-        require(now <= proposal.startTime + votingPeriodLength,"time out");
+        require(now <= proposal.sTap.startTime + votingPeriodLength,"time out");
         //投票的状态是默认（弃权）状态
         require(proposal.voteDetails[msg.sender] == enumVoteResult.waiver,"Votes have been cast");
         //投票的结果只能是赞成或反对
@@ -156,7 +163,7 @@ contract Vote_ApplyFund is VoteApp{
         bool r = IGovernShareManager(appManager.getGovernShareManager()).lock(
             msg.sender,
             proposal.index,
-            proposal.startTime + votingPeriodLength,
+            proposal.sTap.startTime + votingPeriodLength,
             FdtAmount
         );
         require(r,"lock error");
@@ -171,7 +178,7 @@ contract Vote_ApplyFund is VoteApp{
         //提出终止的人必须是发起人
         require(proposal.proposer == msg.sender,"sender should be proposer");
         //必须还处于有效期内
-        require(now <= proposal.startTime + votingPeriodLength,"time out");
+        require(now <= proposal.sTap.startTime + votingPeriodLength,"time out");
         //没有被一票否决
         require(proposal.oneTicketRefuse == false,"proposal has been oneTicketRefuse");
         //没有被终止过
@@ -203,7 +210,7 @@ contract Vote_ApplyFund is VoteApp{
         require(proposalIndex<proposalQueue.length,"proposal does not exist");
         Proposal storage proposal = proposalQueue[proposalIndex];
         //投票已经过了投票权
-        require(now > proposal.startTime + votingPeriodLength,"it's within the expiry date");
+        require(now > proposal.sTap.startTime + votingPeriodLength,"it's within the expiry date");
         //没有被处理过
         require(proposal.process == false,"proposal has been process");
         //没有被终止
@@ -217,8 +224,8 @@ contract Vote_ApplyFund is VoteApp{
         if(proposal.approveVotes>proposal.refuseVotes){
             proposal.pass = true;
             // 通过了提案就给接收人划一笔钱
-            Tap tap = new Tap(proposal.recipient,now,(now.add(proposal.timeConsuming)).mul(1 days),proposal.value);
-            IGovernShareManager(appManager.getGovernShareManager()).sendEth(address(tap),proposal.value);
+            Tap tap = new Tap(proposal.sTap.recipient,now,(now.add(proposal.sTap.timeConsuming)).mul(1 days),proposal.sTap.value);
+            IGovernShareManager(appManager.getGovernShareManager()).sendEth(address(tap),proposal.sTap.value);
         }
         emit OnProcess(proposalIndex,proposal.pass);
     }

@@ -1,13 +1,13 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 import "../apps/FutureDaoApp.sol";
-import "./ICurve.sol";
+import "../Interface/ICurve.sol";
 
 contract Co is FutureDaoApp , ICurve{
 
-    uint256 public slope;
+    uint256 public slope; //1000 * 10**9
 
-    uint256 public alpha;
+    uint256 public alpha; //300
 
     bytes32 public constant Co_ChangeSlop = keccak256("Co_ChangeSlop");
     bytes32 public constant Co_ChangeAlpha = keccak256("Co_ChangeAlpha");

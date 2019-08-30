@@ -1,0 +1,1427 @@
+{
+  "contractName": "VoteApp",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "proposalFee",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "EMPTY_PARAM_HASH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "deposit",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "appManager",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_addr",
+          "type": "address"
+        }
+      ],
+      "name": "getFdtInGovern",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "getFdtTotalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"getFdtTotalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_addr\",\"type\":\"address\"}],\"name\":\"getFdtInGovern\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"proposalFee\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"EMPTY_PARAM_HASH\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"deposit\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"appManager\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{\"getFdtInGovern(address)\":{\"notice\":\"\\u83b7\\u53d6\\u53ef\\u4ee5\\u6295\\u7968\\u7684\\u80a1\\u4efd\\u6570\"},\"getFdtTotalSupply()\":{\"notice\":\"\\u83b7\\u53d6\\u5168\\u90e8\\u7684\\u7968\\u6570\"}}}},\"settings\":{\"compilationTarget\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Vote/VoteApp.sol\":\"VoteApp\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IGovernShareManager.sol\":{\"keccak256\":\"0x48c6bf156f7048712f1916c77fe88863aaa81021e6b9e4604369088c0004071f\",\"urls\":[\"bzzr://44317749712df0c4295892d6f6c70762db2c58d18da02c3d25fab93562a0e819\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IPermission.sol\":{\"keccak256\":\"0x62320d580ab5438cf48be75f470fa0230087985a773d709a308f5097f39e3920\",\"urls\":[\"bzzr://5f325154da4ce3dd69d322752fab9e6185d865ab8bc2b44b6b8e564cd49b5b72\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":{\"keccak256\":\"0x4e75f51246a492f2ce9b356cb663072785a8456345bf30454cf0f72fd53389b7\",\"urls\":[\"bzzr://a88b17b90cbafb10cdfed7a475dd012cf0cbaff5a4df794a21db42253c3bc432\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Own/Own.sol\":{\"keccak256\":\"0x19c99e27349183d4afe38bbfad36d1e2e4e14d46a32b457e9d9fd67f3e2bb58c\",\"urls\":[\"bzzr://86f3ce0c96241249bbd1b6b63edea009dab7d641eda8d9c129e1b4a172a1388a\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Permission/Permission.sol\":{\"keccak256\":\"0xbda7bb62b879bcc09a439f457bd54510162c4449d0982ded659cf5660b609533\",\"urls\":[\"bzzr://e241699a6314e8f25d538af4bc385ec90fff61f25380730560261086b36e80ca\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Vote/VoteApp.sol\":{\"keccak256\":\"0xb30cf9d8cd05e59add4c3393c51e74c9862a2adbf369015ff6c51a4e91fc7237\",\"urls\":[\"bzzr://fa91bf514f041788f8e148add035604aa933b2c7c9e85ea94b575e98b29141da\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/AppManager.sol\":{\"keccak256\":\"0xbcdf7ea331e694d8f63c9501118d08a3c95b294b90d965b76bc54371ffffbdce\",\"urls\":[\"bzzr://9ea34c0e6ae56b4248ca1d073cede442576fd61b2e71706ccdd4f3a5405a4281\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol\":{\"keccak256\":\"0x407b61263f18afbb631ff8b7958bd5a9419f434ac3e805ce8311ee5f76d69947\",\"urls\":[\"bzzr://02519534ec18838d0d6f2e2b5104daf74fef21e5f5c0266ece3636d45cd68518\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/lib/SafeMath.sol\":{\"keccak256\":\"0x746184ea1a24fb0ea4b10a0c2f02591b675607a38027663a1decbe80fece1e29\",\"urls\":[\"bzzr://0a96cd5d3e7a040dc4cd84d7b6d2c43be1529a823bf879af3bd3edf5a83698a3\"]}},\"version\":1}",
+  "bytecode": "0x608060405262093a8060015567016345785d8a000060025567016345785d8a000060035534801561002f57600080fd5b506104948061003f6000396000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c806308731cfe14610067578063578f6a6214610085578063c27cabb5146100dd578063c513f66e146100fb578063d0e30db014610119578063ebe86c1314610137575b600080fd5b61006f610181565b6040518082815260200191505060405180910390f35b6100c76004803603602081101561009b57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102ac565b6040518082815260200191505060405180910390f35b6100e5610410565b6040518082815260200191505060405180910390f35b610103610416565b6040518082815260200191505060405180910390f35b61012161043d565b6040518082815260200191505060405180910390f35b61013f610443565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663bf7b00eb6040518163ffffffff1660e01b815260040160206040518083038186803b1580156101ea57600080fd5b505afa1580156101fe573d6000803e3d6000fd5b505050506040513d602081101561021457600080fd5b810190808051906020019092919050505073ffffffffffffffffffffffffffffffffffffffff1663e24d20676040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561026c57600080fd5b505af1158015610280573d6000803e3d6000fd5b505050506040513d602081101561029657600080fd5b8101908080519060200190929190505050905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663bf7b00eb6040518163ffffffff1660e01b815260040160206040518083038186803b15801561031557600080fd5b505afa158015610329573d6000803e3d6000fd5b505050506040513d602081101561033f57600080fd5b810190808051906020019092919050505073ffffffffffffffffffffffffffffffffffffffff1663578f6a62836040518263ffffffff1660e01b8152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b1580156103ce57600080fd5b505af11580156103e2573d6000803e3d6000fd5b505050506040513d60208110156103f857600080fd5b81019080805190602001909291905050509050919050565b60035481565b7f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56360001b81565b60025481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea165627a7a72305820bfbc000df51d8df3bdd45e57f276404e04f205183742247dfab1167730e9e1070029",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100625760003560e01c806308731cfe14610067578063578f6a6214610085578063c27cabb5146100dd578063c513f66e146100fb578063d0e30db014610119578063ebe86c1314610137575b600080fd5b61006f610181565b6040518082815260200191505060405180910390f35b6100c76004803603602081101561009b57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102ac565b6040518082815260200191505060405180910390f35b6100e5610410565b6040518082815260200191505060405180910390f35b610103610416565b6040518082815260200191505060405180910390f35b61012161043d565b6040518082815260200191505060405180910390f35b61013f610443565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663bf7b00eb6040518163ffffffff1660e01b815260040160206040518083038186803b1580156101ea57600080fd5b505afa1580156101fe573d6000803e3d6000fd5b505050506040513d602081101561021457600080fd5b810190808051906020019092919050505073ffffffffffffffffffffffffffffffffffffffff1663e24d20676040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561026c57600080fd5b505af1158015610280573d6000803e3d6000fd5b505050506040513d602081101561029657600080fd5b8101908080519060200190929190505050905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663bf7b00eb6040518163ffffffff1660e01b815260040160206040518083038186803b15801561031557600080fd5b505afa158015610329573d6000803e3d6000fd5b505050506040513d602081101561033f57600080fd5b810190808051906020019092919050505073ffffffffffffffffffffffffffffffffffffffff1663578f6a62836040518263ffffffff1660e01b8152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b1580156103ce57600080fd5b505af11580156103e2573d6000803e3d6000fd5b505050506040513d60208110156103f857600080fd5b81019080805190602001909291905050509050919050565b60035481565b7f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56360001b81565b60025481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea165627a7a72305820bfbc000df51d8df3bdd45e57f276404e04f205183742247dfab1167730e9e1070029",
+  "sourceMap": "122:922:13:-;;;247:6;218:35;;359:9;334:34;;490:9;461:38;;122:922;8:9:-1;5:2;;;30:1;27;20:12;5:2;122:922:13;;;;;;;",
+  "deployedSourceMap": "122:922:13:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;122:922:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;888:153;;;:::i;:::-;;;;;;;;;;;;;;;;;;;676:165;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;676:165:13;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;461:38;;;:::i;:::-;;;;;;;;;;;;;;;;;;;198:109:16;;;:::i;:::-;;;;;;;;;;;;;;;;;;;334:34:13;;;:::i;:::-;;;;;;;;;;;;;;;;;;;161:28:16;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;888:153:13;932:7;978:10;;;;;;;;;;;:32;;;:34;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;978:34:13;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;978:34:13;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;978:34:13;;;;;;;;;;;;;;;;958:73;;;:75;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;958:75:13;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;958:75:13;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;958:75:13;;;;;;;;;;;;;;;;951:82;;888:153;:::o;676:165::-;730:7;776:10;;;;;;;;;;;:32;;;:34;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;776:34:13;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;776:34:13;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;776:34:13;;;;;;;;;;;;;;;;756:70;;;827:5;756:77;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;756:77:13;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;756:77:13;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;756:77:13;;;;;;;;;;;;;;;;749:84;;676:165;;;:::o;461:38::-;;;;:::o;198:109:16:-;241:66;198:109;;;:::o;334:34:13:-;;;;:::o;161:28:16:-;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity >=0.4.22 <0.6.0;\r\n\r\nimport \"../apps/FutureDaoApp.sol\";\r\nimport \"../Interface/IGovernShareManager.sol\";\r\n\r\ncontract VoteApp is FutureDaoApp {\r\n    /// @notice 一个提议有14天的投票窗口期\r\n    uint256 votingPeriodLength = 7 days;\r\n\r\n    /// @notice 发起提议需要抵押的eth数量（对应成fnd）\r\n    uint256 public deposit = 0.1 ether;\r\n\r\n    /// @notice 发起提议的人需要给的手续费，用来奖励结算的人\r\n    uint256 public proposalFee = 0.1 ether;\r\n\r\n    /// @notice 投票的结果\r\n    enum enumVoteResult {\r\n        waiver,\r\n        approve,\r\n        refuse\r\n    }\r\n\r\n    /// @notice 获取可以投票的股份数\r\n    function getFdtInGovern(address _addr) public returns(uint256){\r\n        return IGovernShareManager(appManager.getGovernShareManager()).getFdtInGovern(_addr);\r\n    }\r\n\r\n    /// @notice 获取全部的票数\r\n    function getFdtTotalSupply() public returns(uint256){\r\n        return IGovernShareManager(appManager.getGovernShareManager()).getFtdTotalSupply();\r\n    }\r\n}",
+  "sourcePath": "D:\\_______work\\FD_Contract_ETH\\fd\\contracts\\Vote\\VoteApp.sol",
+  "ast": {
+    "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Vote/VoteApp.sol",
+    "exportedSymbols": {
+      "VoteApp": [
+        2693
+      ]
+    },
+    "id": 2694,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2644,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.6",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:32:13"
+      },
+      {
+        "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol",
+        "file": "../apps/FutureDaoApp.sol",
+        "id": 2645,
+        "nodeType": "ImportDirective",
+        "scope": 2694,
+        "sourceUnit": 3482,
+        "src": "36:34:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IGovernShareManager.sol",
+        "file": "../Interface/IGovernShareManager.sol",
+        "id": 2646,
+        "nodeType": "ImportDirective",
+        "scope": 2694,
+        "sourceUnit": 1753,
+        "src": "72:46:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2647,
+              "name": "FutureDaoApp",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3481,
+              "src": "142:12:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_FutureDaoApp_$3481",
+                "typeString": "contract FutureDaoApp"
+              }
+            },
+            "id": 2648,
+            "nodeType": "InheritanceSpecifier",
+            "src": "142:12:13"
+          }
+        ],
+        "contractDependencies": [
+          3481
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2693,
+        "linearizedBaseContracts": [
+          2693,
+          3481
+        ],
+        "name": "VoteApp",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2651,
+            "name": "votingPeriodLength",
+            "nodeType": "VariableDeclaration",
+            "scope": 2693,
+            "src": "218:35:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2649,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "218:7:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "37",
+              "id": 2650,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "247:6:13",
+              "subdenomination": "days",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_604800_by_1",
+                "typeString": "int_const 604800"
+              },
+              "value": "7"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 2654,
+            "name": "deposit",
+            "nodeType": "VariableDeclaration",
+            "scope": 2693,
+            "src": "334:34:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2652,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "334:7:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "302e31",
+              "id": 2653,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "359:9:13",
+              "subdenomination": "ether",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_100000000000000000_by_1",
+                "typeString": "int_const 100000000000000000"
+              },
+              "value": "0.1"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2657,
+            "name": "proposalFee",
+            "nodeType": "VariableDeclaration",
+            "scope": 2693,
+            "src": "461:38:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2655,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "461:7:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "302e31",
+              "id": 2656,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "490:9:13",
+              "subdenomination": "ether",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_100000000000000000_by_1",
+                "typeString": "int_const 100000000000000000"
+              },
+              "value": "0.1"
+            },
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "VoteApp.enumVoteResult",
+            "id": 2661,
+            "members": [
+              {
+                "id": 2658,
+                "name": "waiver",
+                "nodeType": "EnumValue",
+                "src": "572:6:13"
+              },
+              {
+                "id": 2659,
+                "name": "approve",
+                "nodeType": "EnumValue",
+                "src": "589:7:13"
+              },
+              {
+                "id": 2660,
+                "name": "refuse",
+                "nodeType": "EnumValue",
+                "src": "607:6:13"
+              }
+            ],
+            "name": "enumVoteResult",
+            "nodeType": "EnumDefinition",
+            "src": "541:79:13"
+          },
+          {
+            "body": {
+              "id": 2677,
+              "nodeType": "Block",
+              "src": "738:103:13",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2674,
+                        "name": "_addr",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2663,
+                        "src": "827:5:13",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "arguments": [],
+                            "expression": {
+                              "argumentTypes": [],
+                              "expression": {
+                                "argumentTypes": null,
+                                "id": 2669,
+                                "name": "appManager",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 3457,
+                                "src": "776:10:13",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_contract$_AppManager_$3448",
+                                  "typeString": "contract AppManager"
+                                }
+                              },
+                              "id": 2670,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "getGovernShareManager",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 3356,
+                              "src": "776:32:13",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_external_view$__$returns$_t_address_$",
+                                "typeString": "function () view external returns (address)"
+                              }
+                            },
+                            "id": 2671,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "776:34:13",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 2668,
+                          "name": "IGovernShareManager",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 1752,
+                          "src": "756:19:13",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IGovernShareManager_$1752_$",
+                            "typeString": "type(contract IGovernShareManager)"
+                          }
+                        },
+                        "id": 2672,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "756:55:13",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IGovernShareManager_$1752",
+                          "typeString": "contract IGovernShareManager"
+                        }
+                      },
+                      "id": 2673,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "getFdtInGovern",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1699,
+                      "src": "756:70:13",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$_t_uint256_$",
+                        "typeString": "function (address) external returns (uint256)"
+                      }
+                    },
+                    "id": 2675,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "756:77:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2667,
+                  "id": 2676,
+                  "nodeType": "Return",
+                  "src": "749:84:13"
+                }
+              ]
+            },
+            "documentation": "@notice 获取可以投票的股份数",
+            "id": 2678,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFdtInGovern",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2664,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2663,
+                  "name": "_addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2678,
+                  "src": "700:13:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2662,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "700:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "699:15:13"
+            },
+            "returnParameters": {
+              "id": 2667,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2666,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2678,
+                  "src": "730:7:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2665,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "730:7:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "729:9:13"
+            },
+            "scope": 2693,
+            "src": "676:165:13",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2691,
+              "nodeType": "Block",
+              "src": "940:101:13",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "arguments": [],
+                            "expression": {
+                              "argumentTypes": [],
+                              "expression": {
+                                "argumentTypes": null,
+                                "id": 2684,
+                                "name": "appManager",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 3457,
+                                "src": "978:10:13",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_contract$_AppManager_$3448",
+                                  "typeString": "contract AppManager"
+                                }
+                              },
+                              "id": 2685,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "getGovernShareManager",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 3356,
+                              "src": "978:32:13",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_external_view$__$returns$_t_address_$",
+                                "typeString": "function () view external returns (address)"
+                              }
+                            },
+                            "id": 2686,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "978:34:13",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 2683,
+                          "name": "IGovernShareManager",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 1752,
+                          "src": "958:19:13",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IGovernShareManager_$1752_$",
+                            "typeString": "type(contract IGovernShareManager)"
+                          }
+                        },
+                        "id": 2687,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "958:55:13",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IGovernShareManager_$1752",
+                          "typeString": "contract IGovernShareManager"
+                        }
+                      },
+                      "id": 2688,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "getFtdTotalSupply",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1704,
+                      "src": "958:73:13",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$_t_uint256_$",
+                        "typeString": "function () external returns (uint256)"
+                      }
+                    },
+                    "id": 2689,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "958:75:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2682,
+                  "id": 2690,
+                  "nodeType": "Return",
+                  "src": "951:82:13"
+                }
+              ]
+            },
+            "documentation": "@notice 获取全部的票数",
+            "id": 2692,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFdtTotalSupply",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2679,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "914:2:13"
+            },
+            "returnParameters": {
+              "id": 2682,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2681,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2692,
+                  "src": "932:7:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2680,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "932:7:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "931:9:13"
+            },
+            "scope": 2693,
+            "src": "888:153:13",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2694,
+        "src": "122:922:13"
+      }
+    ],
+    "src": "0:1044:13"
+  },
+  "legacyAST": {
+    "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Vote/VoteApp.sol",
+    "exportedSymbols": {
+      "VoteApp": [
+        2693
+      ]
+    },
+    "id": 2694,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2644,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.6",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:32:13"
+      },
+      {
+        "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol",
+        "file": "../apps/FutureDaoApp.sol",
+        "id": 2645,
+        "nodeType": "ImportDirective",
+        "scope": 2694,
+        "sourceUnit": 3482,
+        "src": "36:34:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IGovernShareManager.sol",
+        "file": "../Interface/IGovernShareManager.sol",
+        "id": 2646,
+        "nodeType": "ImportDirective",
+        "scope": 2694,
+        "sourceUnit": 1753,
+        "src": "72:46:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2647,
+              "name": "FutureDaoApp",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3481,
+              "src": "142:12:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_FutureDaoApp_$3481",
+                "typeString": "contract FutureDaoApp"
+              }
+            },
+            "id": 2648,
+            "nodeType": "InheritanceSpecifier",
+            "src": "142:12:13"
+          }
+        ],
+        "contractDependencies": [
+          3481
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2693,
+        "linearizedBaseContracts": [
+          2693,
+          3481
+        ],
+        "name": "VoteApp",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2651,
+            "name": "votingPeriodLength",
+            "nodeType": "VariableDeclaration",
+            "scope": 2693,
+            "src": "218:35:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2649,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "218:7:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "37",
+              "id": 2650,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "247:6:13",
+              "subdenomination": "days",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_604800_by_1",
+                "typeString": "int_const 604800"
+              },
+              "value": "7"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 2654,
+            "name": "deposit",
+            "nodeType": "VariableDeclaration",
+            "scope": 2693,
+            "src": "334:34:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2652,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "334:7:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "302e31",
+              "id": 2653,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "359:9:13",
+              "subdenomination": "ether",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_100000000000000000_by_1",
+                "typeString": "int_const 100000000000000000"
+              },
+              "value": "0.1"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2657,
+            "name": "proposalFee",
+            "nodeType": "VariableDeclaration",
+            "scope": 2693,
+            "src": "461:38:13",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2655,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "461:7:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "302e31",
+              "id": 2656,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "490:9:13",
+              "subdenomination": "ether",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_100000000000000000_by_1",
+                "typeString": "int_const 100000000000000000"
+              },
+              "value": "0.1"
+            },
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "VoteApp.enumVoteResult",
+            "id": 2661,
+            "members": [
+              {
+                "id": 2658,
+                "name": "waiver",
+                "nodeType": "EnumValue",
+                "src": "572:6:13"
+              },
+              {
+                "id": 2659,
+                "name": "approve",
+                "nodeType": "EnumValue",
+                "src": "589:7:13"
+              },
+              {
+                "id": 2660,
+                "name": "refuse",
+                "nodeType": "EnumValue",
+                "src": "607:6:13"
+              }
+            ],
+            "name": "enumVoteResult",
+            "nodeType": "EnumDefinition",
+            "src": "541:79:13"
+          },
+          {
+            "body": {
+              "id": 2677,
+              "nodeType": "Block",
+              "src": "738:103:13",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2674,
+                        "name": "_addr",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2663,
+                        "src": "827:5:13",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "arguments": [],
+                            "expression": {
+                              "argumentTypes": [],
+                              "expression": {
+                                "argumentTypes": null,
+                                "id": 2669,
+                                "name": "appManager",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 3457,
+                                "src": "776:10:13",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_contract$_AppManager_$3448",
+                                  "typeString": "contract AppManager"
+                                }
+                              },
+                              "id": 2670,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "getGovernShareManager",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 3356,
+                              "src": "776:32:13",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_external_view$__$returns$_t_address_$",
+                                "typeString": "function () view external returns (address)"
+                              }
+                            },
+                            "id": 2671,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "776:34:13",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 2668,
+                          "name": "IGovernShareManager",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 1752,
+                          "src": "756:19:13",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IGovernShareManager_$1752_$",
+                            "typeString": "type(contract IGovernShareManager)"
+                          }
+                        },
+                        "id": 2672,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "756:55:13",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IGovernShareManager_$1752",
+                          "typeString": "contract IGovernShareManager"
+                        }
+                      },
+                      "id": 2673,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "getFdtInGovern",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1699,
+                      "src": "756:70:13",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$_t_uint256_$",
+                        "typeString": "function (address) external returns (uint256)"
+                      }
+                    },
+                    "id": 2675,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "756:77:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2667,
+                  "id": 2676,
+                  "nodeType": "Return",
+                  "src": "749:84:13"
+                }
+              ]
+            },
+            "documentation": "@notice 获取可以投票的股份数",
+            "id": 2678,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFdtInGovern",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2664,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2663,
+                  "name": "_addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2678,
+                  "src": "700:13:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2662,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "700:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "699:15:13"
+            },
+            "returnParameters": {
+              "id": 2667,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2666,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2678,
+                  "src": "730:7:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2665,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "730:7:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "729:9:13"
+            },
+            "scope": 2693,
+            "src": "676:165:13",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2691,
+              "nodeType": "Block",
+              "src": "940:101:13",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "arguments": [],
+                            "expression": {
+                              "argumentTypes": [],
+                              "expression": {
+                                "argumentTypes": null,
+                                "id": 2684,
+                                "name": "appManager",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 3457,
+                                "src": "978:10:13",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_contract$_AppManager_$3448",
+                                  "typeString": "contract AppManager"
+                                }
+                              },
+                              "id": 2685,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "getGovernShareManager",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 3356,
+                              "src": "978:32:13",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_external_view$__$returns$_t_address_$",
+                                "typeString": "function () view external returns (address)"
+                              }
+                            },
+                            "id": 2686,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "978:34:13",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 2683,
+                          "name": "IGovernShareManager",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 1752,
+                          "src": "958:19:13",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IGovernShareManager_$1752_$",
+                            "typeString": "type(contract IGovernShareManager)"
+                          }
+                        },
+                        "id": 2687,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "958:55:13",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IGovernShareManager_$1752",
+                          "typeString": "contract IGovernShareManager"
+                        }
+                      },
+                      "id": 2688,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "getFtdTotalSupply",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1704,
+                      "src": "958:73:13",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$_t_uint256_$",
+                        "typeString": "function () external returns (uint256)"
+                      }
+                    },
+                    "id": 2689,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "958:75:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2682,
+                  "id": 2690,
+                  "nodeType": "Return",
+                  "src": "951:82:13"
+                }
+              ]
+            },
+            "documentation": "@notice 获取全部的票数",
+            "id": 2692,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFdtTotalSupply",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2679,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "914:2:13"
+            },
+            "returnParameters": {
+              "id": 2682,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2681,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2692,
+                  "src": "932:7:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2680,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "932:7:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "931:9:13"
+            },
+            "scope": 2693,
+            "src": "888:153:13",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2694,
+        "src": "122:922:13"
+      }
+    ],
+    "src": "0:1044:13"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.8+commit.23d335f2.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.11",
+  "updatedAt": "2019-08-27T10:27:31.813Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {
+      "getFdtInGovern(address)": {
+        "notice": "获取可以投票的股份数"
+      },
+      "getFdtTotalSupply()": {
+        "notice": "获取全部的票数"
+      }
+    }
+  }
+}

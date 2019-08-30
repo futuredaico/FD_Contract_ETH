@@ -2,8 +2,8 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "../Permission/Permission.sol";
 import "../Own/Own.sol";
-import "../Govern/IGovernShareManager.sol";
-import "../Financing/ITradeFundPool.sol";
+import "../Interface/IGovernShareManager.sol";
+import "../Interface/ITradeFundPool.sol";
 
 
 contract AppManager is Own{
@@ -32,11 +32,14 @@ contract AppManager is Own{
         permission.addPermission(_grantor,_app,_vData);
     }
 
-    function addPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external isOwner(msg.sender){
+    function addPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash)
+    external
+    isOwner(msg.sender)
+    {
         permission.addPermission(_grantor,_app,_vData,_paramsHash);
     }
 
     function verifyPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external view returns (bool){
-        permission.verifyPermission(_grantor,_app,_vData,_paramsHash);
+        return permission.verifyPermission(_grantor,_app,_vData,_paramsHash);
     }
 }

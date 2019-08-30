@@ -1,7 +1,7 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 import "../apps/FutureDaoApp.sol";
-import "../Govern/IGovernShareManager.sol";
+import "../Interface/IGovernShareManager.sol";
 
 contract VoteApp is FutureDaoApp {
     /// @notice 一个提议有14天的投票窗口期

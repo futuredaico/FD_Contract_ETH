@@ -1,6 +1,6 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./IPermission.sol";
+import "../Interface/IPermission.sol";
 
 contract Permission is IPermission  {
 
@@ -21,8 +21,8 @@ contract Permission is IPermission  {
         emit AddPermission(_grantor,_app,_vData,_paramsHash);
     }
 
-    function verifyPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external view returns (bool){
-        if(permissions[permissionHash(_grantor, _app, _vData)] == _paramsHash)
+    function verifyPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external view returns(bool){
+        if(bytes32(permissions[permissionHash(_grantor, _app, _vData)]) == _paramsHash)
             return true;
         return false;
     }
