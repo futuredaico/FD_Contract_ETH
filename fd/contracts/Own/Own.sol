@@ -1,7 +1,7 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 contract Own {
-    address public owner;
+    address payable public owner;
 
     mapping(address => bool) whiteList;
 
@@ -28,7 +28,7 @@ contract Own {
         whiteList[_addr] = false;
     }
 
-    function changeOwner(address _newOwner) public isOwner(msg.sender){
+    function changeOwner(address payable _newOwner) public isOwner(msg.sender){
         require(msg.sender != _newOwner,"Need a new address");
         owner = _newOwner;
     }

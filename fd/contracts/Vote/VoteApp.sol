@@ -4,7 +4,7 @@ import "../apps/FutureDaoApp.sol";
 import "../Interface/IGovernShareManager.sol";
 
 contract VoteApp is FutureDaoApp {
-    /// @notice 一个提议有14天的投票窗口期
+    /// @notice 一个提议有7天的投票窗口期
     uint256 votingPeriodLength = 7 days;
 
     /// @notice 发起提议需要抵押的eth数量（对应成fnd）
@@ -21,12 +21,12 @@ contract VoteApp is FutureDaoApp {
     }
 
     /// @notice 获取可以投票的股份数
-    function getFdtInGovern(address _addr) public returns(uint256){
+    function getFdtInGovern(address _addr) public view returns(uint256){
         return IGovernShareManager(appManager.getGovernShareManager()).getFdtInGovern(_addr);
     }
 
     /// @notice 获取全部的票数
-    function getFdtTotalSupply() public returns(uint256){
-        return IGovernShareManager(appManager.getGovernShareManager()).getFtdTotalSupply();
+    function getFdtTotalSupply() public view returns(uint256){
+        return IGovernShareManager(appManager.getGovernShareManager()).getFdtTotalSupply();
     }
 }

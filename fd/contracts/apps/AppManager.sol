@@ -10,25 +10,48 @@ contract AppManager is Own{
 
     IPermission private permission;
 
-    ITradeFundPool private tradeFundPool;
+    address payable private tradeFundPool;
 
-    IGovernShareManager private governShareManager;
+    address payable private governShareManager;
+
+    address payable private fdToken;
+
+    bool public bool_isInit;
 
     constructor() public {
         permission = new Permission();
     }
 
-    function getGovernShareManager() external view returns(address) {
-        require(address(governShareManager) != address(0),"The address cannot be empty");
-        return address(governShareManager);
+    modifier isInit() {
+        require(bool_isInit == true,"");
+        _;
     }
 
-    function getTradeFundPool() external view returns(address){
-        require(address(tradeFundPool) != address(0),"The address cannot be empty");
-        return address(tradeFundPool);
+    function initialize(address payable _tradeFundPool,address payable _governShareManager,address payable _fdToken)
+    external isOwner(msg.sender){
+        require(bool_isInit == false,"");
+        tradeFundPool = _tradeFundPool;
+        governShareManager = _governShareManager;
+        fdToken = _fdToken;
+        bool_isInit = true;
     }
 
-    function addPermission(address _grantor,address _app,bytes32 _vData) external isOwner(msg.sender){
+    function getGovernShareManager() external view returns(address payable) {
+        require(governShareManager != address(0),"The address cannot be empty");
+        return governShareManager;
+    }
+
+    function getTradeFundPool() external view returns(address payable){
+        require(tradeFundPool != address(0),"The address cannot be empty");
+        return tradeFundPool;
+    }
+
+    function getFdToken() external view returns(address payable){
+        require(fdToken != address(0),"The address cannot be empty");
+        return fdToken;
+    }
+
+    function addPermission(address _grantor,address _app,bytes32 _vData) external isInit() isOwner(msg.sender){
         permission.addPermission(_grantor,_app,_vData);
     }
 

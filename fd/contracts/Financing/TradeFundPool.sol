@@ -40,6 +40,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     bytes32 public constant FundPool_Start = keccak256("FundPool_Start");
     bytes32 public constant FundPool_PreMint = keccak256("FundPool_PreMint");
     bytes32 public constant FundPool_SendEth = keccak256("FundPool_SendEth");
+    bytes32 public constant FundPool_Clearing = keccak256("FundPool_Clearing");
     //bytes32 public constant FundPool_crowdfunding = keccak256("FundPool_crowdfunding");
 
     //////////////
@@ -241,6 +242,15 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         require(address(this).balance.sub(_value) > sellReserve, "not sufficient funds");
 
         _who.transfer(_value);
+    }
+
+    /// @notice 清退  ratio 乘以了 10 ** 9
+    function clearing(address payable _clearingContractAddress,uint256 _ratio) public isStart() isNotCrowdfunding() auth(FundPool_Clearing){
+        require(_ratio<=10**9,"ratio is wrong");
+        uint256 _value_reserve = (sellReserve).mul(_ratio).div(10**9);
+        uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio).div(10**9);
+        sellReserve = sellReserve.sub(_value_reserve);
+        _clearingContractAddress.transfer(_value_reserve.add(_value_govern));
     }
 
     function() external payable{

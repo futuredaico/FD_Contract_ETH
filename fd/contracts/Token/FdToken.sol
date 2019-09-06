@@ -57,6 +57,11 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
         return true;
     }
 
+    function burnSelfToken(uint256 amount) public returns(bool){
+        _burn(msg.sender,amount);
+        return true;
+    }
+
     /**
      * @dev See {IERC20-transfer}.
      *
@@ -197,7 +202,7 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
     function _burn(address account, uint256 value) internal {
         require(account != address(0), "ERC20: burn from the zero address");
 
-        _balances[account] = _balances[account].sub(value, "ERC20: burn amount exceeds balance");
+        _balances[account] = _balances[account].sub(value);
         _totalSupply = _totalSupply.sub(value);
         emit Transfer(account, address(0), value);
     }

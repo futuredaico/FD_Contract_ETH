@@ -7,4 +7,6 @@ interface ITradeFundPool {
     function sell(uint256 amount) external;
     function revenue() external payable;
     function sendEth(address payable _who,uint256 _value) external;
+    function clearing(address payable _clearingContractAddress,uint256 _ratio) external;
+    function() external payable;
 }

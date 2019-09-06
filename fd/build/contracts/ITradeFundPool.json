@@ -2,6 +2,11 @@
   "contractName": "ITradeFundPool",
   "abi": [
     {
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
       "constant": false,
       "inputs": [],
       "name": "windingUp",
@@ -73,27 +78,45 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_clearingContractAddress",
+          "type": "address"
+        },
+        {
+          "name": "_ratio",
+          "type": "uint256"
+        }
+      ],
+      "name": "clearing",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"revenue\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_who\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"sendEth\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"needBack\",\"type\":\"bool\"}],\"name\":\"crowdfunding\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"buy\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"sell\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"windingUp\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":\"ITradeFundPool\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":{\"keccak256\":\"0x4e75f51246a492f2ce9b356cb663072785a8456345bf30454cf0f72fd53389b7\",\"urls\":[\"bzzr://a88b17b90cbafb10cdfed7a475dd012cf0cbaff5a4df794a21db42253c3bc432\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"revenue\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_who\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"sendEth\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"needBack\",\"type\":\"bool\"}],\"name\":\"crowdfunding\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_clearingContractAddress\",\"type\":\"address\"},{\"name\":\"_ratio\",\"type\":\"uint256\"}],\"name\":\"clearing\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"buy\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"sell\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"windingUp\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"fallback\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":\"ITradeFundPool\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":{\"keccak256\":\"0x210577217944107c3122431292aa5b709136d15ad19d539d0a0491f0f4869b37\",\"urls\":[\"bzzr://739784c7dc1412fae6cf56354d05f59d156ac21dc5ef3365cc9aabbae7bfb4c8\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity >=0.4.22 <0.6.0;\r\n\r\ninterface ITradeFundPool {\r\n    function windingUp() external;\r\n    function crowdfunding(bool needBack) external payable;\r\n    function buy() external payable;\r\n    function sell(uint256 amount) external;\r\n    function revenue() external payable;\r\n    function sendEth(address payable _who,uint256 _value) external;\r\n}",
+  "source": "pragma solidity >=0.4.22 <0.6.0;\r\n\r\ninterface ITradeFundPool {\r\n    function windingUp() external;\r\n    function crowdfunding(bool needBack) external payable;\r\n    function buy() external payable;\r\n    function sell(uint256 amount) external;\r\n    function revenue() external payable;\r\n    function sendEth(address payable _who,uint256 _value) external;\r\n    function clearing(address payable _clearingContractAddress,uint256 _ratio) external;\r\n    function() external payable;\r\n}",
   "sourcePath": "D:\\_______work\\FD_Contract_ETH\\fd\\contracts\\Interface\\ITradeFundPool.sol",
   "ast": {
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol",
     "exportedSymbols": {
       "ITradeFundPool": [
-        1817
+        2103
       ]
     },
-    "id": 1818,
+    "id": 2104,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1790,
+        "id": 2066,
         "literals": [
           "solidity",
           ">=",
@@ -104,7 +127,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:32:7"
+        "src": "0:32:8"
       },
       {
         "baseContracts": [],
@@ -112,9 +135,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1817,
+        "id": 2103,
         "linearizedBaseContracts": [
-          1817
+          2103
         ],
         "name": "ITradeFundPool",
         "nodeType": "ContractDefinition",
@@ -122,26 +145,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1793,
+            "id": 2069,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "windingUp",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1791,
+              "id": 2067,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "86:2:7"
+              "src": "86:2:8"
             },
             "returnParameters": {
-              "id": 1792,
+              "id": 2068,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "97:0:7"
+              "src": "97:0:8"
             },
-            "scope": 1817,
-            "src": "68:30:7",
+            "scope": 2103,
+            "src": "68:30:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -149,23 +172,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1798,
+            "id": 2074,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "crowdfunding",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1796,
+              "id": 2072,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1795,
+                  "id": 2071,
                   "name": "needBack",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1798,
-                  "src": "126:13:7",
+                  "scope": 2074,
+                  "src": "126:13:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -173,10 +196,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 1794,
+                    "id": 2070,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "126:4:7",
+                    "src": "126:4:8",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -186,16 +209,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "125:15:7"
+              "src": "125:15:8"
             },
             "returnParameters": {
-              "id": 1797,
+              "id": 2073,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "157:0:7"
+              "src": "157:0:8"
             },
-            "scope": 1817,
-            "src": "104:54:7",
+            "scope": 2103,
+            "src": "104:54:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -203,26 +226,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1801,
+            "id": 2077,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "buy",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1799,
+              "id": 2075,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "176:2:7"
+              "src": "176:2:8"
             },
             "returnParameters": {
-              "id": 1800,
+              "id": 2076,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "195:0:7"
+              "src": "195:0:8"
             },
-            "scope": 1817,
-            "src": "164:32:7",
+            "scope": 2103,
+            "src": "164:32:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -230,23 +253,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1806,
+            "id": 2082,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "sell",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1804,
+              "id": 2080,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1803,
+                  "id": 2079,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1806,
-                  "src": "216:14:7",
+                  "scope": 2082,
+                  "src": "216:14:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -254,10 +277,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1802,
+                    "id": 2078,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "216:7:7",
+                    "src": "216:7:8",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -267,16 +290,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "215:16:7"
+              "src": "215:16:8"
             },
             "returnParameters": {
-              "id": 1805,
+              "id": 2081,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "240:0:7"
+              "src": "240:0:8"
             },
-            "scope": 1817,
-            "src": "202:39:7",
+            "scope": 2103,
+            "src": "202:39:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -284,26 +307,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1809,
+            "id": 2085,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "revenue",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1807,
+              "id": 2083,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "263:2:7"
+              "src": "263:2:8"
             },
             "returnParameters": {
-              "id": 1808,
+              "id": 2084,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "282:0:7"
+              "src": "282:0:8"
             },
-            "scope": 1817,
-            "src": "247:36:7",
+            "scope": 2103,
+            "src": "247:36:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -311,23 +334,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1816,
+            "id": 2092,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "sendEth",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1814,
+              "id": 2090,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1811,
+                  "id": 2087,
                   "name": "_who",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1816,
-                  "src": "306:20:7",
+                  "scope": 2092,
+                  "src": "306:20:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -335,10 +358,10 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 1810,
+                    "id": 2086,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "306:15:7",
+                    "src": "306:15:8",
                     "stateMutability": "payable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address_payable",
@@ -350,11 +373,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1813,
+                  "id": 2089,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1816,
-                  "src": "327:14:7",
+                  "scope": 2092,
+                  "src": "327:14:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -362,10 +385,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1812,
+                    "id": 2088,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "327:7:7",
+                    "src": "327:7:8",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -375,39 +398,147 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "305:37:7"
+              "src": "305:37:8"
             },
             "returnParameters": {
-              "id": 1815,
+              "id": 2091,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "351:0:7"
+              "src": "351:0:8"
             },
-            "scope": 1817,
-            "src": "289:63:7",
+            "scope": 2103,
+            "src": "289:63:8",
             "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2099,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "clearing",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2097,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2094,
+                  "name": "_clearingContractAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2099,
+                  "src": "376:40:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 2093,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "376:15:8",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2096,
+                  "name": "_ratio",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2099,
+                  "src": "417:14:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2095,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "417:7:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "375:57:8"
+            },
+            "returnParameters": {
+              "id": 2098,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "441:0:8"
+            },
+            "scope": 2103,
+            "src": "358:84:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2102,
+            "implemented": false,
+            "kind": "fallback",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2100,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "456:2:8"
+            },
+            "returnParameters": {
+              "id": 2101,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "475:0:8"
+            },
+            "scope": 2103,
+            "src": "448:28:8",
+            "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 1818,
-        "src": "36:319:7"
+        "scope": 2104,
+        "src": "36:443:8"
       }
     ],
-    "src": "0:355:7"
+    "src": "0:479:8"
   },
   "legacyAST": {
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol",
     "exportedSymbols": {
       "ITradeFundPool": [
-        1817
+        2103
       ]
     },
-    "id": 1818,
+    "id": 2104,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1790,
+        "id": 2066,
         "literals": [
           "solidity",
           ">=",
@@ -418,7 +549,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:32:7"
+        "src": "0:32:8"
       },
       {
         "baseContracts": [],
@@ -426,9 +557,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1817,
+        "id": 2103,
         "linearizedBaseContracts": [
-          1817
+          2103
         ],
         "name": "ITradeFundPool",
         "nodeType": "ContractDefinition",
@@ -436,26 +567,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1793,
+            "id": 2069,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "windingUp",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1791,
+              "id": 2067,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "86:2:7"
+              "src": "86:2:8"
             },
             "returnParameters": {
-              "id": 1792,
+              "id": 2068,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "97:0:7"
+              "src": "97:0:8"
             },
-            "scope": 1817,
-            "src": "68:30:7",
+            "scope": 2103,
+            "src": "68:30:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -463,23 +594,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1798,
+            "id": 2074,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "crowdfunding",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1796,
+              "id": 2072,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1795,
+                  "id": 2071,
                   "name": "needBack",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1798,
-                  "src": "126:13:7",
+                  "scope": 2074,
+                  "src": "126:13:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -487,10 +618,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 1794,
+                    "id": 2070,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "126:4:7",
+                    "src": "126:4:8",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -500,16 +631,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "125:15:7"
+              "src": "125:15:8"
             },
             "returnParameters": {
-              "id": 1797,
+              "id": 2073,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "157:0:7"
+              "src": "157:0:8"
             },
-            "scope": 1817,
-            "src": "104:54:7",
+            "scope": 2103,
+            "src": "104:54:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -517,26 +648,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1801,
+            "id": 2077,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "buy",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1799,
+              "id": 2075,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "176:2:7"
+              "src": "176:2:8"
             },
             "returnParameters": {
-              "id": 1800,
+              "id": 2076,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "195:0:7"
+              "src": "195:0:8"
             },
-            "scope": 1817,
-            "src": "164:32:7",
+            "scope": 2103,
+            "src": "164:32:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -544,23 +675,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1806,
+            "id": 2082,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "sell",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1804,
+              "id": 2080,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1803,
+                  "id": 2079,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1806,
-                  "src": "216:14:7",
+                  "scope": 2082,
+                  "src": "216:14:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -568,10 +699,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1802,
+                    "id": 2078,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "216:7:7",
+                    "src": "216:7:8",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -581,16 +712,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "215:16:7"
+              "src": "215:16:8"
             },
             "returnParameters": {
-              "id": 1805,
+              "id": 2081,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "240:0:7"
+              "src": "240:0:8"
             },
-            "scope": 1817,
-            "src": "202:39:7",
+            "scope": 2103,
+            "src": "202:39:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -598,26 +729,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1809,
+            "id": 2085,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "revenue",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1807,
+              "id": 2083,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "263:2:7"
+              "src": "263:2:8"
             },
             "returnParameters": {
-              "id": 1808,
+              "id": 2084,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "282:0:7"
+              "src": "282:0:8"
             },
-            "scope": 1817,
-            "src": "247:36:7",
+            "scope": 2103,
+            "src": "247:36:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -625,23 +756,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1816,
+            "id": 2092,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "sendEth",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1814,
+              "id": 2090,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1811,
+                  "id": 2087,
                   "name": "_who",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1816,
-                  "src": "306:20:7",
+                  "scope": 2092,
+                  "src": "306:20:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -649,10 +780,10 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 1810,
+                    "id": 2086,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "306:15:7",
+                    "src": "306:15:8",
                     "stateMutability": "payable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address_payable",
@@ -664,11 +795,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1813,
+                  "id": 2089,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1816,
-                  "src": "327:14:7",
+                  "scope": 2092,
+                  "src": "327:14:8",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -676,10 +807,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1812,
+                    "id": 2088,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "327:7:7",
+                    "src": "327:7:8",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -689,26 +820,134 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "305:37:7"
+              "src": "305:37:8"
             },
             "returnParameters": {
-              "id": 1815,
+              "id": 2091,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "351:0:7"
+              "src": "351:0:8"
             },
-            "scope": 1817,
-            "src": "289:63:7",
+            "scope": 2103,
+            "src": "289:63:8",
             "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2099,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "clearing",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2097,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2094,
+                  "name": "_clearingContractAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2099,
+                  "src": "376:40:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 2093,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "376:15:8",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2096,
+                  "name": "_ratio",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2099,
+                  "src": "417:14:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2095,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "417:7:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "375:57:8"
+            },
+            "returnParameters": {
+              "id": 2098,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "441:0:8"
+            },
+            "scope": 2103,
+            "src": "358:84:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2102,
+            "implemented": false,
+            "kind": "fallback",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2100,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "456:2:8"
+            },
+            "returnParameters": {
+              "id": 2101,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "475:0:8"
+            },
+            "scope": 2103,
+            "src": "448:28:8",
+            "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 1818,
-        "src": "36:319:7"
+        "scope": 2104,
+        "src": "36:443:8"
       }
     ],
-    "src": "0:355:7"
+    "src": "0:479:8"
   },
   "compiler": {
     "name": "solc",
@@ -716,7 +955,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-08-27T10:27:31.805Z",
+  "updatedAt": "2019-09-04T09:56:02.917Z",
   "devdoc": {
     "methods": {}
   },

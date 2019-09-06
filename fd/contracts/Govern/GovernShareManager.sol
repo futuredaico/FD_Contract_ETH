@@ -4,12 +4,13 @@ import "../Interface/IGovernShareManager.sol";
 import "../apps/FutureDaoApp.sol";
 import "../Interface/IERC20.sol";
 import "../Interface/ITradeFundPool.sol";
+import "../clearing/ClearingFundPool.sol";
 
 
 /// @title 自治管钱的合约
 /// @author viko
 /// @notice 只允许白名单中的合约调用，不允许其他地址调用
-contract GovernShareManager is IGovernShareManager , FutureDaoApp{
+contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     /// @notice 最多允许锁股份次数
     uint8 lockTimesLimit = 5;
 
@@ -20,11 +21,13 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
     mapping (address=>uint256) balances;
 
     /// @notice 发行的股份币的合约地址
-    IERC20 public token;
+    address public token;
 
     bytes32 public constant GovernShareManager_Lock = keccak256("GovernShareManager_Lock");
     bytes32 public constant GovernShareManager_Free = keccak256("GovernShareManager_Free");
     bytes32 public constant GovernShareManager_SendEth = keccak256("GovernShareManager_SendEth");
+    bytes32 public constant GovernShareManager_Clearing = keccak256("GovernShareManager_Clearing");
+    bytes32 public constant GovernShareManager_ClearingFdt = keccak256("GovernShareManager_ClearingFdt");
 
 
     /// @notice 用来记录提议合约的某个锁定到期时间
@@ -35,25 +38,26 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
         uint256 lockAmount;
     }
 
-    constructor(AppManager _appManager,IERC20 _token) public{
+    constructor(AppManager _appManager,address _token) public{
         appManager = _appManager;
         token = _token;
     }
 
     /// @notice 获取某个地址拥有的可以投票的股份数量
-    function getFdtInGovern(address _addr) public returns(uint256){
+    function getFdtInGovern(address _addr) public view returns(uint256){
         return balances[_addr];
     }
 
     /// @notice 获取fdt总发行量
-    function getFtdTotalSupply() public returns(uint256){
-        return token.totalSupply();
+    function getFdtTotalSupply() public view returns(uint256){
+        uint256 totalSupplyInFdt = IERC20(token).totalSupply();
+        return totalSupplyInFdt;
     }
 
     ///@notice 从tradefund合约中充钱进来
-    function setFdtIn(uint256 amount) public returns(bool){
+    function setFdtIn(uint256 amount) public returns(bool) {
         require(amount>0,"amount need more than 0");
-        bool r = token.transferFrom(msg.sender,address(this),amount);
+        bool r = IERC20(token).transferFrom(msg.sender,address(this),amount);
         require(r,"lock error");
         balances[msg.sender] = balances[msg.sender].add(amount);
         return true;
@@ -65,7 +69,7 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
         require(balances[msg.sender]>=amount,"The balance is not enough");
         //先刷新一波
         _refreshSL(msg.sender);
-        bool r = token.transfer(msg.sender,amount);
+        bool r = IERC20(token).transfer(msg.sender,amount);
         require(r,"free error");
         balances[msg.sender] = balances[msg.sender].sub(amount);
     }
@@ -92,10 +96,28 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
         _delSL(_lockAddr,msg.sender,_index,_expireDate);
     }
 
+    /// @notice 清退fdt
+    function clearingFdt(address payable _addr_clearingFundPool,address _addr,uint256 amount) public auth(GovernShareManager_ClearingFdt)
+    returns(bool)
+    {
+        //先刷新一波
+        _refreshSL(_addr);
+        require(balances[_addr].sub(amount)>0,"no money");
+        IERC20(token).approve(_addr_clearingFundPool,amount);
+        bool r = ClearingFundPool(_addr_clearingFundPool).lock(_addr,amount);
+        balances[_addr] = balances[_addr].sub(amount);
+        require(r==true,"error");
+    }
 
     /// @notice 给某个地址转账
     function sendEth(address payable _addr,uint256 _value) public payable auth(GovernShareManager_SendEth) returns(bool){
         ITradeFundPool(appManager.getTradeFundPool()).sendEth(_addr,_value);
+    }
+
+    /// @notice 清退
+    function clearing(address payable _addr_clearingFundPool,uint256 _ratio) public payable auth(GovernShareManager_Clearing) returns(bool){
+        ITradeFundPool(appManager.getTradeFundPool()).clearing(_addr_clearingFundPool,_ratio);
+        return true;
     }
 
 /////////////////////
@@ -120,6 +142,7 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
             SL storage _sl = slQueue[i];
             if(_sl.contractAddress == _contractAddr && _sl.expireDate == _expireDate && _sl.index == _index){
                 _sl.lockAmount = _sl.lockAmount.add(_lockAmount);
+                balances[_lockAddr] = balances[_lockAddr].sub(_lockAmount);
                 return true;
             }
         }
@@ -131,8 +154,9 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
             lockAmount : _lockAmount
         });
         //不能超过锁定的次数
-        require(lockTimesLimit <= slQueue.length,"Cannot exceed the number of locks");
+        require(slQueue.length <= lockTimesLimit,"Cannot exceed the number of locks");
         slMap[_lockAddr].push(sl);
+        balances[_lockAddr] = balances[_lockAddr].sub(_lockAmount);
         return true;
     }
 
@@ -150,6 +174,7 @@ contract GovernShareManager is IGovernShareManager , FutureDaoApp{
         for(uint256 i = 0;i < slQueue.length;i = i.add(1)){
             SL storage _sl = slQueue[i];
             if(_sl.contractAddress == _contractAddr && _sl.expireDate == _expireDate && _sl.index == _index){
+                balances[_lockAddr] = balances[_lockAddr].add(_sl.lockAmount);
                 _sl = slQueue[slQueue.length.sub(1)];
                 delete slQueue[slQueue.length.sub(1)];
                 slQueue.length = slQueue.length.sub(1);

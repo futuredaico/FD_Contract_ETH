@@ -1,0 +1,239 @@
+{
+  "contractName": "ITap",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "GetMoney",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "GetMoneyBackToFund",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"GetMoney\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"GetMoneyBackToFund\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol\":\"ITap\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol\":{\"keccak256\":\"0x6e7be2e7bd0677051ca23b9b3acb5891de9e43fb964853731df4432bd6c94aee\",\"urls\":[\"bzzr://4ea5cd4969961c1953d116074747174c67bb0e2fb8a282e545a6a9c0edcd1ba4\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity >=0.4.22 <0.6.0;\r\n\r\ninterface ITap {\r\n\r\n    function GetMoney() external payable;\r\n\r\n    function GetMoneyBackToFund() external payable;\r\n}",
+  "sourcePath": "D:/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
+  "ast": {
+    "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
+    "exportedSymbols": {
+      "ITap": [
+        2057
+      ]
+    },
+    "id": 2058,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2050,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.6",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:32:7"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 2057,
+        "linearizedBaseContracts": [
+          2057
+        ],
+        "name": "ITap",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2053,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "GetMoney",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2051,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "77:2:7"
+            },
+            "returnParameters": {
+              "id": 2052,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "96:0:7"
+            },
+            "scope": 2057,
+            "src": "60:37:7",
+            "stateMutability": "payable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2056,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "GetMoneyBackToFund",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2054,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "132:2:7"
+            },
+            "returnParameters": {
+              "id": 2055,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "151:0:7"
+            },
+            "scope": 2057,
+            "src": "105:47:7",
+            "stateMutability": "payable",
+            "superFunction": null,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2058,
+        "src": "36:119:7"
+      }
+    ],
+    "src": "0:155:7"
+  },
+  "legacyAST": {
+    "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
+    "exportedSymbols": {
+      "ITap": [
+        2057
+      ]
+    },
+    "id": 2058,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2050,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.6",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:32:7"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 2057,
+        "linearizedBaseContracts": [
+          2057
+        ],
+        "name": "ITap",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2053,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "GetMoney",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2051,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "77:2:7"
+            },
+            "returnParameters": {
+              "id": 2052,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "96:0:7"
+            },
+            "scope": 2057,
+            "src": "60:37:7",
+            "stateMutability": "payable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 2056,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "GetMoneyBackToFund",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2054,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "132:2:7"
+            },
+            "returnParameters": {
+              "id": 2055,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "151:0:7"
+            },
+            "scope": 2057,
+            "src": "105:47:7",
+            "stateMutability": "payable",
+            "superFunction": null,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2058,
+        "src": "36:119:7"
+      }
+    ],
+    "src": "0:155:7"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.8+commit.23d335f2.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.11",
+  "updatedAt": "2019-09-04T08:58:42.660Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
