@@ -4,6 +4,21 @@ const FdToken = artifacts.require("FdToken");
 const TradeFundPool = artifacts.require("TradeFundPool");
 const GovernShareManager = artifacts.require("GovernShareManager");
 const Vote_ApplyFund = artifacts.require("Vote_ApplyFund");
+const DateTime = artifacts.require("DateTime");
+
+class Ut {
+    /**
+    * 异步延迟
+    * @param {number} time 延迟的时间,单位毫秒
+    */
+    static sleep(time = 0) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve();
+        }, time);
+      })
+    };
+}
 
 contract("Test",async(accounts)=>{
     let root = accounts[0];
@@ -14,8 +29,9 @@ contract("Test",async(accounts)=>{
     let crowdFundPrice = 223606000000000;
     let preMintAmount = 100;
 
-    let tradeFundPoolIns , fdTokenIns , appManagerIns , coIns , governShareManagerIns , vote_ApplyFundIns;
-    let bytes32_FundPool_PreMint,bytes32_EMPTY_PARAM_HASH,bytes32_FdToken_Burn,bytes32_FdToken_Mint,bytes32_FundPool_Start,bytes32_GovernShareManager_Lock;
+    let tradeFundPoolIns , fdTokenIns , appManagerIns , coIns , governShareManagerIns , vote_ApplyFundIns ,DateTimeIns;
+    let bytes32_FundPool_PreMint,bytes32_EMPTY_PARAM_HASH,bytes32_FdToken_Burn,bytes32_FdToken_Mint,bytes32_FundPool_Start,bytes32_GovernShareManager_Lock,
+        bytes32_Vote_ApplyFund_OneTicketRefuseProposal;
 
     it("init",async()=>{
         tradeFundPoolIns = await TradeFundPool.deployed();
@@ -24,6 +40,7 @@ contract("Test",async(accounts)=>{
         coIns = await Co.deployed();
         governShareManagerIns = await GovernShareManager.deployed();
         vote_ApplyFundIns = await Vote_ApplyFund.deployed();
+        DateTimeIns = await DateTime.deployed();
         
         bytes32_EMPTY_PARAM_HASH = await tradeFundPoolIns.EMPTY_PARAM_HASH();
         bytes32_FundPool_PreMint = await tradeFundPoolIns.FundPool_PreMint();
@@ -31,11 +48,13 @@ contract("Test",async(accounts)=>{
         bytes32_FdToken_Burn = await fdTokenIns.FdToken_Burn();
         bytes32_FdToken_Mint = await fdTokenIns.FdToken_Mint();
         bytes32_GovernShareManager_Lock = await governShareManagerIns.GovernShareManager_Lock();
+        bytes32_Vote_ApplyFund_OneTicketRefuseProposal = await vote_ApplyFundIns.Vote_ApplyFund_OneTicketRefuseProposal();
 
-        await appManagerIns.initialize(tradeFundPoolIns.address,governShareManagerIns.address,fdTokenIns.address);
+        await appManagerIns.initialize(tradeFundPoolIns.address,governShareManagerIns.address,fdTokenIns.address,DateTimeIns.address);
     
         ///分配权限
         await appManagerIns.addPermission(root,tradeFundPoolIns.address,bytes32_FundPool_PreMint);
+        await appManagerIns.addPermission(root,root,bytes32_Vote_ApplyFund_OneTicketRefuseProposal);
         await appManagerIns.addPermission(root,tradeFundPoolIns.address,bytes32_FundPool_Start);
         await appManagerIns.addPermission(tradeFundPoolIns.address,fdTokenIns.address,bytes32_FdToken_Burn);
         await appManagerIns.addPermission(tradeFundPoolIns.address,fdTokenIns.address,bytes32_FdToken_Mint);
@@ -452,6 +471,9 @@ contract("Test",async(accounts)=>{
         let _count2 =(await vote_ApplyFundIns.getProposalQueueLength())/1;
         assert.equal(_count2 == _count1 + 1,true,"count is wrong --2");
 
+        let amountOfProposalToday = (await vote_ApplyFundIns.getAmountOfProposalToday())/1;
+        assert.equal(amountOfProposalToday == 1,true,"amountOfProposalToday is wrong");
+
         ///接下来比对信息
         let baseInfo = await vote_ApplyFundIns.getProposalBaseInfoByIndex(1);
         let _proposalName = baseInfo[0];
@@ -491,13 +513,94 @@ contract("Test",async(accounts)=>{
         assert.equal(_value == 1 * (10 ** 15),true,"_value is wrong");
         assert.equal(_timeConsuming == 0,true,"_timeConsuming is wrong");
     });
+/*
+    /// 终止提议
+    it("abort",async()=>{
+        await Ut.sleep(10000);//等待10s
+        console.log("开始终止提议");
+        await vote_ApplyFundIns.abortProposal(1);
+        let state = await vote_ApplyFundIns.getProposalStateByIndex(1);
+        let _approveVotes = state[0];
+        let _refuseVotes = state[1];
+        let _process = state[2];
+        let _pass = state[3];
+        let _abort = state[4];
+        let _abandon = state[5];
+        let _oneTicketRefuse = state[6];
 
+        assert.equal(_approveVotes == 0,true,"_approveVotes is wrong");
+        assert.equal(_refuseVotes == 0,true,"_refuseVotes is wrong");
+        assert.equal(_process == false,true,"_process is wrong");
+        assert.equal(_pass == false,true,"_pass is wrong");
+        assert.equal(_abort == true,true,"_abort is wrong");
+        assert.equal(_abandon == false,true,"_abandon is wrong");
+        assert.equal(_oneTicketRefuse == false,true,"_oneTicketRefuse is wrong");
+
+        let amountOfProposalToday = (await vote_ApplyFundIns.getAmountOfProposalToday())/1;
+        assert.equal(amountOfProposalToday == 0,true,"amountOfProposalToday is wrong");
+    });
+*/
+
+    /// 一票否决了
+    it("oneTicketRefuse",async()=>{
+        await Ut.sleep(10000);//等待10s
+        console.log("准备一票否决了");
+        await vote_ApplyFundIns.oneTicketRefuseProposal(1);
+        let state = await vote_ApplyFundIns.getProposalStateByIndex(1);
+        let _approveVotes = state[0];
+        let _refuseVotes = state[1];
+        let _process = state[2];
+        let _pass = state[3];
+        let _abort = state[4];
+        let _abandon = state[5];
+        let _oneTicketRefuse = state[6];
+        assert.equal(_approveVotes == 0,true,"_approveVotes is wrong");
+        assert.equal(_refuseVotes == 0,true,"_refuseVotes is wrong");
+        assert.equal(_process == false,true,"_process is wrong");
+        assert.equal(_pass == false,true,"_pass is wrong");
+        assert.equal(_abort == false,true,"_abort is wrong");
+        assert.equal(_abandon == false,true,"_abandon is wrong");
+        assert.equal(_oneTicketRefuse == true,true,"_oneTicketRefuse is wrong");
+
+        let amountOfProposalToday = (await vote_ApplyFundIns.getAmountOfProposalToday())/1;
+        assert.equal(amountOfProposalToday == 0,true,"amountOfProposalToday is wrong");
+    });
+    
     /// 投票
     it("vote",async()=>{
+
+        await Ut.sleep(20000); // 等待20s再发起提案
+        console.log("开始投票");
+
+        let amount = 888;
         let _balanceInGovern_before = (await governShareManagerIns.getFdtInGovern(root)) / 1;
-        console.log(_balanceInGovern_before);
-        await vote_ApplyFundIns.vote(1,1,888);
+        //console.log(_balanceInGovern_before);
+        await vote_ApplyFundIns.vote(1,1,amount);
         let _balanceInGovern_after = (await governShareManagerIns.getFdtInGovern(root)) / 1;
-        console.log(_balanceInGovern_after);
+        //console.log(_balanceInGovern_after);
+
+        ///比对数据
+        //投票的数量是否正确
+        assert.equal(_balanceInGovern_before-_balanceInGovern_after == amount,true,"vote shares is wrong");
+        //比对提议中记录的数据
+        let state = await vote_ApplyFundIns.getProposalStateByIndex(1);
+        let _approveVotes = state[0];
+        let _refuseVotes = state[1];
+        let _process = state[2];
+        let _pass = state[3];
+        let _abort = state[4];
+        let _abandon = state[5];
+        let _oneTicketRefuse = state[6];
+        assert.equal(_approveVotes == amount,true,"_approveVotes is wrong");
+        assert.equal(_refuseVotes == 0,true,"_refuseVotes is wrong");
+        assert.equal(_process == false,true,"_process is wrong");
+        assert.equal(_pass == false,true,"_pass is wrong");
+        assert.equal(_abort == false,true,"_abort is wrong");
+        assert.equal(_abandon == false,true,"_abandon is wrong");
+        assert.equal(_oneTicketRefuse == false,true,"_oneTicketRefuse is wrong");
     });
+
+    ///
 });
+
+

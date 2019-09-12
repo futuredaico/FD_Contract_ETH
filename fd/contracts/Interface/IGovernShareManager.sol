@@ -1,6 +1,7 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 interface IGovernShareManager {
+    function mintBinding(address _addr,uint256 _amount,uint256 _timestamp) external returns(bool);
     function getFdtInGovern(address _addr) external view returns(uint256);
     function getFdtTotalSupply() external view returns(uint256);
     function setFdtIn(uint256 amount) external returns(bool);

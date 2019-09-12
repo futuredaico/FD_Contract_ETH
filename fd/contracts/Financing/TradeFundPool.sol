@@ -82,7 +82,8 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 预挖矿
     event OnPreMint(
         address who,
-        uint256 fdtAmount
+        uint256 fdtAmount,
+        uint256 timestamp
     );
 
     /// @notice 构造函数
@@ -141,10 +142,12 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     }
 
     /// @notice 预挖矿
-    function preMint(address who,uint256 amount) public auth(FundPool_PreMint){
+    function preMint(address who,uint256 amount,uint256 timestamp) public auth(FundPool_PreMint){
         require(started == false,"cant start");
-        token.mint(who,amount);
-        emit OnPreMint(who,amount);
+        address govern = appManager.getGovernShareManager();
+        token.mint(govern,amount);
+        IGovernShareManager(govern).mintBinding(who,amount,timestamp);
+        emit OnPreMint(who,amount,timestamp);
     }
 
     /// @notice 众筹失败，清退

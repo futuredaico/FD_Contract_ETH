@@ -20,9 +20,19 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     /// @notice 用户存在治理合约中的Fdt的数量
     mapping (address=>uint256) balances;
 
+    /// @notice 用户必须锁定的时间和数量，不是额外的，包含在balances中。只是表示其中的一部分需要锁定到什么时候
+    mapping (address=>Sbinding[]) map_Sbinding;
+
     /// @notice 发行的股份币的合约地址
     address public token;
 
+    //// 这部分的锁定 是不能提取出合约，但是能投票的那种
+    struct Sbinding{
+        uint256 amount;
+        uint timestamp;
+    }
+
+    bytes32 public constant GovernShareManager_MintBinding = keccak256("GovernShareManager_MintBinding");
     bytes32 public constant GovernShareManager_Lock = keccak256("GovernShareManager_Lock");
     bytes32 public constant GovernShareManager_Free = keccak256("GovernShareManager_Free");
     bytes32 public constant GovernShareManager_SendEth = keccak256("GovernShareManager_SendEth");
@@ -44,7 +54,7 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     }
 
     /// @notice 获取某个地址拥有的可以投票的股份数量
-    function getFdtInGovern(address _addr) public view returns(uint256){
+    function getFdtInGovern(address _addr) public view returns(uint256) {
         return balances[_addr];
     }
 
@@ -54,21 +64,32 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         return totalSupplyInFdt;
     }
 
+    function mintBinding(address _addr,uint256 _amount,uint256 _timestamp)
+    public auth(GovernShareManager_MintBinding) returns(bool){
+        balances[_addr] = balances[_addr].add(_amount);
+        Sbinding memory binding = Sbinding({
+            amount : _amount,
+            timestamp : _timestamp
+        });
+        map_Sbinding[msg.sender].push(binding);
+        return true;
+    }
+
     ///@notice 从tradefund合约中充钱进来
-    function setFdtIn(uint256 amount) public returns(bool) {
-        require(amount>0,"amount need more than 0");
-        bool r = IERC20(token).transferFrom(msg.sender,address(this),amount);
+    function setFdtIn(uint256 _amount) public returns(bool) {
+        require(_amount>0,"amount need more than 0");
+        bool r = IERC20(token).transferFrom(msg.sender,address(this),_amount);
         require(r,"lock error");
-        balances[msg.sender] = balances[msg.sender].add(amount);
         return true;
     }
 
     ///@notice 从tradefund合约中解锁股份
     function getFdtOut(uint256 amount) public returns(bool){
         require(amount>0,'amount need more than 0');
-        require(balances[msg.sender]>=amount,"The balance is not enough");
-        //先刷新一波
-        _refreshSL(msg.sender);
+        uint256 _bindingAmount = _getbindingAmount(msg.sender);
+        require(balances[msg.sender].sub(_bindingAmount) >= amount,"The balance is not enough");
+        // //先刷新一波
+        // _refreshSL(msg.sender);
         bool r = IERC20(token).transfer(msg.sender,amount);
         require(r,"free error");
         balances[msg.sender] = balances[msg.sender].sub(amount);
@@ -80,8 +101,8 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     auth(GovernShareManager_Lock)
     returns(bool)
     {
-        //先刷新一波
-        _refreshSL(_lockAddr);
+        // //先刷新一波
+        // _refreshSL(_lockAddr);
         //锁定股份
         _addSL(_lockAddr,msg.sender,_index,_expireDate,_lockAmount);
         return true;
@@ -100,8 +121,8 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     function clearingFdt(address payable _addr_clearingFundPool,address _addr,uint256 amount) public auth(GovernShareManager_ClearingFdt)
     returns(bool)
     {
-        //先刷新一波
-        _refreshSL(_addr);
+        // //先刷新一波
+        // _refreshSL(_addr);
         require(balances[_addr].sub(amount)>0,"no money");
         IERC20(token).approve(_addr_clearingFundPool,amount);
         bool r = ClearingFundPool(_addr_clearingFundPool).lock(_addr,amount);
@@ -171,32 +192,34 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     returns(bool)
     {
         SL[] storage slQueue = slMap[_lockAddr];
-        for(uint256 i = 0;i < slQueue.length;i = i.add(1)){
-            SL storage _sl = slQueue[i];
+        for(int i = 0;i < int(slQueue.length);i++){
+            SL storage _sl = slQueue[uint(i)];
             if(_sl.contractAddress == _contractAddr && _sl.expireDate == _expireDate && _sl.index == _index){
                 balances[_lockAddr] = balances[_lockAddr].add(_sl.lockAmount);
                 _sl = slQueue[slQueue.length.sub(1)];
                 delete slQueue[slQueue.length.sub(1)];
                 slQueue.length = slQueue.length.sub(1);
+                i = i - 1;
                 return true;
             }
         }
         return false;
     }
 
-    /// @notice 刷新记录 剔除已经过期的记录
-    function _refreshSL(address _lockAddr) private {
-        SL[] storage slQueue = slMap[_lockAddr];
-        for(uint256 i = 0;i<slQueue.length;i = i.add(1)){
-            SL storage _sl = slQueue[i];
-            if(_sl.expireDate > now){
-                balances[_lockAddr] = balances[_lockAddr].add(_sl.lockAmount);
-                _sl = slQueue[slQueue.length.sub(1)];
-                delete slQueue[slQueue.length.sub(1)];
-                slQueue.length = slQueue.length.sub(1);
-            }
-        }
-    }
+    // /// @notice 刷新记录 剔除已经过期的记录
+    // function _refreshSL(address _lockAddr) private {
+    //     SL[] storage slQueue = slMap[_lockAddr];
+    //     for(int i = 0;i<int(slQueue.length);i++){
+    //         SL storage _sl = slQueue[uint(i)];
+    //         if(_sl.expireDate > now){
+    //             balances[_lockAddr] = balances[_lockAddr].add(_sl.lockAmount);
+    //             _sl = slQueue[slQueue.length.sub(1)];
+    //             delete slQueue[slQueue.length.sub(1)];
+    //             slQueue.length = slQueue.length.sub(1);
+    //             i = i-1;
+    //         }
+    //     }
+    // }
 
 /*
     /// @notice 调用合约做什么事情
@@ -205,6 +228,24 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         require(success, "call failed");
     }
 */
+
+    function _getbindingAmount(address _addr) private returns(uint256 _bindingAmount){
+        _bindingAmount = 0;
+        Sbinding[] storage queue = map_Sbinding[_addr];
+        for(int i = 0;i < int(queue.length);i++){
+            Sbinding storage _sb = queue[uint(i)];
+            if(now < _sb.timestamp){
+                _bindingAmount = _bindingAmount.add(_sb.amount);
+            }
+            else{
+                _sb = queue[queue.length.sub(1)];
+                delete queue[queue.length.sub(1)];
+                queue.length = queue.length.sub(1);
+                i = i - 1;
+            }
+        }
+        return _bindingAmount;
+    }
 
     function() external payable{
     }

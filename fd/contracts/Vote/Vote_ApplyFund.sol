@@ -2,6 +2,7 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./VoteApp.sol";
 import "../Tap/Tap.sol";
+import "../Interface/IDateTime.sol";
 
 contract Vote_ApplyFund is VoteApp{
 
@@ -9,6 +10,11 @@ contract Vote_ApplyFund is VoteApp{
 
     /// @notice 所有的提议
     Proposal[] private proposalQueue;
+
+    ///一天最多的提议数量
+    uint256 maxProposalOneDay = 5;
+
+    mapping(bytes32=>uint256) counter;
 
     /// @notice 一个提议的结构
     struct Proposal{
@@ -93,6 +99,12 @@ contract Vote_ApplyFund is VoteApp{
         return proposalQueue.length;
     }
 
+    ///查询今天已经有几个议题了
+    function getAmountOfProposalToday() public view returns(uint256){
+        bytes32 b32 = getTimeHash();
+        return counter[b32];
+    }
+
     ///查询某一个index对应的提议的信息()
     function getProposalBaseInfoByIndex(uint256 _proposalIndex)
     public
@@ -157,6 +169,10 @@ contract Vote_ApplyFund is VoteApp{
         //发起提议的人需要转给本合约一定的gas作为费用奖励处理者
         require(msg.value >= proposalFee + deposit, "need proposalFee");
         require(_retrialIndex <= proposalQueue.length,"_retrialIndex is wrong");
+        //当前天的提议数量看看是多少
+        bytes32 b32 = getTimeHash();
+        require(counter[b32] < maxProposalOneDay,"Beyond the maxProposalOneDay");
+
         STap memory _sTap = STap({
             startTime : now,
             recipient : _recipient,
@@ -192,6 +208,7 @@ contract Vote_ApplyFund is VoteApp{
             proposal.retrialIndex
         );
         proposalQueue.push(proposal);
+        counter[b32] = counter[b32].add(1);
     }
 
     function vote(uint256 _proposalIndex,uint8 result,uint256 FdtAmount) public ownFdt() {
@@ -200,10 +217,10 @@ contract Vote_ApplyFund is VoteApp{
         Proposal storage proposal = proposalQueue[queueIndex];
         //投票要在投票期内
         require(now <= proposal.sTap.startTime + votingPeriodLength,"time out");
-        //投票的状态是默认（弃权）状态
-        require(proposal.voteDetails[msg.sender] == enumVoteResult.waiver,"Votes have been cast");
         //投票的结果只能是赞成或反对
         require(result == 1||result == 2,"vote result must be less than 3");
+        //投票的状态是默认（弃权）状态
+        require(proposal.voteDetails[msg.sender] == enumVoteResult.waiver || proposal.voteDetails[msg.sender] == enumVoteResult(result),"Votes have been cast");
         //没有被终止
         require(proposal.abort == false,"proposal has been aborted");
         //也没有被一票否决
@@ -244,6 +261,8 @@ contract Vote_ApplyFund is VoteApp{
         require(proposal.abort == false,"proposal has been aborted");
         proposal.abort = true;
         emit OnAbort(_proposalIndex);
+        bytes32 b32 = getTimeHash(proposal.sTap.startTime);
+        counter[b32] = counter[b32].sub(1);
     }
 
     /// @notice 一票否决
@@ -259,6 +278,8 @@ contract Vote_ApplyFund is VoteApp{
 
         proposal.oneTicketRefuse = true;
         emit OnOneTicketRefuse(_proposalIndex);
+        bytes32 b32 = getTimeHash(proposal.sTap.startTime);
+        counter[b32] = counter[b32].sub(1);
     }
 
     /// @notice 处理提议
@@ -296,12 +317,42 @@ contract Vote_ApplyFund is VoteApp{
             }
         }
         emit OnProcess(_proposalIndex,proposal.pass);
+        bytes32 b32 = getTimeHash(proposal.sTap.startTime);
+        counter[b32] = counter[b32].sub(1);
+    }
+
+    function freeFdt(uint256[] memory _proposalIndexs) public{
+        for(uint256 i = 0;i<_proposalIndexs.length;i++){
+            uint256 _proposalIndex = _proposalIndexs[i];
+            require(_proposalIndex <= proposalQueue.length && _proposalIndex>0,"proposal does not exist");
+            Proposal storage proposal = proposalQueue[_proposalIndex];
+            //需要提议是 已经处理或者被一票否决或者被撤销
+            require(proposal.process == true || proposal.abort == true || proposal.oneTicketRefuse == true,"proposal need process");
+            IGovernShareManager(appManager.getGovernShareManager()).free(msg.sender,_proposalIndex,proposal.sTap.startTime + votingPeriodLength);
+        }
+
     }
 
     function proposalIndexToQueueIndex(uint256 _proposalIndex) private view returns(uint256){
         //提议首先要存在
         require(_proposalIndex <= proposalQueue.length && _proposalIndex>0,"proposal does not exist");
         return _proposalIndex - 1;
+    }
+
+    function getTimeHash() private view returns(bytes32){
+        IDateTime dateTime = IDateTime(appManager.getDateTime());
+        uint16 year = dateTime.getYear(now);
+        uint8 month = dateTime.getMonth(now);
+        uint8 day = dateTime.getDay(now);
+        return keccak256(abi.encodePacked(year,month,day));
+    }
+
+    function getTimeHash(uint256 timestamp) private view returns(bytes32){
+        IDateTime dateTime = IDateTime(appManager.getDateTime());
+        uint16 year = dateTime.getYear(timestamp);
+        uint8 month = dateTime.getMonth(timestamp);
+        uint8 day = dateTime.getDay(timestamp);
+        return keccak256(abi.encodePacked(year,month,day));
     }
 
     function() external payable{

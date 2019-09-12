@@ -16,6 +16,8 @@ contract AppManager is Own{
 
     address payable private fdToken;
 
+    address public dateTime;
+
     bool public bool_isInit;
 
     constructor() public {
@@ -27,12 +29,13 @@ contract AppManager is Own{
         _;
     }
 
-    function initialize(address payable _tradeFundPool,address payable _governShareManager,address payable _fdToken)
+    function initialize(address payable _tradeFundPool,address payable _governShareManager,address payable _fdToken,address _dateTime)
     external isOwner(msg.sender){
         require(bool_isInit == false,"");
         tradeFundPool = _tradeFundPool;
         governShareManager = _governShareManager;
         fdToken = _fdToken;
+        dateTime = _dateTime;
         bool_isInit = true;
     }
 
@@ -49,6 +52,11 @@ contract AppManager is Own{
     function getFdToken() external view returns(address payable){
         require(fdToken != address(0),"The address cannot be empty");
         return fdToken;
+    }
+
+    function getDateTime() external view returns(address){
+        require(dateTime != address(0),"The address cannot be empty");
+        return dateTime;
     }
 
     function addPermission(address _grantor,address _app,bytes32 _vData) external isInit() isOwner(msg.sender){
