@@ -86,8 +86,7 @@ contract Vote_ApplyFund is VoteApp{
         uint256 index
     );
 
-    constructor(AppManager _appManager) public{
-        appManager = _appManager;
+    constructor(AppManager _appManager) FutureDaoApp(_appManager) public{
     }
 
     modifier ownFdt() {
@@ -122,6 +121,7 @@ contract Vote_ApplyFund is VoteApp{
         _detail = proposal.detail;
         _address_tap = proposal.address_tap;
     }
+
     ///查询某个协议的投票状态
     function getProposalStateByIndex(uint256 _proposalIndex)
     public

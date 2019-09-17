@@ -86,6 +86,8 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 timestamp
     );
 
+    event OnEvent(string eventString);
+
     /// @notice 构造函数
     /// @param _duringTime 众筹的时间，_money 众筹的目标资金
     constructor(AppManager _appManager,IERC20 _token,uint256 _duringTime,uint256 _money,ICurve _curve) public{
@@ -165,7 +167,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
 
     /// @notice 众筹
     /// @dev 众筹期间价格是固定的，不需要走购买曲线,期间所有的钱都进入储备池，需要考虑的是零界点的处理
-    function crowdfunding(bool needBack) public payable isStart() isCrowdfunding(){
+    function crowdfunding(bool needBack,string memory _eventString) public payable isStart() isCrowdfunding(){
         uint256 invest = msg.value;
         require(invest > 0,"value need more than 0");
         require(now.sub(crowdFundStartTime) <= crowdFundDuringTime,"need in the corwdfunding period");
@@ -203,27 +205,31 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
             sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
             crowdFundingEth[msg.sender] = crowdFundingEth[msg.sender].add(invest);
         }
+        emit OnEvent(_eventString);
     }
 
     /// @notice 投资者购买
-    function buy() public payable isStart() isNotCrowdfunding(){
+    function buy(uint256 _minBuyToken,string memory _eventString) public payable isStart() isNotCrowdfunding(){
         require(msg.value > 0,"value need more than 0");
         uint256 invest = msg.value;
         uint256 fdtAmount = curve.getBuyAmount(invest,token.totalSupply());
         token.mint(msg.sender,fdtAmount);
+        require(fdtAmount <= _minBuyToken,"fdtAmount need more than _minBuyToken");
         //存在本合约储备池里的钱
         sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
         emit OnBuy(msg.sender,msg.value,fdtAmount);
+        emit OnEvent(_eventString);
     }
 
     /// @notice 投资者出售
     /// @dev 如果在众筹阶段，是不允许出售股份的
     /// @param _amount 出售的股份数
-    function sell(uint256 _amount) public isStart() isNotCrowdfunding(){
+    function sell(uint256 _amount,uint256 _maxGasValue) public isStart() isNotCrowdfunding(){
         require(_amount > 0,"amount need more than 0");
         uint256 withdraw = curve.getSellValue(_amount,sellReserve,token.totalSupply());
         sellReserve = sellReserve.sub(withdraw);
         require(sellReserve >= 0,"sellReserve need more than 0");
+        require(withdraw >= _maxGasValue,"withdraw need less than _maxGasValue");
         token.burn(msg.sender,_amount);
         msg.sender.transfer(withdraw);
         emit OnSell(msg.sender,withdraw,_amount);
