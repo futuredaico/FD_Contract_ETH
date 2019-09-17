@@ -5,8 +5,12 @@ import "../Interface/IGovernShareManager.sol";
 
 contract VoteApp is FutureDaoApp {
     /// @notice 一个提议有7天的投票窗口期
-    uint256 votingPeriodLength = 2 minutes; //测试用
-    //uint256 votingPeriodLength = 7 days;
+    uint256 votingPeriodLength = 5 minutes; //测试用
+    uint256 publicityPeriodLength = 9 minutes;
+
+    //uint256 votingPeriodLength = 5 days;
+    //uint256 publicityPeriodLength = 9 days;
+
 
     /// @notice 发起提议需要抵押的eth数量（对应成fnd）
     uint256 public deposit = 0.1 ether;

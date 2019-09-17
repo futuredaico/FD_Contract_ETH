@@ -4,7 +4,13 @@ interface IPermission {
 
     function addPermission(address _grantor,address _app,bytes32 _vData) external;
 
+    function changePermission(address _oldGrantor,address _newGrantor,address _app,bytes32 _vData) external;
+
     function addPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external;
 
+    function changePermission(address _oldGrantor,address _newGrantor,address _app,bytes32 _vData,bytes32 _paramsHash) external;
+
     function verifyPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external view returns(bool);
+
+    function deletePermission(address _grantor,address _app,bytes32 _vData) external;
 }

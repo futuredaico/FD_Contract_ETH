@@ -5,9 +5,6 @@ import "../clearing/ClearingFundPool.sol";
 
 contract Govern_Proposal_ApplyFund is VoteApp{
 
-    /// @notice 一个提议有3天的投票窗口期
-    uint256 clearingVotingPeriodLehgth = 3 days;
-
     /// @notice 当前的清算提议  同时期应该只允许一个清算提议
     ClearingProposal public cur_clearingProposal;
     
@@ -94,7 +91,7 @@ contract Govern_Proposal_ApplyFund is VoteApp{
         uint256 fndInGovern = getFdtInGovern(msg.sender);
         require(fndInGovern > 0,"fndInGovern need more than 0");
         //需要在7天内
-        require(now <= cur_clearingProposal.startTime + clearingVotingPeriodLehgth,"time out");
+        require(now <= cur_clearingProposal.startTime + votingPeriodLength,"time out");
 
 
         bool r = IGovernShareManager(appManager.getGovernShareManager())
@@ -110,7 +107,7 @@ contract Govern_Proposal_ApplyFund is VoteApp{
     /// @notice 处理提议
     function processClearingProposal() public{
         //提议要超过7天
-        require(now > cur_clearingProposal.startTime + clearingVotingPeriodLehgth,"it's within the expiry date");
+        require(now > cur_clearingProposal.startTime + votingPeriodLength,"it's within the expiry date");
         require(cur_clearingProposal.process == false, "needs proposals have not been addressed");
         //获取当前所有fnd的数量
         uint256 totalFnd = getFdtTotalSupply();

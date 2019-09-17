@@ -63,11 +63,24 @@ contract AppManager is Own{
         permission.addPermission(_grantor,_app,_vData);
     }
 
+    function changePermission(address _newGrantor,address _app,bytes32 _vData) external isInit(){
+        permission.changePermission(msg.sender,_newGrantor,_app,_vData);
+    }
+
     function addPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash)
     external
+    isInit()
     isOwner(msg.sender)
     {
         permission.addPermission(_grantor,_app,_vData,_paramsHash);
+    }
+
+    function changePermission(address _newGrantor,address _app,bytes32 _vData,bytes32 _paramsHash) external isInit(){
+        permission.changePermission(msg.sender,_newGrantor,_app,_vData,_paramsHash);
+    }
+
+    function deletePermission(address _grantor,address _app,bytes32 _vData) external isInit() isOwner(msg.sender){
+        permission.deletePermission(_grantor,_app,_vData);
     }
 
     function verifyPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external view returns (bool){

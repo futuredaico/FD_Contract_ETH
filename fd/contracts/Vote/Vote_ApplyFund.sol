@@ -7,6 +7,7 @@ import "../Interface/IDateTime.sol";
 contract Vote_ApplyFund is VoteApp{
 
     bytes32 public constant Vote_ApplyFund_OneTicketRefuseProposal = keccak256("Vote_ApplyFund_OneTicketRefuseProposal");
+    bytes32 public constant Vote_ApplyFund_oneTicketStopTap = keccak256("Vote_ApplyFund_oneTicketStopTap");
 
     /// @notice 所有的提议
     Proposal[] private proposalQueue;
@@ -32,7 +33,6 @@ contract Vote_ApplyFund is VoteApp{
         mapping(address => enumVoteResult) voteDetails;
         string detail; //提议的描述
         address payable address_tap; //水龙头的地址
-        uint256 retrialIndex; //是不是重新处理了某个提议，如果是0则是新的
     }
 
     struct STap {
@@ -51,8 +51,7 @@ contract Vote_ApplyFund is VoteApp{
         address recipient,
         uint256 value,
         uint256 timeConsuming,
-        string detail,
-        uint256 retrialIndex
+        string detail
     );
 
     /// @param who 投票人
@@ -79,6 +78,11 @@ contract Vote_ApplyFund is VoteApp{
 
     /// @param index 提议的序列号
     event OnOneTicketRefuse(
+        uint256 index
+    );
+
+    /// @param index 提议的序列号
+    event OnOneTicketStopTap(
         uint256 index
     );
 
@@ -109,7 +113,7 @@ contract Vote_ApplyFund is VoteApp{
     function getProposalBaseInfoByIndex(uint256 _proposalIndex)
     public
     view
-    returns(string memory _proposalName,address _proposer,string memory _detail,address payable _address_tap,uint256 _retrialIndex)
+    returns(string memory _proposalName,address _proposer,string memory _detail,address payable _address_tap)
     {
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
@@ -117,7 +121,6 @@ contract Vote_ApplyFund is VoteApp{
         _proposer = proposal.proposer;
         _detail = proposal.detail;
         _address_tap = proposal.address_tap;
-        _retrialIndex = proposal.retrialIndex;
     }
     ///查询某个协议的投票状态
     function getProposalStateByIndex(uint256 _proposalIndex)
@@ -156,8 +159,7 @@ contract Vote_ApplyFund is VoteApp{
         address payable _recipient,
         uint256 _value,
         uint256 _timeConsuming,
-        string memory _detail,
-        uint256 _retrialIndex
+        string memory _detail
     )
     public
     payable
@@ -168,7 +170,6 @@ contract Vote_ApplyFund is VoteApp{
         require(_timeConsuming>=0,"_timeConsuming cant less than 0");
         //发起提议的人需要转给本合约一定的gas作为费用奖励处理者
         require(msg.value >= proposalFee + deposit, "need proposalFee");
-        require(_retrialIndex <= proposalQueue.length,"_retrialIndex is wrong");
         //当前天的提议数量看看是多少
         bytes32 b32 = getTimeHash();
         require(counter[b32] < maxProposalOneDay,"Beyond the maxProposalOneDay");
@@ -179,6 +180,7 @@ contract Vote_ApplyFund is VoteApp{
             value : _value,
             timeConsuming : _timeConsuming
         });
+
         Proposal memory proposal = Proposal({
             index : proposalQueue.length + 1,
             proposalName : _name,
@@ -192,8 +194,7 @@ contract Vote_ApplyFund is VoteApp{
             oneTicketRefuse : false,
             abandon : false,
             detail : _detail,
-            address_tap : address(0),
-            retrialIndex : _retrialIndex
+            address_tap : address(0)
         });
 
         emit OnApplyProposal(
@@ -204,8 +205,7 @@ contract Vote_ApplyFund is VoteApp{
             proposal.sTap.recipient,
             proposal.sTap.value,
             proposal.sTap.timeConsuming,
-            proposal.detail,
-            proposal.retrialIndex
+            proposal.detail
         );
         proposalQueue.push(proposal);
         counter[b32] = counter[b32].add(1);
@@ -282,13 +282,26 @@ contract Vote_ApplyFund is VoteApp{
         counter[b32] = counter[b32].sub(1);
     }
 
+    /// @notice 一票停发
+    /// @dev 有权限要求
+    /// @param _proposalIndex 提议的序号
+    function oneTicketStopTap(uint256 _proposalIndex) public auth(Vote_ApplyFund_oneTicketStopTap){
+        uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
+        Proposal storage retrial_proposal = proposalQueue[queueIndex];
+        require(retrial_proposal.abandon == false,"proposal has been abandon");
+        Tap address_retrial_tap = Tap(retrial_proposal.address_tap);
+        address_retrial_tap.GetMoneyBackToFund();
+        retrial_proposal.abandon = true;
+        emit OnOneTicketStopTap(_proposalIndex);
+    }
+
     /// @notice 处理提议
     /// @param _proposalIndex 提议的序号
     function process(uint256 _proposalIndex) public {
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
-        //投票已经过了投票权
-        require(now > proposal.sTap.startTime + votingPeriodLength,"it's within the expiry date");
+        //投票已经过了投票期 处于公示期
+        require(now > proposal.sTap.startTime + votingPeriodLength && now < proposal.sTap.startTime + votingPeriodLength + publicityPeriodLength,"it's within the expiry date");
         //没有被处理过
         require(proposal.process == false,"proposal has been process");
         //没有被终止
@@ -301,14 +314,6 @@ contract Vote_ApplyFund is VoteApp{
         //根据票行得到是否通过提案
         if(proposal.approveVotes>proposal.refuseVotes){
             proposal.pass = true;
-            //如果是重审一个合约，先把老tap中的钱都拿出来
-            if(proposal.retrialIndex != 0){
-                uint256 queueIndex_retrialIndex = proposalIndexToQueueIndex(proposal.retrialIndex);
-                Proposal storage retrial_proposal = proposalQueue[queueIndex_retrialIndex];
-                Tap address_retrial_tap = Tap(retrial_proposal.address_tap);
-                address_retrial_tap.GetMoneyBackToFund();
-                retrial_proposal.abandon = true;
-            }
             if(proposal.sTap.value>0){
                 // 通过了提案就给接收人划一笔钱
                 Tap tap = new Tap(address(this),appManager.getTradeFundPool(),proposal.sTap.recipient,now,(now.add(proposal.sTap.timeConsuming)).mul(1 days),proposal.sTap.value);
@@ -321,7 +326,7 @@ contract Vote_ApplyFund is VoteApp{
         counter[b32] = counter[b32].sub(1);
     }
 
-    function freeFdt(uint256[] memory _proposalIndexs) public{
+    function freeFdt(uint256[] memory _proposalIndexs) public {
         for(uint256 i = 0;i<_proposalIndexs.length;i++){
             uint256 _proposalIndex = _proposalIndexs[i];
             require(_proposalIndex <= proposalQueue.length && _proposalIndex>0,"proposal does not exist");
@@ -330,7 +335,6 @@ contract Vote_ApplyFund is VoteApp{
             require(proposal.process == true || proposal.abort == true || proposal.oneTicketRefuse == true,"proposal need process");
             IGovernShareManager(appManager.getGovernShareManager()).free(msg.sender,_proposalIndex,proposal.sTap.startTime + votingPeriodLength);
         }
-
     }
 
     function proposalIndexToQueueIndex(uint256 _proposalIndex) private view returns(uint256){
