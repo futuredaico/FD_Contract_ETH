@@ -248,8 +248,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 动用合约的钱  需要权限验证
     function sendEth(address payable _who,uint256 _value) public isStart() isNotCrowdfunding() auth(FundPool_SendEth){
         //需要确保不能用到 储备池 中的钱
-        require(address(this).balance.sub(_value) > sellReserve, "not sufficient funds");
-
+        require(address(this).balance.sub(_value) >= sellReserve, "not sufficient funds");
         _who.transfer(_value);
     }
 

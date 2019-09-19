@@ -21,7 +21,7 @@ contract Vote_ApplyFund is VoteApp{
     struct Proposal{
         uint256 index;//提议的序号
         string proposalName; //提议的名字
-        address proposer; //提议人
+        address payable proposer; //提议人
         uint256 approveVotes; //同意的票数
         uint256 refuseVotes; //否决的票数
         STap sTap;
@@ -46,9 +46,9 @@ contract Vote_ApplyFund is VoteApp{
     event OnApplyProposal(
         uint256 index,
         string proposalName,
-        address proposaler,
+        address payable proposaler,
         uint256 startTime,
-        address recipient,
+        address payable recipient,
         uint256 value,
         uint256 timeConsuming,
         string detail
@@ -263,6 +263,10 @@ contract Vote_ApplyFund is VoteApp{
         emit OnAbort(_proposalIndex);
         bytes32 b32 = getTimeHash(proposal.sTap.startTime);
         counter[b32] = counter[b32].sub(1);
+        //手续费充公
+        appManager.getTradeFundPool().transfer(proposalFee);
+        //发起人拿回押金
+        proposal.proposer.transfer(deposit);
     }
 
     /// @notice 一票否决
@@ -280,6 +284,10 @@ contract Vote_ApplyFund is VoteApp{
         emit OnOneTicketRefuse(_proposalIndex);
         bytes32 b32 = getTimeHash(proposal.sTap.startTime);
         counter[b32] = counter[b32].sub(1);
+        //手续费充公
+        appManager.getTradeFundPool().transfer(proposalFee);
+        //发起人拿回押金
+        proposal.proposer.transfer(deposit);
     }
 
     /// @notice 一票停发
@@ -309,8 +317,7 @@ contract Vote_ApplyFund is VoteApp{
         //也没有被一票否决
         require(proposal.oneTicketRefuse == false,"proposal has been oneTicketRefuse");
         proposal.process = true;
-        //处理提议的人可以得到一比奖励
-        msg.sender.transfer(proposalFee);
+
         //根据票行得到是否通过提案
         if(proposal.approveVotes>proposal.refuseVotes){
             proposal.pass = true;
@@ -324,6 +331,11 @@ contract Vote_ApplyFund is VoteApp{
         emit OnProcess(_proposalIndex,proposal.pass);
         bytes32 b32 = getTimeHash(proposal.sTap.startTime);
         counter[b32] = counter[b32].sub(1);
+
+        //处理提议的人可以得到一比奖励
+        msg.sender.transfer(proposalFee);
+        //发起人拿回押金
+        proposal.proposer.transfer(deposit);
     }
 
     function freeFdt(uint256[] memory _proposalIndexs) public {
