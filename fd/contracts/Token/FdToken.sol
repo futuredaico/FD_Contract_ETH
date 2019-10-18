@@ -22,8 +22,7 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
     bytes32 public constant FdToken_Mint = keccak256("FundPool_Mint");
     bytes32 public constant FdToken_Burn = keccak256("FundPool_Burn");
 
-    constructor(AppManager _appManager,string memory _name,uint8 _decimals,string memory _symbol) public {
-        appManager = _appManager;
+    constructor(AppManager _appManager,string memory _name,uint8 _decimals,string memory _symbol) FutureDaoApp(_appManager) public {
         name = _name;
         decimals = _decimals;
         symbol = _symbol;

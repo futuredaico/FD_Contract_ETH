@@ -26,12 +26,6 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     /// @notice 发行的股份币的合约地址
     address public token;
 
-    //// 这部分的锁定 是不能提取出合约，但是能投票的那种
-    struct Sbinding{
-        uint256 amount;
-        uint timestamp;
-    }
-
     bytes32 public constant GovernShareManager_MintBinding = keccak256("GovernShareManager_MintBinding");
     bytes32 public constant GovernShareManager_Lock = keccak256("GovernShareManager_Lock");
     bytes32 public constant GovernShareManager_Free = keccak256("GovernShareManager_Free");
@@ -39,6 +33,11 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     bytes32 public constant GovernShareManager_Clearing = keccak256("GovernShareManager_Clearing");
     bytes32 public constant GovernShareManager_ClearingFdt = keccak256("GovernShareManager_ClearingFdt");
 
+    //// 这部分的锁定 是不能提取出合约，但是能投票的那种
+    struct Sbinding{
+        uint256 amount;
+        uint timestamp;
+    }
 
     /// @notice 用来记录提议合约的某个锁定到期时间
     struct SL {
@@ -48,8 +47,32 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         uint256 lockAmount;
     }
 
-    constructor(AppManager _appManager,address _token) public{
-        appManager = _appManager;
+    /// @notice 将fdt从本合约中取出
+    /// @param who 交易发起者
+    /// @param amount 数额
+    event OnGetFdtOut(address who,uint256 amount);
+
+    /// @notice 将fdt存入本合约以投票
+    /// @param who 交易发起者
+    /// @param amount 数额
+    event OnSetFdtIn(address who,uint256 amount);
+
+    /// @notice 锁定fdt
+    /// @param contractAddress 哪个合约申请的锁币
+    /// @param lockAddr 锁哪个地址的币
+    /// @param index 标识序列号
+    /// @param expireDate 到期时间
+    /// @param lockAmount 锁定的数量
+    event OnLock(address contractAddress,address lockAddr,uint256 index,uint256 expireDate,uint256 lockAmount);
+
+    /// @notice 解锁fdt
+    /// @param contractAddress 哪个合约申请的锁币
+    /// @param lockAddr 锁哪个地址的币
+    /// @param index 标识序列号
+    /// @param expireDate 到期时间
+    event OnFree(address contractAddress,address lockAddr,uint256 index,uint256 expireDate);
+
+    constructor(AppManager _appManager,address _token)  FutureDaoApp(_appManager) public {
         token = _token;
     }
 

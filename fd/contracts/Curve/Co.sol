@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.6.0;
 import "../apps/FutureDaoApp.sol";
 import "../Interface/ICurve.sol";
 
-contract Co is FutureDaoApp , ICurve{
+contract Co is ICurve ,FutureDaoApp{
 
     uint256 public slope; //1000 * 10**9
 
@@ -11,20 +11,23 @@ contract Co is FutureDaoApp , ICurve{
 
     bytes32 public constant Co_ChangeSlop = keccak256("Co_ChangeSlop");
     bytes32 public constant Co_ChangeAlpha = keccak256("Co_ChangeAlpha");
-    bytes32 public constant Co_ChangeBeta = keccak256("Co_ChangeBeta");
 
-    constructor(AppManager _appManager,uint256 _slope,uint256 _alpha) public {
-        appManager = _appManager;
+    event OnChangeSlope(uint256 _slope);
+    event OnChangeAlpha(uint256 _alpha);
+
+    constructor(AppManager _appManager,uint256 _slope,uint256 _alpha) FutureDaoApp(_appManager) public {
         slope = _slope;
         alpha = _alpha;
     }
 
     function changeSlop(uint256 _slope) public auth(Co_ChangeSlop) returns(bool){
         slope = _slope;
+        emit OnChangeSlope(_slope);
     }
 
     function changeAlpha(uint256 _alpha) public auth(Co_ChangeAlpha) returns(bool){
         alpha = _alpha;
+        emit OnChangeAlpha(_alpha);
     }
 
     function getVauleToReserve(uint256 _totalValue) external view returns(uint256){

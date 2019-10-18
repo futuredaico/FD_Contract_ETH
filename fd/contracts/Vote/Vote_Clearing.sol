@@ -47,8 +47,7 @@ contract Govern_Proposal_ApplyFund is VoteApp{
         bool pass
     );
 
-    constructor(AppManager _appManager) public{
-        appManager = _appManager;
+    constructor(AppManager _appManager) FutureDaoApp(appManager) public{
     }
 
     modifier ownFnd() {

@@ -2,8 +2,11 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "../apps/FutureDaoApp.sol";
 import "../Interface/IGovernShareManager.sol";
+import "../lib/SafeMath.sol";
 
 contract VoteApp is FutureDaoApp {
+    using SafeMath for uint256;
+
     /// @notice 一个提议有7天的投票窗口期
     uint256 votingPeriodLength = 5 minutes; //测试用
     uint256 publicityPeriodLength = 9 minutes;

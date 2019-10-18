@@ -279,6 +279,16 @@ contract Vote_ApplyFund is VoteApp{
         require(proposal.abort == false,"proposal has been aborted");
         //也没有被一票否决
         require(proposal.oneTicketRefuse == false,"proposal has been oneTicketRefuse");
+        //时间在审核期间
+        require(
+            now>proposal.sTap.startTime + votingPeriodLength && now < proposal.sTap.startTime + votingPeriodLength + publicityPeriodLength,
+            "time out"
+        );
+
+        //同意的人数不能超过66%
+        uint256 totalFdt = getFdtTotalSupply();
+        uint256 ratio = proposal.approveVotes.mul(1000).div(totalFdt);
+        require(ratio<660,"");
 
         proposal.oneTicketRefuse = true;
         emit OnOneTicketRefuse(_proposalIndex);
@@ -290,18 +300,18 @@ contract Vote_ApplyFund is VoteApp{
         proposal.proposer.transfer(deposit);
     }
 
-    /// @notice 一票停发
-    /// @dev 有权限要求
-    /// @param _proposalIndex 提议的序号
-    function oneTicketStopTap(uint256 _proposalIndex) public auth(Vote_ApplyFund_oneTicketStopTap){
-        uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
-        Proposal storage retrial_proposal = proposalQueue[queueIndex];
-        require(retrial_proposal.abandon == false,"proposal has been abandon");
-        Tap address_retrial_tap = Tap(retrial_proposal.address_tap);
-        address_retrial_tap.GetMoneyBackToFund();
-        retrial_proposal.abandon = true;
-        emit OnOneTicketStopTap(_proposalIndex);
-    }
+    // /// @notice 一票停发
+    // /// @dev 有权限要求
+    // /// @param _proposalIndex 提议的序号
+    // function oneTicketStopTap(uint256 _proposalIndex) public auth(Vote_ApplyFund_oneTicketStopTap){
+    //     uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
+    //     Proposal storage retrial_proposal = proposalQueue[queueIndex];
+    //     require(retrial_proposal.abandon == false,"proposal has been abandon");
+    //     Tap address_retrial_tap = Tap(retrial_proposal.address_tap);
+    //     address_retrial_tap.GetMoneyBackToFund();
+    //     retrial_proposal.abandon = true;
+    //     emit OnOneTicketStopTap(_proposalIndex);
+    // }
 
     /// @notice 处理提议
     /// @param _proposalIndex 提议的序号

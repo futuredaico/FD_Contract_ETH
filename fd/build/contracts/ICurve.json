@@ -101,14 +101,14 @@
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ICurve.sol",
     "exportedSymbols": {
       "ICurve": [
-        1843
+        2033
       ]
     },
-    "id": 1844,
+    "id": 2034,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1808,
+        "id": 1998,
         "literals": [
           "solidity",
           ">=",
@@ -127,9 +127,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1843,
+        "id": 2033,
         "linearizedBaseContracts": [
-          1843
+          2033
         ],
         "name": "ICurve",
         "nodeType": "ContractDefinition",
@@ -137,22 +137,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1815,
+            "id": 2005,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getVauleToReserve",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1811,
+              "id": 2001,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1810,
+                  "id": 2000,
                   "name": "_totalValue",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1815,
+                  "scope": 2005,
                   "src": "87:19:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -161,7 +161,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1809,
+                    "id": 1999,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "87:7:3",
@@ -177,15 +177,15 @@
               "src": "86:21:3"
             },
             "returnParameters": {
-              "id": 1814,
+              "id": 2004,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1813,
+                  "id": 2003,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1815,
+                  "scope": 2005,
                   "src": "130:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -194,7 +194,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1812,
+                    "id": 2002,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "130:7:3",
@@ -209,7 +209,7 @@
               ],
               "src": "129:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "60:79:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -218,22 +218,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1822,
+            "id": 2012,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCrowdFundPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1818,
+              "id": 2008,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1817,
+                  "id": 2007,
                   "name": "_crowdFundMoney",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1822,
+                  "scope": 2012,
                   "src": "172:23:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -242,7 +242,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1816,
+                    "id": 2006,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "172:7:3",
@@ -258,15 +258,15 @@
               "src": "171:25:3"
             },
             "returnParameters": {
-              "id": 1821,
+              "id": 2011,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1820,
+                  "id": 2010,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1822,
+                  "scope": 2012,
                   "src": "219:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -275,7 +275,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1819,
+                    "id": 2009,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "219:7:3",
@@ -290,7 +290,7 @@
               ],
               "src": "218:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "145:83:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -299,22 +299,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1831,
+            "id": 2021,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getBuyAmount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1827,
+              "id": 2017,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1824,
+                  "id": 2014,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1831,
+                  "scope": 2021,
                   "src": "256:14:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -323,7 +323,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1823,
+                    "id": 2013,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "256:7:3",
@@ -337,10 +337,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 1826,
+                  "id": 2016,
                   "name": "_totalSupply",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1831,
+                  "scope": 2021,
                   "src": "271:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -349,7 +349,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1825,
+                    "id": 2015,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "271:7:3",
@@ -365,15 +365,15 @@
               "src": "255:37:3"
             },
             "returnParameters": {
-              "id": 1830,
+              "id": 2020,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1829,
+                  "id": 2019,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1831,
+                  "scope": 2021,
                   "src": "315:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -382,7 +382,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1828,
+                    "id": 2018,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "315:7:3",
@@ -397,7 +397,7 @@
               ],
               "src": "314:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "234:90:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -406,22 +406,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1842,
+            "id": 2032,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getSellValue",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1838,
+              "id": 2028,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1833,
+                  "id": 2023,
                   "name": "_sellAmount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "352:19:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -430,7 +430,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1832,
+                    "id": 2022,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "352:7:3",
@@ -444,10 +444,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 1835,
+                  "id": 2025,
                   "name": "_sellReserve",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "372:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -456,7 +456,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1834,
+                    "id": 2024,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "372:7:3",
@@ -470,10 +470,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 1837,
+                  "id": 2027,
                   "name": "_totalSupply",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "393:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -482,7 +482,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1836,
+                    "id": 2026,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "393:7:3",
@@ -498,15 +498,15 @@
               "src": "351:63:3"
             },
             "returnParameters": {
-              "id": 1841,
+              "id": 2031,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1840,
+                  "id": 2030,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "437:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -515,7 +515,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1839,
+                    "id": 2029,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "437:7:3",
@@ -530,14 +530,14 @@
               ],
               "src": "436:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "330:116:3",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 1844,
+        "scope": 2034,
         "src": "36:413:3"
       }
     ],
@@ -547,14 +547,14 @@
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ICurve.sol",
     "exportedSymbols": {
       "ICurve": [
-        1843
+        2033
       ]
     },
-    "id": 1844,
+    "id": 2034,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1808,
+        "id": 1998,
         "literals": [
           "solidity",
           ">=",
@@ -573,9 +573,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1843,
+        "id": 2033,
         "linearizedBaseContracts": [
-          1843
+          2033
         ],
         "name": "ICurve",
         "nodeType": "ContractDefinition",
@@ -583,22 +583,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1815,
+            "id": 2005,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getVauleToReserve",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1811,
+              "id": 2001,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1810,
+                  "id": 2000,
                   "name": "_totalValue",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1815,
+                  "scope": 2005,
                   "src": "87:19:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -607,7 +607,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1809,
+                    "id": 1999,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "87:7:3",
@@ -623,15 +623,15 @@
               "src": "86:21:3"
             },
             "returnParameters": {
-              "id": 1814,
+              "id": 2004,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1813,
+                  "id": 2003,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1815,
+                  "scope": 2005,
                   "src": "130:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -640,7 +640,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1812,
+                    "id": 2002,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "130:7:3",
@@ -655,7 +655,7 @@
               ],
               "src": "129:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "60:79:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -664,22 +664,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1822,
+            "id": 2012,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCrowdFundPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1818,
+              "id": 2008,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1817,
+                  "id": 2007,
                   "name": "_crowdFundMoney",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1822,
+                  "scope": 2012,
                   "src": "172:23:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -688,7 +688,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1816,
+                    "id": 2006,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "172:7:3",
@@ -704,15 +704,15 @@
               "src": "171:25:3"
             },
             "returnParameters": {
-              "id": 1821,
+              "id": 2011,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1820,
+                  "id": 2010,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1822,
+                  "scope": 2012,
                   "src": "219:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -721,7 +721,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1819,
+                    "id": 2009,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "219:7:3",
@@ -736,7 +736,7 @@
               ],
               "src": "218:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "145:83:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -745,22 +745,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1831,
+            "id": 2021,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getBuyAmount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1827,
+              "id": 2017,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1824,
+                  "id": 2014,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1831,
+                  "scope": 2021,
                   "src": "256:14:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -769,7 +769,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1823,
+                    "id": 2013,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "256:7:3",
@@ -783,10 +783,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 1826,
+                  "id": 2016,
                   "name": "_totalSupply",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1831,
+                  "scope": 2021,
                   "src": "271:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -795,7 +795,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1825,
+                    "id": 2015,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "271:7:3",
@@ -811,15 +811,15 @@
               "src": "255:37:3"
             },
             "returnParameters": {
-              "id": 1830,
+              "id": 2020,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1829,
+                  "id": 2019,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1831,
+                  "scope": 2021,
                   "src": "315:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -828,7 +828,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1828,
+                    "id": 2018,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "315:7:3",
@@ -843,7 +843,7 @@
               ],
               "src": "314:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "234:90:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -852,22 +852,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1842,
+            "id": 2032,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getSellValue",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1838,
+              "id": 2028,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1833,
+                  "id": 2023,
                   "name": "_sellAmount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "352:19:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -876,7 +876,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1832,
+                    "id": 2022,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "352:7:3",
@@ -890,10 +890,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 1835,
+                  "id": 2025,
                   "name": "_sellReserve",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "372:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -902,7 +902,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1834,
+                    "id": 2024,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "372:7:3",
@@ -916,10 +916,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 1837,
+                  "id": 2027,
                   "name": "_totalSupply",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "393:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -928,7 +928,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1836,
+                    "id": 2026,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "393:7:3",
@@ -944,15 +944,15 @@
               "src": "351:63:3"
             },
             "returnParameters": {
-              "id": 1841,
+              "id": 2031,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1840,
+                  "id": 2030,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1842,
+                  "scope": 2032,
                   "src": "437:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -961,7 +961,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1839,
+                    "id": 2029,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "437:7:3",
@@ -976,14 +976,14 @@
               ],
               "src": "436:9:3"
             },
-            "scope": 1843,
+            "scope": 2033,
             "src": "330:116:3",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 1844,
+        "scope": 2034,
         "src": "36:413:3"
       }
     ],
@@ -995,7 +995,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-09-04T09:56:02.910Z",
+  "updatedAt": "2019-10-18T03:16:16.837Z",
   "devdoc": {
     "methods": {}
   },

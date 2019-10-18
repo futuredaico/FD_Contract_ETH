@@ -73,7 +73,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 ethAmount
     );
 
-    /// @notice 清退
+    /// @notice 众筹
     event OnWindingUp(
         address who,
         uint256 ethAmount
@@ -86,20 +86,39 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 timestamp
     );
 
-    event OnEvent(string eventString);
+    /// @notice 取钱
+    /// @param who 哪个地址来取钱的
+    /// @param ethAmount 多少钱
+    event OnSendEth(
+        address who,
+        uint256 ethAmount
+    );
+
+    /// @notice 清退
+    /// @param clearingContractAddress 处理清退的合约地址
+    /// @param ratio 清退占所有股票的比例
+    /// @param ethAmount 清退了多少钱
+    event OnClearing(
+        address clearingContractAddress,
+        uint256 ratio,
+        uint256 ethAmount
+    );
+
+    event OnEvent(uint256 tag);
 
     /// @notice 构造函数
     /// @param _duringTime 众筹的时间，_money 众筹的目标资金
-    constructor(AppManager _appManager,IERC20 _token,uint256 _duringTime,uint256 _money,ICurve _curve) public{
-        require(_duringTime > 0, "d need greater than 0");
-        require(_money > 0, "m need greater than 0");
-        curve = _curve;
-        appManager = _appManager;
+    constructor(AppManager _appManager,IERC20 _token,uint256 _duringTime,uint256 _money,address _curve) FutureDaoApp(_appManager) public{
+        curve = ICurve(_curve);
         token = _token;
-        crowdFundDuringTime = _duringTime;
-        crowdFundMoney = _money;
         crowdFundStartTime = now;
-        crowdFundPrice = curve.getCrowdFundPrice(crowdFundMoney);
+        if(_duringTime>0 && _money>0){
+            crowdFundDuringTime = _duringTime;
+            crowdFundMoney = _money;
+            crowdFundPrice = curve.getCrowdFundPrice(crowdFundMoney);
+        }else{
+            during_crowdfunding = false;
+        }
     }
 
     /// @notice 判断是不是已经开始募资
@@ -167,7 +186,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
 
     /// @notice 众筹
     /// @dev 众筹期间价格是固定的，不需要走购买曲线,期间所有的钱都进入储备池，需要考虑的是零界点的处理
-    function crowdfunding(bool needBack,string memory _eventString) public payable isStart() isCrowdfunding(){
+    function crowdfunding(bool needBack,uint256 tag) public payable isStart() isCrowdfunding(){
         uint256 invest = msg.value;
         require(invest > 0,"value need more than 0");
         require(now.sub(crowdFundStartTime) <= crowdFundDuringTime,"need in the corwdfunding period");
@@ -205,31 +224,31 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
             sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
             crowdFundingEth[msg.sender] = crowdFundingEth[msg.sender].add(invest);
         }
-        emit OnEvent(_eventString);
+        emit OnEvent(tag);
     }
 
     /// @notice 投资者购买
-    function buy(uint256 _minBuyToken,string memory _eventString) public payable isStart() isNotCrowdfunding(){
+    function buy(uint256 _minBuyToken,uint256 tag) public payable isStart() isNotCrowdfunding(){
         require(msg.value > 0,"value need more than 0");
         uint256 invest = msg.value;
         uint256 fdtAmount = curve.getBuyAmount(invest,token.totalSupply());
         token.mint(msg.sender,fdtAmount);
-        require(fdtAmount <= _minBuyToken,"fdtAmount need more than _minBuyToken");
+        require(fdtAmount >= _minBuyToken,"fdtAmount need more than _minBuyToken");
         //存在本合约储备池里的钱
         sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
         emit OnBuy(msg.sender,msg.value,fdtAmount);
-        emit OnEvent(_eventString);
+        emit OnEvent(tag);
     }
 
     /// @notice 投资者出售
     /// @dev 如果在众筹阶段，是不允许出售股份的
     /// @param _amount 出售的股份数
-    function sell(uint256 _amount,uint256 _maxGasValue) public isStart() isNotCrowdfunding(){
+    function sell(uint256 _amount,uint256 _minGasValue) public isStart() isNotCrowdfunding(){
         require(_amount > 0,"amount need more than 0");
         uint256 withdraw = curve.getSellValue(_amount,sellReserve,token.totalSupply());
         sellReserve = sellReserve.sub(withdraw);
         require(sellReserve >= 0,"sellReserve need more than 0");
-        require(withdraw >= _maxGasValue,"withdraw need less than _maxGasValue");
+        require(withdraw >= _minGasValue,"withdraw need less than _maxGasValue");
         token.burn(msg.sender,_amount);
         msg.sender.transfer(withdraw);
         emit OnSell(msg.sender,withdraw,_amount);
@@ -250,6 +269,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         //需要确保不能用到 储备池 中的钱
         require(address(this).balance.sub(_value) >= sellReserve, "not sufficient funds");
         _who.transfer(_value);
+        emit OnSendEth(_who,_value);
     }
 
     /// @notice 清退  ratio 乘以了 10 ** 9
@@ -258,7 +278,9 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 _value_reserve = (sellReserve).mul(_ratio).div(10**9);
         uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio).div(10**9);
         sellReserve = sellReserve.sub(_value_reserve);
-        _clearingContractAddress.transfer(_value_reserve.add(_value_govern));
+        uint256 v = _value_reserve.add(_value_govern);
+        _clearingContractAddress.transfer(v);
+        emit OnClearing(_clearingContractAddress,_ratio,v);
     }
 
     function() external payable{
