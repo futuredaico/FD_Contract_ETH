@@ -98,15 +98,16 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         return true;
     }
 
-    ///@notice 从tradefund合约中充钱进来
+    ///@notice 充钱进来
     function setFdtIn(uint256 _amount) public returns(bool) {
         require(_amount>0,"amount need more than 0");
         bool r = IERC20(token).transferFrom(msg.sender,address(this),_amount);
         require(r,"lock error");
+        emit OnSetFdtIn(msg.sender,_amount);
         return true;
     }
 
-    ///@notice 从tradefund合约中解锁股份
+    ///@notice 拿钱出去
     function getFdtOut(uint256 amount) public returns(bool){
         require(amount>0,'amount need more than 0');
         uint256 _bindingAmount = _getbindingAmount(msg.sender);
@@ -116,6 +117,7 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         bool r = IERC20(token).transfer(msg.sender,amount);
         require(r,"free error");
         balances[msg.sender] = balances[msg.sender].sub(amount);
+        emit OnGetFdtOut(msg.sender,amount);
     }
 
     /// @notice 锁定股份

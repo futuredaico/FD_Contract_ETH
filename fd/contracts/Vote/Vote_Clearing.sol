@@ -3,11 +3,11 @@ pragma solidity >=0.4.22 <0.6.0;
 import "./VoteApp.sol";
 import "../clearing/ClearingFundPool.sol";
 
-contract Govern_Proposal_ApplyFund is VoteApp{
+contract Vote_Clearing is VoteApp{
 
     /// @notice 当前的清算提议  同时期应该只允许一个清算提议
     ClearingProposal public cur_clearingProposal;
-    
+
     /// @notice 所有的清算提议
     ClearingProposal[] clearingProposalQueue;
 
@@ -50,14 +50,14 @@ contract Govern_Proposal_ApplyFund is VoteApp{
     constructor(AppManager _appManager) FutureDaoApp(appManager) public{
     }
 
-    modifier ownFnd() {
+    modifier ownFdt() {
         require(getFdtInGovern(msg.sender)>0, "need has shares");
         _;
     }
 
     /// @notice 发起清算提议
     /// @dev 股东都可以发起清算提议
-    function applyClearingProposal() public payable ownFnd(){
+    function applyClearingProposal() public payable ownFdt(){
         //只能允许一个清算提议
         require(cur_clearingProposal.proposer == address(0),"Only one proposal is allowed");
         //发起提议的人需要转给本合约一定的gas作为费用奖励处理者
@@ -86,21 +86,21 @@ contract Govern_Proposal_ApplyFund is VoteApp{
     }
 
     /// @notice 参与清算提议
-    function voteClearingProposal() public ownFnd(){
-        uint256 fndInGovern = getFdtInGovern(msg.sender);
-        require(fndInGovern > 0,"fndInGovern need more than 0");
+    function voteClearingProposal() public ownFdt(){
+        uint256 fdtInGovern = getFdtInGovern(msg.sender);
+        require(fdtInGovern > 0,"fdtInGovern need more than 0");
         //需要在7天内
         require(now <= cur_clearingProposal.startTime + votingPeriodLength,"time out");
 
 
         bool r = IGovernShareManager(appManager.getGovernShareManager())
-        .clearingFdt(cur_clearingProposal.address_clearingFundPool,msg.sender,fndInGovern);
+        .clearingFdt(cur_clearingProposal.address_clearingFundPool,msg.sender,fdtInGovern);
         require(r,"lock error");
 
-        cur_clearingProposal.clearingList[msg.sender] += fndInGovern;
-        cur_clearingProposal.totalFndAmount += fndInGovern;
+        cur_clearingProposal.clearingList[msg.sender] += fdtInGovern;
+        cur_clearingProposal.totalFndAmount += fdtInGovern;
 
-        emit OnVoteClearingProposal(msg.sender,cur_clearingProposal.index,fndInGovern);
+        emit OnVoteClearingProposal(msg.sender,cur_clearingProposal.index,fdtInGovern);
     }
 
     /// @notice 处理提议

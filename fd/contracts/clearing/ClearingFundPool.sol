@@ -54,12 +54,13 @@ contract ClearingFundPool is Own{
         require(clearingResult == enumVoteResult.approve, "clearingResult is wrong");
         require(map_clearingInfo[who].isGet == false, "No repeat collection");
         uint256 value = (map_clearingInfo[who].fdtAmount).mul(address(this).balance).div(totalFdt);
+        bool r = IERC20(address_erc20).burn(map_clearingInfo[who].fdtAmount);
+        require(r,"error");
         who.transfer(value);
         map_clearingInfo[who].isGet = true;
         totalFdt = totalFdt.sub(map_clearingInfo[who].fdtAmount);
     }
 
-    
     function() external payable{
     }
 }

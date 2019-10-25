@@ -69,25 +69,25 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getAppManagerAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"FundPool_PreMint\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"EMPTY_PARAM_HASH\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"appManager\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"_appManager\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol\":\"FutureDaoApp\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IGovernShareManager.sol\":{\"keccak256\":\"0xc50bdd948693bf6775ce7f13818a41230703f60ec12f351e6de10c45192d81d7\",\"urls\":[\"bzzr://41cb941cb994db43c57f228d4e3e128a4a80cd8219bd70a63b134a8c6330a9dd\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IPermission.sol\":{\"keccak256\":\"0x5edb0fdddd2c0e9f21e9f6ae0b80cc2a14a2d59b669d48e5861fb05c69d1501d\",\"urls\":[\"bzzr://8b09ac58ddb3f3bc3b542b6ebde56277085e88b547dd87c07306512a22dbe3b6\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":{\"keccak256\":\"0x09deecb2adebbc741af231d5b0d7e02bc1e9c2995061fd6c74f31374fab4ce35\",\"urls\":[\"bzzr://d135c73d1becc06199341ba9b3836e9a02fa0016cfabec89540c8ea707b6bc6b\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Own/Own.sol\":{\"keccak256\":\"0x823e0fc0618cb9ef403265b4da3ab57963d090f565885bb10fd79721eed3a1ef\",\"urls\":[\"bzzr://ba3675ddb1a729b3d5b64154197960be495782ab0ca6fb4594a41242f770dc2c\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Permission/Permission.sol\":{\"keccak256\":\"0x78ad10ff5a70dd74b07917b203e7e4b29b38848f4caa7723f531731deab4aae4\",\"urls\":[\"bzzr://5d2ff2283bc80e9e672ed502c5fb7ff1448ccc4dbd52b79761d7f7a79a92208f\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/AppManager.sol\":{\"keccak256\":\"0xa981c2a12e54d84bd336263a891bd429a9bbd7528bcd8e4e1379808aa29b3804\",\"urls\":[\"bzzr://90a63ea2396c965d5f709699c1f3d5e8942172b2a57583a08bc7f55cb064fb63\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol\":{\"keccak256\":\"0xa44b32d59a774bd464d0e9820bb60bd73ed15391e5ec493d0a76c01960da6406\",\"urls\":[\"bzzr://345c8b76b7c15af9d587c2c02a3c985329a9910aee73d6b6bc736353e17cc9f7\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/lib/SafeMath.sol\":{\"keccak256\":\"0x746184ea1a24fb0ea4b10a0c2f02591b675607a38027663a1decbe80fece1e29\",\"urls\":[\"bzzr://0a96cd5d3e7a040dc4cd84d7b6d2c43be1529a823bf879af3bd3edf5a83698a3\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b5060405160208061028c8339810180604052602081101561003057600080fd5b8101908080519060200190929190505050806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506101fb806100916000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80634c33007714610051578063b710ffc01461009b578063c513f66e146100b9578063ebe86c13146100d7575b600080fd5b610059610121565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100a361014a565b6040518082815260200191505060405180910390f35b6100c1610183565b6040518082815260200191505060405180910390f35b6100df6101aa565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60405180807f46756e64506f6f6c5f5072654d696e74000000000000000000000000000000008152506010019050604051809103902081565b7f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56360001b81565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea165627a7a723058202f3695e7f9c05a6e63eb2825d8db5dd58065c7e3d9e57210d2906b472d82bdd70029",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c80634c33007714610051578063b710ffc01461009b578063c513f66e146100b9578063ebe86c13146100d7575b600080fd5b610059610121565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100a361014a565b6040518082815260200191505060405180910390f35b6100c1610183565b6040518082815260200191505060405180910390f35b6100df6101aa565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60405180807f46756e64506f6f6c5f5072654d696e74000000000000000000000000000000008152506010019050604051809103902081565b7f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56360001b81565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea165627a7a723058202f3695e7f9c05a6e63eb2825d8db5dd58065c7e3d9e57210d2906b472d82bdd70029",
-  "sourceMap": "97:690:19:-;;;395:85;8:9:-1;5:2;;;30:1;27;20:12;5:2;395:85:19;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;395:85:19;;;;;;;;;;;;;;;;461:11;448:10;;:24;;;;;;;;;;;;;;;;;;395:85;97:690;;;;;;",
-  "deployedSourceMap": "97:690:19:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;97:690:19;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;679:105;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;314:72;;;:::i;:::-;;;;;;;;;;;;;;;;;;;198:109;;;:::i;:::-;;;;;;;;;;;;;;;;;;;161:28;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;679:105;731:7;765:10;;;;;;;;;;;750:26;;679:105;:::o;314:72::-;357:29;;;;;;;;;;;;;;;;;;;314:72;:::o;198:109::-;241:66;198:109;;;:::o;161:28::-;;;;;;;;;;;;;:::o",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getAppManagerAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"FundPool_PreMint\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"EMPTY_PARAM_HASH\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"appManager\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"_appManager\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol\":\"FutureDaoApp\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IGovernShareManager.sol\":{\"keccak256\":\"0xc50bdd948693bf6775ce7f13818a41230703f60ec12f351e6de10c45192d81d7\",\"urls\":[\"bzzr://41cb941cb994db43c57f228d4e3e128a4a80cd8219bd70a63b134a8c6330a9dd\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/IPermission.sol\":{\"keccak256\":\"0x5edb0fdddd2c0e9f21e9f6ae0b80cc2a14a2d59b669d48e5861fb05c69d1501d\",\"urls\":[\"bzzr://8b09ac58ddb3f3bc3b542b6ebde56277085e88b547dd87c07306512a22dbe3b6\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITradeFundPool.sol\":{\"keccak256\":\"0x09deecb2adebbc741af231d5b0d7e02bc1e9c2995061fd6c74f31374fab4ce35\",\"urls\":[\"bzzr://d135c73d1becc06199341ba9b3836e9a02fa0016cfabec89540c8ea707b6bc6b\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Own/Own.sol\":{\"keccak256\":\"0x823e0fc0618cb9ef403265b4da3ab57963d090f565885bb10fd79721eed3a1ef\",\"urls\":[\"bzzr://ba3675ddb1a729b3d5b64154197960be495782ab0ca6fb4594a41242f770dc2c\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/Permission/Permission.sol\":{\"keccak256\":\"0xa08d7ed25c3e9f48e44c1f9fd270c0d4dddf851d4bd72de56c0becd0de076a66\",\"urls\":[\"bzzr://8330f64eacab2497bda8b0130c889918a994b26eecb413ab50183024e9832b2b\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/AppManager.sol\":{\"keccak256\":\"0xcc2be7c5e8fd96dde7c20b621870200bbc20f8cd1eeb4b2c007fbd2a6b8abcfc\",\"urls\":[\"bzzr://a42aca8fbf157fd2abc9d0cbc93cbd04b24933d45bd82c9d38d7d7f38b2281b9\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol\":{\"keccak256\":\"0xa44b32d59a774bd464d0e9820bb60bd73ed15391e5ec493d0a76c01960da6406\",\"urls\":[\"bzzr://345c8b76b7c15af9d587c2c02a3c985329a9910aee73d6b6bc736353e17cc9f7\"]},\"/D/_______work/FD_Contract_ETH/fd/contracts/lib/SafeMath.sol\":{\"keccak256\":\"0x746184ea1a24fb0ea4b10a0c2f02591b675607a38027663a1decbe80fece1e29\",\"urls\":[\"bzzr://0a96cd5d3e7a040dc4cd84d7b6d2c43be1529a823bf879af3bd3edf5a83698a3\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160208061028c8339810180604052602081101561003057600080fd5b8101908080519060200190929190505050806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506101fb806100916000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80634c33007714610051578063b710ffc01461009b578063c513f66e146100b9578063ebe86c13146100d7575b600080fd5b610059610121565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100a361014a565b6040518082815260200191505060405180910390f35b6100c1610183565b6040518082815260200191505060405180910390f35b6100df6101aa565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60405180807f46756e64506f6f6c5f5072654d696e74000000000000000000000000000000008152506010019050604051809103902081565b7f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56360001b81565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea165627a7a7230582037f17fc946847bf1567f13ac0f99126d2c36ca5f9f8f9646005f70000e3dc46e0029",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c80634c33007714610051578063b710ffc01461009b578063c513f66e146100b9578063ebe86c13146100d7575b600080fd5b610059610121565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100a361014a565b6040518082815260200191505060405180910390f35b6100c1610183565b6040518082815260200191505060405180910390f35b6100df6101aa565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60405180807f46756e64506f6f6c5f5072654d696e74000000000000000000000000000000008152506010019050604051809103902081565b7f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56360001b81565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea165627a7a7230582037f17fc946847bf1567f13ac0f99126d2c36ca5f9f8f9646005f70000e3dc46e0029",
+  "sourceMap": "97:690:20:-;;;395:85;8:9:-1;5:2;;;30:1;27;20:12;5:2;395:85:20;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;395:85:20;;;;;;;;;;;;;;;;461:11;448:10;;:24;;;;;;;;;;;;;;;;;;395:85;97:690;;;;;;",
+  "deployedSourceMap": "97:690:20:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;97:690:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;679:105;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;314:72;;;:::i;:::-;;;;;;;;;;;;;;;;;;;198:109;;;:::i;:::-;;;;;;;;;;;;;;;;;;;161:28;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;679:105;731:7;765:10;;;;;;;;;;;750:26;;679:105;:::o;314:72::-;357:29;;;;;;;;;;;;;;;;;;;314:72;:::o;198:109::-;241:66;198:109;;;:::o;161:28::-;;;;;;;;;;;;;:::o",
   "source": "pragma solidity >=0.4.22 <0.6.0;\r\n\r\nimport \"./AppManager.sol\";\r\nimport \"../lib/SafeMath.sol\";\r\n\r\ncontract FutureDaoApp {\r\n    using SafeMath for uint256;\r\n\r\n    AppManager public appManager;\r\n\r\n    bytes32 public constant EMPTY_PARAM_HASH = 0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563;\r\n    bytes32 public constant FundPool_PreMint = keccak256(\"FundPool_PreMint\");\r\n\r\n    constructor(AppManager _appManager) public{\r\n        appManager = _appManager;\r\n    }\r\n\r\n    modifier auth(bytes32 _vData){\r\n        require(appManager.verifyPermission(msg.sender,address(this),_vData,EMPTY_PARAM_HASH),\"No permission to invoke the Contract\");\r\n        _;\r\n    }\r\n    function getAppManagerAddress() public view returns(address){\r\n        return address(appManager);\r\n    }\r\n}",
   "sourcePath": "D:\\_______work\\FD_Contract_ETH\\fd\\contracts\\apps\\FutureDaoApp.sol",
   "ast": {
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol",
     "exportedSymbols": {
       "FutureDaoApp": [
-        5551
+        5745
       ]
     },
-    "id": 5552,
+    "id": 5746,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5495,
+        "id": 5689,
         "literals": [
           "solidity",
           ">=",
@@ -98,27 +98,27 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:32:19"
+        "src": "0:32:20"
       },
       {
         "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/apps/AppManager.sol",
         "file": "./AppManager.sol",
-        "id": 5496,
+        "id": 5690,
         "nodeType": "ImportDirective",
-        "scope": 5552,
-        "sourceUnit": 5494,
-        "src": "36:26:19",
+        "scope": 5746,
+        "sourceUnit": 5688,
+        "src": "36:26:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/lib/SafeMath.sol",
         "file": "../lib/SafeMath.sol",
-        "id": 5497,
+        "id": 5691,
         "nodeType": "ImportDirective",
-        "scope": 5552,
-        "sourceUnit": 7042,
-        "src": "64:29:19",
+        "scope": 5746,
+        "sourceUnit": 7253,
+        "src": "64:29:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -128,34 +128,34 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 5551,
+        "id": 5745,
         "linearizedBaseContracts": [
-          5551
+          5745
         ],
         "name": "FutureDaoApp",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 5500,
+            "id": 5694,
             "libraryName": {
               "contractScope": null,
-              "id": 5498,
+              "id": 5692,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 7041,
-              "src": "132:8:19",
+              "referencedDeclaration": 7252,
+              "src": "132:8:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$7041",
+                "typeIdentifier": "t_contract$_SafeMath_$7252",
                 "typeString": "library SafeMath"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "126:27:19",
+            "src": "126:27:20",
             "typeName": {
-              "id": 5499,
+              "id": 5693,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "145:7:19",
+              "src": "145:7:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -164,26 +164,26 @@
           },
           {
             "constant": false,
-            "id": 5502,
+            "id": 5696,
             "name": "appManager",
             "nodeType": "VariableDeclaration",
-            "scope": 5551,
-            "src": "161:28:19",
+            "scope": 5745,
+            "src": "161:28:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_AppManager_$5493",
+              "typeIdentifier": "t_contract$_AppManager_$5687",
               "typeString": "contract AppManager"
             },
             "typeName": {
               "contractScope": null,
-              "id": 5501,
+              "id": 5695,
               "name": "AppManager",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5493,
-              "src": "161:10:19",
+              "referencedDeclaration": 5687,
+              "src": "161:10:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AppManager_$5493",
+                "typeIdentifier": "t_contract$_AppManager_$5687",
                 "typeString": "contract AppManager"
               }
             },
@@ -192,11 +192,11 @@
           },
           {
             "constant": true,
-            "id": 5505,
+            "id": 5699,
             "name": "EMPTY_PARAM_HASH",
             "nodeType": "VariableDeclaration",
-            "scope": 5551,
-            "src": "198:109:19",
+            "scope": 5745,
+            "src": "198:109:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -204,10 +204,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 5503,
+              "id": 5697,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "198:7:19",
+              "src": "198:7:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -216,14 +216,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832393064656364393534386236326138643630333435613938383338366663383462613662633935343834303038663633363266393331363065663365353633",
-              "id": 5504,
+              "id": 5698,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "241:66:19",
+              "src": "241:66:20",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_18569430475105882587588266137607568536673111973893317399460219858819262702947_by_1",
@@ -235,11 +235,11 @@
           },
           {
             "constant": true,
-            "id": 5510,
+            "id": 5704,
             "name": "FundPool_PreMint",
             "nodeType": "VariableDeclaration",
-            "scope": 5551,
-            "src": "314:72:19",
+            "scope": 5745,
+            "src": "314:72:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -247,10 +247,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 5506,
+              "id": 5700,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "314:7:19",
+              "src": "314:7:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -262,14 +262,14 @@
                 {
                   "argumentTypes": null,
                   "hexValue": "46756e64506f6f6c5f5072654d696e74",
-                  "id": 5508,
+                  "id": 5702,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
                   "kind": "string",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "367:18:19",
+                  "src": "367:18:20",
                   "subdenomination": null,
                   "typeDescriptions": {
                     "typeIdentifier": "t_stringliteral_3d63953bfada0c4cc3cea0a09daef824e50d00b680559062be96929898578847",
@@ -285,18 +285,18 @@
                     "typeString": "literal_string \"FundPool_PreMint\""
                   }
                 ],
-                "id": 5507,
+                "id": 5701,
                 "name": "keccak256",
                 "nodeType": "Identifier",
                 "overloadedDeclarations": [],
-                "referencedDeclaration": 7050,
-                "src": "357:9:19",
+                "referencedDeclaration": 7261,
+                "src": "357:9:20",
                 "typeDescriptions": {
                   "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
                   "typeString": "function (bytes memory) pure returns (bytes32)"
                 }
               },
-              "id": 5509,
+              "id": 5703,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -304,7 +304,7 @@
               "lValueRequested": false,
               "names": [],
               "nodeType": "FunctionCall",
-              "src": "357:29:19",
+              "src": "357:29:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -314,28 +314,28 @@
           },
           {
             "body": {
-              "id": 5519,
+              "id": 5713,
               "nodeType": "Block",
-              "src": "437:43:19",
+              "src": "437:43:20",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 5517,
+                    "id": 5711,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 5515,
+                      "id": 5709,
                       "name": "appManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5502,
-                      "src": "448:10:19",
+                      "referencedDeclaration": 5696,
+                      "src": "448:10:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AppManager_$5493",
+                        "typeIdentifier": "t_contract$_AppManager_$5687",
                         "typeString": "contract AppManager"
                       }
                     },
@@ -343,62 +343,62 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 5516,
+                      "id": 5710,
                       "name": "_appManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5512,
-                      "src": "461:11:19",
+                      "referencedDeclaration": 5706,
+                      "src": "461:11:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AppManager_$5493",
+                        "typeIdentifier": "t_contract$_AppManager_$5687",
                         "typeString": "contract AppManager"
                       }
                     },
-                    "src": "448:24:19",
+                    "src": "448:24:20",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AppManager_$5493",
+                      "typeIdentifier": "t_contract$_AppManager_$5687",
                       "typeString": "contract AppManager"
                     }
                   },
-                  "id": 5518,
+                  "id": 5712,
                   "nodeType": "ExpressionStatement",
-                  "src": "448:24:19"
+                  "src": "448:24:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 5520,
+            "id": 5714,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5513,
+              "id": 5707,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5512,
+                  "id": 5706,
                   "name": "_appManager",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5520,
-                  "src": "407:22:19",
+                  "scope": 5714,
+                  "src": "407:22:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_AppManager_$5493",
+                    "typeIdentifier": "t_contract$_AppManager_$5687",
                     "typeString": "contract AppManager"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 5511,
+                    "id": 5705,
                     "name": "AppManager",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 5493,
-                    "src": "407:10:19",
+                    "referencedDeclaration": 5687,
+                    "src": "407:10:20",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AppManager_$5493",
+                      "typeIdentifier": "t_contract$_AppManager_$5687",
                       "typeString": "contract AppManager"
                     }
                   },
@@ -406,25 +406,25 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "406:24:19"
+              "src": "406:24:20"
             },
             "returnParameters": {
-              "id": 5514,
+              "id": 5708,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "437:0:19"
+              "src": "437:0:20"
             },
-            "scope": 5551,
-            "src": "395:85:19",
+            "scope": 5745,
+            "src": "395:85:20",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 5539,
+              "id": 5733,
               "nodeType": "Block",
-              "src": "517:156:19",
+              "src": "517:156:20",
               "statements": [
                 {
                   "expression": {
@@ -437,18 +437,18 @@
                             "argumentTypes": null,
                             "expression": {
                               "argumentTypes": null,
-                              "id": 5527,
+                              "id": 5721,
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7056,
-                              "src": "564:3:19",
+                              "referencedDeclaration": 7267,
+                              "src": "564:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
                                 "typeString": "msg"
                               }
                             },
-                            "id": 5528,
+                            "id": 5722,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -456,7 +456,7 @@
                             "memberName": "sender",
                             "nodeType": "MemberAccess",
                             "referencedDeclaration": null,
-                            "src": "564:10:19",
+                            "src": "564:10:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address_payable",
                               "typeString": "address payable"
@@ -467,14 +467,14 @@
                             "arguments": [
                               {
                                 "argumentTypes": null,
-                                "id": 5530,
+                                "id": 5724,
                                 "name": "this",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 7084,
-                                "src": "583:4:19",
+                                "referencedDeclaration": 7295,
+                                "src": "583:4:20",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5551",
+                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5745",
                                   "typeString": "contract FutureDaoApp"
                                 }
                               }
@@ -482,24 +482,24 @@
                             "expression": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5551",
+                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5745",
                                   "typeString": "contract FutureDaoApp"
                                 }
                               ],
-                              "id": 5529,
+                              "id": 5723,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
                               "lValueRequested": false,
                               "nodeType": "ElementaryTypeNameExpression",
-                              "src": "575:7:19",
+                              "src": "575:7:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_type$_t_address_$",
                                 "typeString": "type(address)"
                               },
                               "typeName": "address"
                             },
-                            "id": 5531,
+                            "id": 5725,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -507,7 +507,7 @@
                             "lValueRequested": false,
                             "names": [],
                             "nodeType": "FunctionCall",
-                            "src": "575:13:19",
+                            "src": "575:13:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
                               "typeString": "address"
@@ -515,12 +515,12 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5532,
+                            "id": 5726,
                             "name": "_vData",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5522,
-                            "src": "589:6:19",
+                            "referencedDeclaration": 5716,
+                            "src": "589:6:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
                               "typeString": "bytes32"
@@ -528,12 +528,12 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5533,
+                            "id": 5727,
                             "name": "EMPTY_PARAM_HASH",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5505,
-                            "src": "596:16:19",
+                            "referencedDeclaration": 5699,
+                            "src": "596:16:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
                               "typeString": "bytes32"
@@ -561,32 +561,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 5525,
+                            "id": 5719,
                             "name": "appManager",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5502,
-                            "src": "536:10:19",
+                            "referencedDeclaration": 5696,
+                            "src": "536:10:20",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_AppManager_$5493",
+                              "typeIdentifier": "t_contract$_AppManager_$5687",
                               "typeString": "contract AppManager"
                             }
                           },
-                          "id": 5526,
+                          "id": 5720,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "verifyPermission",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 5492,
-                          "src": "536:27:19",
+                          "referencedDeclaration": 5686,
+                          "src": "536:27:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_external_view$_t_address_$_t_address_$_t_bytes32_$_t_bytes32_$returns$_t_bool_$",
                             "typeString": "function (address,address,bytes32,bytes32) view external returns (bool)"
                           }
                         },
-                        "id": 5534,
+                        "id": 5728,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -594,7 +594,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "536:77:19",
+                        "src": "536:77:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -603,14 +603,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "4e6f207065726d697373696f6e20746f20696e766f6b652074686520436f6e7472616374",
-                        "id": 5535,
+                        "id": 5729,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "614:38:19",
+                        "src": "614:38:20",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_d4a775b0e78bb94562b47e6f7b87af436807fcee3933dad468b9d70db31d3420",
@@ -630,21 +630,21 @@
                           "typeString": "literal_string \"No permission to invoke the Contract\""
                         }
                       ],
-                      "id": 5524,
+                      "id": 5718,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7059,
-                        7060
+                        7270,
+                        7271
                       ],
-                      "referencedDeclaration": 7060,
-                      "src": "528:7:19",
+                      "referencedDeclaration": 7271,
+                      "src": "528:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5536,
+                    "id": 5730,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -652,38 +652,38 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "528:125:19",
+                    "src": "528:125:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5537,
+                  "id": 5731,
                   "nodeType": "ExpressionStatement",
-                  "src": "528:125:19"
+                  "src": "528:125:20"
                 },
                 {
-                  "id": 5538,
+                  "id": 5732,
                   "nodeType": "PlaceholderStatement",
-                  "src": "664:1:19"
+                  "src": "664:1:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 5540,
+            "id": 5734,
             "name": "auth",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 5523,
+              "id": 5717,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5522,
+                  "id": 5716,
                   "name": "_vData",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5540,
-                  "src": "502:14:19",
+                  "scope": 5734,
+                  "src": "502:14:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -691,10 +691,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 5521,
+                    "id": 5715,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "502:7:19",
+                    "src": "502:7:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -704,16 +704,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "501:16:19"
+              "src": "501:16:20"
             },
-            "src": "488:185:19",
+            "src": "488:185:20",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 5549,
+              "id": 5743,
               "nodeType": "Block",
-              "src": "739:45:19",
+              "src": "739:45:20",
               "statements": [
                 {
                   "expression": {
@@ -721,14 +721,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 5546,
+                        "id": 5740,
                         "name": "appManager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5502,
-                        "src": "765:10:19",
+                        "referencedDeclaration": 5696,
+                        "src": "765:10:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_AppManager_$5493",
+                          "typeIdentifier": "t_contract$_AppManager_$5687",
                           "typeString": "contract AppManager"
                         }
                       }
@@ -736,24 +736,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_AppManager_$5493",
+                          "typeIdentifier": "t_contract$_AppManager_$5687",
                           "typeString": "contract AppManager"
                         }
                       ],
-                      "id": 5545,
+                      "id": 5739,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "757:7:19",
+                      "src": "757:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 5547,
+                    "id": 5741,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -761,43 +761,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "757:19:19",
+                    "src": "757:19:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 5544,
-                  "id": 5548,
+                  "functionReturnParameters": 5738,
+                  "id": 5742,
                   "nodeType": "Return",
-                  "src": "750:26:19"
+                  "src": "750:26:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 5550,
+            "id": 5744,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getAppManagerAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5541,
+              "id": 5735,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "708:2:19"
+              "src": "708:2:20"
             },
             "returnParameters": {
-              "id": 5544,
+              "id": 5738,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5543,
+                  "id": 5737,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5550,
-                  "src": "731:7:19",
+                  "scope": 5744,
+                  "src": "731:7:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -805,10 +805,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5542,
+                    "id": 5736,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "731:7:19",
+                    "src": "731:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -819,33 +819,33 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "730:9:19"
+              "src": "730:9:20"
             },
-            "scope": 5551,
-            "src": "679:105:19",
+            "scope": 5745,
+            "src": "679:105:20",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 5552,
-        "src": "97:690:19"
+        "scope": 5746,
+        "src": "97:690:20"
       }
     ],
-    "src": "0:787:19"
+    "src": "0:787:20"
   },
   "legacyAST": {
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/apps/FutureDaoApp.sol",
     "exportedSymbols": {
       "FutureDaoApp": [
-        5551
+        5745
       ]
     },
-    "id": 5552,
+    "id": 5746,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5495,
+        "id": 5689,
         "literals": [
           "solidity",
           ">=",
@@ -856,27 +856,27 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:32:19"
+        "src": "0:32:20"
       },
       {
         "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/apps/AppManager.sol",
         "file": "./AppManager.sol",
-        "id": 5496,
+        "id": 5690,
         "nodeType": "ImportDirective",
-        "scope": 5552,
-        "sourceUnit": 5494,
-        "src": "36:26:19",
+        "scope": 5746,
+        "sourceUnit": 5688,
+        "src": "36:26:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/lib/SafeMath.sol",
         "file": "../lib/SafeMath.sol",
-        "id": 5497,
+        "id": 5691,
         "nodeType": "ImportDirective",
-        "scope": 5552,
-        "sourceUnit": 7042,
-        "src": "64:29:19",
+        "scope": 5746,
+        "sourceUnit": 7253,
+        "src": "64:29:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -886,34 +886,34 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 5551,
+        "id": 5745,
         "linearizedBaseContracts": [
-          5551
+          5745
         ],
         "name": "FutureDaoApp",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 5500,
+            "id": 5694,
             "libraryName": {
               "contractScope": null,
-              "id": 5498,
+              "id": 5692,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 7041,
-              "src": "132:8:19",
+              "referencedDeclaration": 7252,
+              "src": "132:8:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$7041",
+                "typeIdentifier": "t_contract$_SafeMath_$7252",
                 "typeString": "library SafeMath"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "126:27:19",
+            "src": "126:27:20",
             "typeName": {
-              "id": 5499,
+              "id": 5693,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "145:7:19",
+              "src": "145:7:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -922,26 +922,26 @@
           },
           {
             "constant": false,
-            "id": 5502,
+            "id": 5696,
             "name": "appManager",
             "nodeType": "VariableDeclaration",
-            "scope": 5551,
-            "src": "161:28:19",
+            "scope": 5745,
+            "src": "161:28:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_AppManager_$5493",
+              "typeIdentifier": "t_contract$_AppManager_$5687",
               "typeString": "contract AppManager"
             },
             "typeName": {
               "contractScope": null,
-              "id": 5501,
+              "id": 5695,
               "name": "AppManager",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5493,
-              "src": "161:10:19",
+              "referencedDeclaration": 5687,
+              "src": "161:10:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AppManager_$5493",
+                "typeIdentifier": "t_contract$_AppManager_$5687",
                 "typeString": "contract AppManager"
               }
             },
@@ -950,11 +950,11 @@
           },
           {
             "constant": true,
-            "id": 5505,
+            "id": 5699,
             "name": "EMPTY_PARAM_HASH",
             "nodeType": "VariableDeclaration",
-            "scope": 5551,
-            "src": "198:109:19",
+            "scope": 5745,
+            "src": "198:109:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -962,10 +962,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 5503,
+              "id": 5697,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "198:7:19",
+              "src": "198:7:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -974,14 +974,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832393064656364393534386236326138643630333435613938383338366663383462613662633935343834303038663633363266393331363065663365353633",
-              "id": 5504,
+              "id": 5698,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "241:66:19",
+              "src": "241:66:20",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_18569430475105882587588266137607568536673111973893317399460219858819262702947_by_1",
@@ -993,11 +993,11 @@
           },
           {
             "constant": true,
-            "id": 5510,
+            "id": 5704,
             "name": "FundPool_PreMint",
             "nodeType": "VariableDeclaration",
-            "scope": 5551,
-            "src": "314:72:19",
+            "scope": 5745,
+            "src": "314:72:20",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1005,10 +1005,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 5506,
+              "id": 5700,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "314:7:19",
+              "src": "314:7:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -1020,14 +1020,14 @@
                 {
                   "argumentTypes": null,
                   "hexValue": "46756e64506f6f6c5f5072654d696e74",
-                  "id": 5508,
+                  "id": 5702,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
                   "kind": "string",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "367:18:19",
+                  "src": "367:18:20",
                   "subdenomination": null,
                   "typeDescriptions": {
                     "typeIdentifier": "t_stringliteral_3d63953bfada0c4cc3cea0a09daef824e50d00b680559062be96929898578847",
@@ -1043,18 +1043,18 @@
                     "typeString": "literal_string \"FundPool_PreMint\""
                   }
                 ],
-                "id": 5507,
+                "id": 5701,
                 "name": "keccak256",
                 "nodeType": "Identifier",
                 "overloadedDeclarations": [],
-                "referencedDeclaration": 7050,
-                "src": "357:9:19",
+                "referencedDeclaration": 7261,
+                "src": "357:9:20",
                 "typeDescriptions": {
                   "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
                   "typeString": "function (bytes memory) pure returns (bytes32)"
                 }
               },
-              "id": 5509,
+              "id": 5703,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1062,7 +1062,7 @@
               "lValueRequested": false,
               "names": [],
               "nodeType": "FunctionCall",
-              "src": "357:29:19",
+              "src": "357:29:20",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -1072,28 +1072,28 @@
           },
           {
             "body": {
-              "id": 5519,
+              "id": 5713,
               "nodeType": "Block",
-              "src": "437:43:19",
+              "src": "437:43:20",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 5517,
+                    "id": 5711,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 5515,
+                      "id": 5709,
                       "name": "appManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5502,
-                      "src": "448:10:19",
+                      "referencedDeclaration": 5696,
+                      "src": "448:10:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AppManager_$5493",
+                        "typeIdentifier": "t_contract$_AppManager_$5687",
                         "typeString": "contract AppManager"
                       }
                     },
@@ -1101,62 +1101,62 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 5516,
+                      "id": 5710,
                       "name": "_appManager",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5512,
-                      "src": "461:11:19",
+                      "referencedDeclaration": 5706,
+                      "src": "461:11:20",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AppManager_$5493",
+                        "typeIdentifier": "t_contract$_AppManager_$5687",
                         "typeString": "contract AppManager"
                       }
                     },
-                    "src": "448:24:19",
+                    "src": "448:24:20",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AppManager_$5493",
+                      "typeIdentifier": "t_contract$_AppManager_$5687",
                       "typeString": "contract AppManager"
                     }
                   },
-                  "id": 5518,
+                  "id": 5712,
                   "nodeType": "ExpressionStatement",
-                  "src": "448:24:19"
+                  "src": "448:24:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 5520,
+            "id": 5714,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5513,
+              "id": 5707,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5512,
+                  "id": 5706,
                   "name": "_appManager",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5520,
-                  "src": "407:22:19",
+                  "scope": 5714,
+                  "src": "407:22:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_AppManager_$5493",
+                    "typeIdentifier": "t_contract$_AppManager_$5687",
                     "typeString": "contract AppManager"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 5511,
+                    "id": 5705,
                     "name": "AppManager",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 5493,
-                    "src": "407:10:19",
+                    "referencedDeclaration": 5687,
+                    "src": "407:10:20",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AppManager_$5493",
+                      "typeIdentifier": "t_contract$_AppManager_$5687",
                       "typeString": "contract AppManager"
                     }
                   },
@@ -1164,25 +1164,25 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "406:24:19"
+              "src": "406:24:20"
             },
             "returnParameters": {
-              "id": 5514,
+              "id": 5708,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "437:0:19"
+              "src": "437:0:20"
             },
-            "scope": 5551,
-            "src": "395:85:19",
+            "scope": 5745,
+            "src": "395:85:20",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 5539,
+              "id": 5733,
               "nodeType": "Block",
-              "src": "517:156:19",
+              "src": "517:156:20",
               "statements": [
                 {
                   "expression": {
@@ -1195,18 +1195,18 @@
                             "argumentTypes": null,
                             "expression": {
                               "argumentTypes": null,
-                              "id": 5527,
+                              "id": 5721,
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7056,
-                              "src": "564:3:19",
+                              "referencedDeclaration": 7267,
+                              "src": "564:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
                                 "typeString": "msg"
                               }
                             },
-                            "id": 5528,
+                            "id": 5722,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -1214,7 +1214,7 @@
                             "memberName": "sender",
                             "nodeType": "MemberAccess",
                             "referencedDeclaration": null,
-                            "src": "564:10:19",
+                            "src": "564:10:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address_payable",
                               "typeString": "address payable"
@@ -1225,14 +1225,14 @@
                             "arguments": [
                               {
                                 "argumentTypes": null,
-                                "id": 5530,
+                                "id": 5724,
                                 "name": "this",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 7084,
-                                "src": "583:4:19",
+                                "referencedDeclaration": 7295,
+                                "src": "583:4:20",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5551",
+                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5745",
                                   "typeString": "contract FutureDaoApp"
                                 }
                               }
@@ -1240,24 +1240,24 @@
                             "expression": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5551",
+                                  "typeIdentifier": "t_contract$_FutureDaoApp_$5745",
                                   "typeString": "contract FutureDaoApp"
                                 }
                               ],
-                              "id": 5529,
+                              "id": 5723,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
                               "lValueRequested": false,
                               "nodeType": "ElementaryTypeNameExpression",
-                              "src": "575:7:19",
+                              "src": "575:7:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_type$_t_address_$",
                                 "typeString": "type(address)"
                               },
                               "typeName": "address"
                             },
-                            "id": 5531,
+                            "id": 5725,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -1265,7 +1265,7 @@
                             "lValueRequested": false,
                             "names": [],
                             "nodeType": "FunctionCall",
-                            "src": "575:13:19",
+                            "src": "575:13:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
                               "typeString": "address"
@@ -1273,12 +1273,12 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5532,
+                            "id": 5726,
                             "name": "_vData",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5522,
-                            "src": "589:6:19",
+                            "referencedDeclaration": 5716,
+                            "src": "589:6:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
                               "typeString": "bytes32"
@@ -1286,12 +1286,12 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5533,
+                            "id": 5727,
                             "name": "EMPTY_PARAM_HASH",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5505,
-                            "src": "596:16:19",
+                            "referencedDeclaration": 5699,
+                            "src": "596:16:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
                               "typeString": "bytes32"
@@ -1319,32 +1319,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 5525,
+                            "id": 5719,
                             "name": "appManager",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5502,
-                            "src": "536:10:19",
+                            "referencedDeclaration": 5696,
+                            "src": "536:10:20",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_AppManager_$5493",
+                              "typeIdentifier": "t_contract$_AppManager_$5687",
                               "typeString": "contract AppManager"
                             }
                           },
-                          "id": 5526,
+                          "id": 5720,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "verifyPermission",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 5492,
-                          "src": "536:27:19",
+                          "referencedDeclaration": 5686,
+                          "src": "536:27:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_external_view$_t_address_$_t_address_$_t_bytes32_$_t_bytes32_$returns$_t_bool_$",
                             "typeString": "function (address,address,bytes32,bytes32) view external returns (bool)"
                           }
                         },
-                        "id": 5534,
+                        "id": 5728,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1352,7 +1352,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "536:77:19",
+                        "src": "536:77:20",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1361,14 +1361,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "4e6f207065726d697373696f6e20746f20696e766f6b652074686520436f6e7472616374",
-                        "id": 5535,
+                        "id": 5729,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "614:38:19",
+                        "src": "614:38:20",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_d4a775b0e78bb94562b47e6f7b87af436807fcee3933dad468b9d70db31d3420",
@@ -1388,21 +1388,21 @@
                           "typeString": "literal_string \"No permission to invoke the Contract\""
                         }
                       ],
-                      "id": 5524,
+                      "id": 5718,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7059,
-                        7060
+                        7270,
+                        7271
                       ],
-                      "referencedDeclaration": 7060,
-                      "src": "528:7:19",
+                      "referencedDeclaration": 7271,
+                      "src": "528:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5536,
+                    "id": 5730,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1410,38 +1410,38 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "528:125:19",
+                    "src": "528:125:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5537,
+                  "id": 5731,
                   "nodeType": "ExpressionStatement",
-                  "src": "528:125:19"
+                  "src": "528:125:20"
                 },
                 {
-                  "id": 5538,
+                  "id": 5732,
                   "nodeType": "PlaceholderStatement",
-                  "src": "664:1:19"
+                  "src": "664:1:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 5540,
+            "id": 5734,
             "name": "auth",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 5523,
+              "id": 5717,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5522,
+                  "id": 5716,
                   "name": "_vData",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5540,
-                  "src": "502:14:19",
+                  "scope": 5734,
+                  "src": "502:14:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1449,10 +1449,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 5521,
+                    "id": 5715,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "502:7:19",
+                    "src": "502:7:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -1462,16 +1462,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "501:16:19"
+              "src": "501:16:20"
             },
-            "src": "488:185:19",
+            "src": "488:185:20",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 5549,
+              "id": 5743,
               "nodeType": "Block",
-              "src": "739:45:19",
+              "src": "739:45:20",
               "statements": [
                 {
                   "expression": {
@@ -1479,14 +1479,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 5546,
+                        "id": 5740,
                         "name": "appManager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5502,
-                        "src": "765:10:19",
+                        "referencedDeclaration": 5696,
+                        "src": "765:10:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_AppManager_$5493",
+                          "typeIdentifier": "t_contract$_AppManager_$5687",
                           "typeString": "contract AppManager"
                         }
                       }
@@ -1494,24 +1494,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_AppManager_$5493",
+                          "typeIdentifier": "t_contract$_AppManager_$5687",
                           "typeString": "contract AppManager"
                         }
                       ],
-                      "id": 5545,
+                      "id": 5739,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "757:7:19",
+                      "src": "757:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 5547,
+                    "id": 5741,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1519,43 +1519,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "757:19:19",
+                    "src": "757:19:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 5544,
-                  "id": 5548,
+                  "functionReturnParameters": 5738,
+                  "id": 5742,
                   "nodeType": "Return",
-                  "src": "750:26:19"
+                  "src": "750:26:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 5550,
+            "id": 5744,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getAppManagerAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5541,
+              "id": 5735,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "708:2:19"
+              "src": "708:2:20"
             },
             "returnParameters": {
-              "id": 5544,
+              "id": 5738,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5543,
+                  "id": 5737,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5550,
-                  "src": "731:7:19",
+                  "scope": 5744,
+                  "src": "731:7:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1563,10 +1563,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5542,
+                    "id": 5736,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "731:7:19",
+                    "src": "731:7:20",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1577,20 +1577,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "730:9:19"
+              "src": "730:9:20"
             },
-            "scope": 5551,
-            "src": "679:105:19",
+            "scope": 5745,
+            "src": "679:105:20",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 5552,
-        "src": "97:690:19"
+        "scope": 5746,
+        "src": "97:690:20"
       }
     ],
-    "src": "0:787:19"
+    "src": "0:787:20"
   },
   "compiler": {
     "name": "solc",
@@ -1598,7 +1598,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-10-18T03:16:16.870Z",
+  "updatedAt": "2019-10-23T12:18:10.434Z",
   "devdoc": {
     "methods": {}
   },

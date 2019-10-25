@@ -20,6 +20,19 @@ contract AppManager is Own{
 
     bool public bool_isInit;
 
+    bytes32 public constant EMPTY_PARAM_HASH = 0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563;
+
+    event OnAddPermission(address indexed grantor, address indexed app, bytes32 indexed vData, bytes32 paramsHash);
+
+    event OnChangePermission(
+        address indexed newGrantor,
+        address indexed app,
+        bytes32 indexed vData,
+        bytes32 paramsHash
+    );
+
+    event OnDeletePermission(address indexed grantor, address indexed app, bytes32 indexed vData);
+
     constructor() public {
         permission = new Permission();
     }
@@ -28,19 +41,6 @@ contract AppManager is Own{
         require(bool_isInit == true,"");
         _;
     }
-
-    ///@notice 增加权限
-    /// @param grantor 调用者
-    /// @param app 被调用者
-    /// @param vdata 方法的标识
-    /// @param paramHash 参数的标识
-    event OnAddPermission(address grantor,address app,bytes32 vData,bytes32 paramsHash);
-
-    event OnDeletePermission(address grantor,address app,bytes32 vData,bytes32 paramsHash);
-
-    /// @param grantor 老的调用者
-    /// @param newgrantor 新的调用者
-    event OnChangePermission(address grantor,address newgrantor,address app,bytes32 vData,bytes32 paramsHash);
 
     function initialize(address payable _tradeFundPool,address payable _governShareManager,address payable _fdToken,address _dateTime)
     external isOwner(msg.sender){
@@ -74,12 +74,12 @@ contract AppManager is Own{
 
     function addPermission(address _grantor,address _app,bytes32 _vData) external isInit() isOwner(msg.sender){
         permission.addPermission(_grantor,_app,_vData);
-        emit OnAddPermission(_grantor,_app,_vData);
+        emit OnAddPermission(_grantor,_app,_vData,EMPTY_PARAM_HASH);
     }
 
     function changePermission(address _newGrantor,address _app,bytes32 _vData) external isInit(){
         permission.changePermission(msg.sender,_newGrantor,_app,_vData);
-        emit OnChangePermission(msg.sender, _newGrantor, _app, _vData);
+        emit OnChangePermission(_newGrantor,_app,_vData,EMPTY_PARAM_HASH);
     }
 
     function addPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash)
@@ -93,12 +93,12 @@ contract AppManager is Own{
 
     function changePermission(address _newGrantor,address _app,bytes32 _vData,bytes32 _paramsHash) external isInit(){
         permission.changePermission(msg.sender,_newGrantor,_app,_vData,_paramsHash);
-        emit OnChangePermission(msg.sender, _newGrantor, _app, _paramsHash);
+        emit OnChangePermission(_newGrantor,_app,_vData,_paramsHash);
     }
 
     function deletePermission(address _grantor,address _app,bytes32 _vData) external isInit() isOwner(msg.sender){
         permission.deletePermission(_grantor,_app,_vData);
-        emit OnDeletePermission(_grantor, _app, _vData);
+        emit OnDeletePermission(_grantor,_app,_vData);
     }
 
     function verifyPermission(address _grantor,address _app,bytes32 _vData,bytes32 _paramsHash) external view returns (bool){

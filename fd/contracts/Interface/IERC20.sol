@@ -67,6 +67,8 @@ interface IERC20 {
 
     function burn(address account,uint256 amount) external returns (bool);
 
+    function burn(uint256 amount) external returns (bool);
+
     function burnSelfToken(uint256 amount) external returns (bool);
 
     /**

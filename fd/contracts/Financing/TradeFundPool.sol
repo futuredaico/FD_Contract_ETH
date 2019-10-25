@@ -97,11 +97,13 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 清退
     /// @param clearingContractAddress 处理清退的合约地址
     /// @param ratio 清退占所有股票的比例
-    /// @param ethAmount 清退了多少钱
+    /// @param ethReserveAmount 清退了储备多少钱
+    /// @param ethGovernAmount 清退了自治多少钱
     event OnClearing(
         address clearingContractAddress,
         uint256 ratio,
-        uint256 ethAmount
+        uint256 ethReserveAmount,
+        uint256 ethGovernAmount
     );
 
     event OnEvent(uint256 tag);
@@ -273,14 +275,15 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     }
 
     /// @notice 清退  ratio 乘以了 10 ** 9
-    function clearing(address payable _clearingContractAddress,uint256 _ratio) public isStart() isNotCrowdfunding() auth(FundPool_Clearing){
+    function clearing(address payable _clearingContractAddress,uint256 _ratio)
+    public isStart() isNotCrowdfunding() auth(FundPool_Clearing){
         require(_ratio<=10**9,"ratio is wrong");
         uint256 _value_reserve = (sellReserve).mul(_ratio).div(10**9);
         uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio).div(10**9);
         sellReserve = sellReserve.sub(_value_reserve);
         uint256 v = _value_reserve.add(_value_govern);
         _clearingContractAddress.transfer(v);
-        emit OnClearing(_clearingContractAddress,_ratio,v);
+        emit OnClearing(_clearingContractAddress,_ratio,_value_reserve,_value_govern);
     }
 
     function() external payable{

@@ -51,6 +51,11 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
         return true;
     }
 
+    function burn(uint256 amount) public returns (bool){
+        _burn(msg.sender,amount);
+        return true;
+    }
+
     function burn(address account,uint256 amount) public auth(FdToken_Burn) returns (bool){
         _burn(account,amount);
         return true;
