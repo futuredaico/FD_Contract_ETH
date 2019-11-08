@@ -72,6 +72,8 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
     /// @param expireDate 到期时间
     event OnFree(address contractAddress,address lockAddr,uint256 index,uint256 expireDate);
 
+    event OnMintBinding(address addr,uint256 amount,uint256 timestamp);
+
     constructor(AppManager _appManager,address _token)  FutureDaoApp(_appManager) public {
         token = _token;
     }
@@ -95,6 +97,7 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
             timestamp : _timestamp
         });
         map_Sbinding[msg.sender].push(binding);
+        emit OnMintBinding(_addr,_amount,_timestamp);
         return true;
     }
 
@@ -203,6 +206,7 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         require(slQueue.length <= lockTimesLimit,"Cannot exceed the number of locks");
         slMap[_lockAddr].push(sl);
         balances[_lockAddr] = balances[_lockAddr].sub(_lockAmount);
+        emit OnLock(_contractAddr,_lockAddr,_index,_expireDate,_lockAmount);
         return true;
     }
 
@@ -225,6 +229,7 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
                 delete slQueue[slQueue.length.sub(1)];
                 slQueue.length = slQueue.length.sub(1);
                 i = i - 1;
+                emit OnFree(_contractAddr,_lockAddr,_index,_expireDate);
                 return true;
             }
         }

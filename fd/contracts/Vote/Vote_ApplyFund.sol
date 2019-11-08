@@ -333,7 +333,7 @@ contract Vote_ApplyFund is VoteApp{
             proposal.pass = true;
             if(proposal.sTap.value>0){
                 // 通过了提案就给接收人划一笔钱
-                Tap tap = new Tap(address(this),appManager.getTradeFundPool(),proposal.sTap.recipient,now,(now.add(proposal.sTap.timeConsuming)).mul(1 days),proposal.sTap.value);
+                Tap tap = new Tap(address(this),appManager.getTradeFundPool(),proposal.sTap.recipient,now,now.add(proposal.sTap.timeConsuming.mul(1 days)),proposal.sTap.value);
                 IGovernShareManager(appManager.getGovernShareManager()).sendEth(address(tap),proposal.sTap.value);
                 proposal.address_tap = address(tap);
             }

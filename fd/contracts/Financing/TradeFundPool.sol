@@ -110,9 +110,9 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
 
     /// @notice 构造函数
     /// @param _duringTime 众筹的时间，_money 众筹的目标资金
-    constructor(AppManager _appManager,IERC20 _token,uint256 _duringTime,uint256 _money,address _curve) FutureDaoApp(_appManager) public{
+    constructor(AppManager _appManager,address _token,uint256 _duringTime,uint256 _money,address _curve) FutureDaoApp(_appManager) public{
         curve = ICurve(_curve);
-        token = _token;
+        token = IERC20(_token);
         crowdFundStartTime = now;
         if(_duringTime>0 && _money>0){
             crowdFundDuringTime = _duringTime;

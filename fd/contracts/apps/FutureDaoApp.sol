@@ -9,7 +9,6 @@ contract FutureDaoApp {
     AppManager public appManager;
 
     bytes32 public constant EMPTY_PARAM_HASH = 0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563;
-    bytes32 public constant FundPool_PreMint = keccak256("FundPool_PreMint");
 
     constructor(AppManager _appManager) public{
         appManager = _appManager;

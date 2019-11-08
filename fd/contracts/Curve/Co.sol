@@ -26,6 +26,7 @@ contract Co is ICurve ,FutureDaoApp{
     }
 
     function changeAlpha(uint256 _alpha) public auth(Co_ChangeAlpha) returns(bool){
+        require(_alpha<10000);
         alpha = _alpha;
         emit OnChangeAlpha(_alpha);
     }
