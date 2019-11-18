@@ -4,19 +4,21 @@ import "../lib/SafeMath.sol";
 import "../Own/Own.sol";
 import "../Interface/IERC20.sol";
 
-contract ClearingFundPool is Own{
+contract ClearingFundPool is Own {
     using SafeMath for uint256;
 
     mapping(address=>clearingInfo) public map_clearingInfo;
 
     enumVoteResult public clearingResult = enumVoteResult.waiver;
 
-    uint256 public totalFdt;
+    uint256 public totalShares;
 
-    address public address_erc20;
+    address public assetAddress;
+
+    address public owner;
 
     struct clearingInfo{
-        uint256 fdtAmount;
+        uint256 sharesAmount;
         bool isGet;
     }
 
@@ -27,38 +29,25 @@ contract ClearingFundPool is Own{
         refuse
     }
 
-    constructor(address payable _address_governShareManager,address _address_erc20) public{
-        owner = _address_governShareManager;
-        address_erc20 = _address_erc20;
+    constructor(address _owner,address _assetAddress) public{
+        owner = _owner;
+        assetAddress = _assetAddress;
     }
 
-    function lock(address who,uint256 amount) public isOwner(msg.sender) returns(bool){
-        require(clearingResult == enumVoteResult.waiver, "clearingResult is wrong");
-        bool r = IERC20(address_erc20).transferFrom(owner,address(this),amount);
-        require(r==true, "error");
-        map_clearingInfo[who].fdtAmount = map_clearingInfo[who].fdtAmount.add(amount);
-        totalFdt = totalFdt.add(amount);
+    function register(address account,uint256 amount) public isOwner(msg.sender) returns(bool){
+        map_clearingInfo[account].sharesAmount += amount;
+        totalShares += amount;
         return true;
-    }
-
-    function free(address who) public{
-        require(clearingResult == enumVoteResult.refuse, "clearingResult is wrong");
-        require(map_clearingInfo[who].isGet == false, "No repeat collection");
-        bool r = IERC20(address_erc20).transfer(who,map_clearingInfo[who].fdtAmount);
-        require(r == true,"error");
-        map_clearingInfo[who].isGet = true;
-        totalFdt = totalFdt.sub(map_clearingInfo[who].fdtAmount);
     }
 
     function clear(address payable who) public{
         require(clearingResult == enumVoteResult.approve, "clearingResult is wrong");
         require(map_clearingInfo[who].isGet == false, "No repeat collection");
-        uint256 value = (map_clearingInfo[who].fdtAmount).mul(address(this).balance).div(totalFdt);
-        bool r = IERC20(address_erc20).burn(map_clearingInfo[who].fdtAmount);
+        uint256 value = (map_clearingInfo[who].sharesAmount).mul(IERC20(assetAddress).balanceOf(address(this))).div(totalShares);
+        bool r = IERC20(assetAddress).transfer(who,value);
         require(r,"error");
-        who.transfer(value);
         map_clearingInfo[who].isGet = true;
-        totalFdt = totalFdt.sub(map_clearingInfo[who].fdtAmount);
+        totalShares = totalShares.sub(map_clearingInfo[who].sharesAmount);
     }
 
     function() external payable{

@@ -5,7 +5,7 @@ import "../lib/SafeMath.sol";
 import "../lib/Context.sol";
 import "../apps/FutureDaoApp.sol";
 
-contract FdToken is IERC20 , Context , FutureDaoApp{
+contract sharesB is IERC20 , Context , FutureDaoApp{
     using SafeMath for uint256;
 
     string public name;
@@ -19,8 +19,8 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
     //////////////
     ///auth
     //////////////
-    bytes32 public constant FdToken_Mint = keccak256("FundPool_Mint");
-    bytes32 public constant FdToken_Burn = keccak256("FundPool_Burn");
+    bytes32 public constant SharesB_Mint = keccak256("SharesB_Mint");
+    bytes32 public constant SharesB_Burn = keccak256("SharesB_Burn");
 
     constructor(AppManager _appManager,string memory _name,uint8 _decimals,string memory _symbol) FutureDaoApp(_appManager) public {
         name = _name;
@@ -46,7 +46,7 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
         return _balances[account];
     }
 
-    function mint(address account,uint256 amount) public auth(FdToken_Mint) returns (bool){
+    function mint(address account,uint256 amount) public auth(SharesB_Mint) returns (bool){
         _mint(account,amount);
         return true;
     }
@@ -56,7 +56,7 @@ contract FdToken is IERC20 , Context , FutureDaoApp{
         return true;
     }
 
-    function burn(address account,uint256 amount) public auth(FdToken_Burn) returns (bool){
+    function burn(address account,uint256 amount) public auth(SharesB_Burn) returns (bool){
         _burn(account,amount);
         return true;
     }

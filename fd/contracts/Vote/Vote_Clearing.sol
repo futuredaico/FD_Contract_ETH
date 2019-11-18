@@ -2,6 +2,7 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./VoteApp.sol";
 import "../clearing/ClearingFundPool.sol";
+import "../Interface/ITradeFundPool.sol";
 
 contract Vote_Clearing is VoteApp{
 
@@ -11,13 +12,15 @@ contract Vote_Clearing is VoteApp{
     /// @notice 所有的清算提议
     ClearingProposal[] clearingProposalQueue;
 
+    address public tradeAddress;
+
     /// @notice 清算提议
     struct ClearingProposal{
         uint256 index;
         mapping(address => uint256) clearingList;//同意人的列表
         uint256 startTime;//开始的时间
         address proposer;//清算的发起者
-        uint256 totalFndAmount;//同意的总票数
+        uint256 totalSharesAmount;//同意的总票数
         address payable address_clearingFundPool;
         bool pass; //是否通过
         bool process; //是否已经处理过
@@ -38,7 +41,7 @@ contract Vote_Clearing is VoteApp{
     event OnVoteClearingProposal(
         address who,
         uint256 index,
-        uint256 fndAmount
+        uint256 sharesAmount
     );
 
     /// @param index 提议的序列号 , pass 是否通过
@@ -47,35 +50,32 @@ contract Vote_Clearing is VoteApp{
         bool pass
     );
 
-    constructor(AppManager _appManager) FutureDaoApp(appManager) public{
-    }
-
-    modifier ownFdt() {
-        require(getFdtInGovern(msg.sender)>0, "need has shares");
-        _;
+    constructor(AppManager _appManager,address _sharesAddress,address _tradeAddress,uint256 _voteRatio,uint256 _approveRatio)
+    VoteApp(_appManager,_sharesAddress,_voteRatio,_approveRatio)
+    public
+    {
+        tradeAddress = _tradeAddress;
     }
 
     /// @notice 发起清算提议
     /// @dev 股东都可以发起清算提议
-    function applyClearingProposal() public payable ownFdt(){
+    function applyClearingProposal() public payable ownShares(){
         //只能允许一个清算提议
         require(cur_clearingProposal.proposer == address(0),"Only one proposal is allowed");
-        //发起提议的人需要转给本合约一定的gas作为费用奖励处理者
-        require(msg.value >= proposalFee + deposit, "need proposalFee");
+        //发起提议的人需要转给本合约一定的费用奖励处理者
+        transferFrom(msg.sender, address(this), proposalFee + deposit);
 
-        ClearingFundPool _clearingFundPool = new ClearingFundPool(appManager.getGovernShareManager(),appManager.getFdToken());
+        ClearingFundPool _clearingFundPool = new ClearingFundPool(address(this),appManager.getAssetAddress());
 
         cur_clearingProposal = ClearingProposal({
             index : clearingProposalQueue.length,
             proposer : msg.sender,
-            totalFndAmount : 0,
+            totalSharesAmount : 0,
             startTime : now,
             pass : false,
             process :false,
             address_clearingFundPool : address(_clearingFundPool)
         });
-
-        clearingProposalQueue.push(cur_clearingProposal);
 
         emit OnApplyClearingProposal(
             cur_clearingProposal.index,
@@ -86,45 +86,38 @@ contract Vote_Clearing is VoteApp{
     }
 
     /// @notice 参与清算提议
-    function voteClearingProposal() public ownFdt(){
-        uint256 fdtInGovern = getFdtInGovern(msg.sender);
-        require(fdtInGovern > 0,"fdtInGovern need more than 0");
-        //需要在7天内
+    function voteClearingProposal(uint256 _amount) public ownFdt(){
+        //需要在投票期间
         require(now <= cur_clearingProposal.startTime + votingPeriodLength,"time out");
+        //将投票的股份转移到本合约
+        bool r = IERC20(sharesAddress).transferFrom(msg.sender,address(this),_amount);
+        require(r, "transferFrom error");
 
+        cur_clearingProposal.clearingList[msg.sender] += _amount;
+        cur_clearingProposal.totalFndAmount += _amount;
 
-        bool r = IGovernShareManager(appManager.getGovernShareManager())
-        .clearingFdt(cur_clearingProposal.address_clearingFundPool,msg.sender,fdtInGovern);
-        require(r,"lock error");
+        ClearingFundPool(cur_clearingProposal.address_clearingFundPool).register(msg.sender,_amount);
 
-        cur_clearingProposal.clearingList[msg.sender] += fdtInGovern;
-        cur_clearingProposal.totalFndAmount += fdtInGovern;
-
-        emit OnVoteClearingProposal(msg.sender,cur_clearingProposal.index,fdtInGovern);
+        emit OnVoteClearingProposal(msg.sender,cur_clearingProposal.index,_amount);
     }
 
     /// @notice 处理提议
-    function processClearingProposal() public{
-        //提议要超过7天
+    function processClearingProposal() public {
+        //已经过了投票期了
         require(now > cur_clearingProposal.startTime + votingPeriodLength,"it's within the expiry date");
-        require(cur_clearingProposal.process == false, "needs proposals have not been addressed");
-        //获取当前所有fnd的数量
-        uint256 totalFnd = getFdtTotalSupply();
-        uint hold = cur_clearingProposal.totalFndAmount * (10 ** 9) / totalFnd;
-        if(hold < (3*(10**8))){
-            cur_clearingProposal.pass = false;
+        require(cur_clearingProposal.process == false,"needs proposals have not been addressed");
+        (bool r,uint256 voteRatio_1000,) = canPass(cur_clearingProposal.totalSharesAmount, 0);
+        if(r){
+            cur_clearingProposal.pass = true;
+            ITradeFundPool(tradeAddress).clearing(cur_clearingProposal.address_clearingFundPool,voteRatio_1000);
         }
         else{
-            cur_clearingProposal.pass = true;
-            //需要清退的总额
-            //去fundpool合约中算钱
-            bool r = IGovernShareManager(appManager.getGovernShareManager()).clearing(cur_clearingProposal.address_clearingFundPool,hold);
-            require(r, "call failed");
+            cur_clearingProposal.pass = false;
         }
         //标示已经处理
         cur_clearingProposal.process = true;
-        //给处理人一比奖励
-        msg.sender.transfer(proposalFee);
+        clearingProposalQueue.push(cur_clearingProposal);
+
         //通知
         emit OnProcessClearingProposal(
             cur_clearingProposal.index,

@@ -14,13 +14,13 @@ contract AppManager is Own{
 
     address payable private governShareManager;
 
-    address payable private fdToken;
-
     address public dateTime;
 
     bool public bool_isInit;
 
     bytes32 public constant EMPTY_PARAM_HASH = 0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563;
+
+    address payable public assetAddress;
 
     event OnAddPermission(address indexed grantor, address indexed app, bytes32 indexed vData, bytes32 paramsHash);
 
@@ -33,8 +33,9 @@ contract AppManager is Own{
 
     event OnDeletePermission(address indexed grantor, address indexed app, bytes32 indexed vData);
 
-    constructor() public {
+    constructor(address payable _assetAddress) public {
         permission = new Permission();
+        assetAddress = _assetAddress;
     }
 
     modifier isInit() {
@@ -42,12 +43,11 @@ contract AppManager is Own{
         _;
     }
 
-    function initialize(address payable _tradeFundPool,address payable _governShareManager,address payable _fdToken,address _dateTime)
+    function initialize(address payable _tradeFundPool,address payable _governShareManager,address _dateTime)
     external isOwner(msg.sender){
         require(bool_isInit == false,"");
         tradeFundPool = _tradeFundPool;
         governShareManager = _governShareManager;
-        fdToken = _fdToken;
         dateTime = _dateTime;
         bool_isInit = true;
     }
@@ -62,9 +62,9 @@ contract AppManager is Own{
         return tradeFundPool;
     }
 
-    function getFdToken() external view returns(address payable){
-        require(fdToken != address(0),"The address cannot be empty");
-        return fdToken;
+    function getAssetAddress() external view returns(address payable){
+        require(assetAddress != address(0),"The address cannot be empty");
+        return assetAddress;
     }
 
     function getDateTime() external view returns(address){

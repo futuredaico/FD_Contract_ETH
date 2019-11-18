@@ -10,38 +10,24 @@ import "../Interface/IERC20.sol";
 /// @notice 你可以进行股份的众筹，出售，购买，交易。
 /// @dev 最开始可以设置一个预期众筹目前和众筹时的股价，众筹期内购买的价格都是一样的。众筹如果未达标，原路返回所有的钱。如果达标了，开始根据购买曲线和出售曲线进行购买和出售操作。
 contract TradeFundPool is ITradeFundPool , FutureDaoApp{
-    /// @notice 众筹时的每股价格
-    uint256 public crowdFundPrice;
-
-    /// @notice 众筹的时间
-    uint256 public crowdFundDuringTime;
-
-    /// @notice 众筹的目标
-    uint256 public crowdFundMoney;
-
-    /// @notice 众筹开始时间
-    uint256 public crowdFundStartTime;
-
-    /// @notice 是否处于众筹期间
-    bool public during_crowdfunding = true;
-
     /// @notice 是否开始募资
     bool public started = false;
 
     /// @notice 当前储备池中的存款
     uint256 public sellReserve;
 
-    /// @notice 众筹期间募集的eth
-    mapping (address=>uint256) public crowdFundingEth;
+    /// @notice 每个月非储备部分流出的百分比   乘以了1000
+    uint256 public monthlyAllocationRatio_1000;
+
+    /// @notice 上一次领月供时的时间
+    uint256 public preSendTimestamp;
 
     /////////////
     /// auth
     /////////////
     bytes32 public constant FundPool_Start = keccak256("FundPool_Start");
-    bytes32 public constant FundPool_PreMint = keccak256("FundPool_PreMint");
-    bytes32 public constant FundPool_SendEth = keccak256("FundPool_SendEth");
     bytes32 public constant FundPool_Clearing = keccak256("FundPool_Clearing");
-    //bytes32 public constant FundPool_crowdfunding = keccak256("FundPool_crowdfunding");
+    bytes32 public constant FundPool_ChangeRatio = keccak256("FundPool_ChangeRatio");
 
     //////////////
     //// 私有属性
@@ -56,42 +42,28 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 购买
     event OnBuy(
         address who,
-        uint256 ethAmount,
-        uint256 fdtAmount
+        uint256 assetValue,
+        uint256 sharesAmount
     );
 
     /// @notice 出售
     event OnSell(
         address who,
-        uint256 ethAmount,
-        uint256 fdtAmount
+        uint256 assetValue,
+        uint256 sharesAmount
     );
 
     /// @notice 利润回购
     event OnRevenue(
         address who,
-        uint256 ethAmount
+        uint256 assetValue
     );
-
-    /// @notice 众筹
-    event OnWindingUp(
-        address who,
-        uint256 ethAmount
-    );
-
-    /// @notice 预挖矿
-    event OnPreMint(
-        address who,
-        uint256 fdtAmount,
-        uint256 timestamp
-    );
-
     /// @notice 取钱
     /// @param who 哪个地址来取钱的
-    /// @param ethAmount 多少钱
-    event OnSendEth(
+    /// @param assetValue 多少钱
+    event OnSendToGovern(
         address who,
-        uint256 ethAmount
+        uint256 assetValue
     );
 
     /// @notice 清退
@@ -110,34 +82,17 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
 
     /// @notice 构造函数
     /// @param _duringTime 众筹的时间，_money 众筹的目标资金
-    constructor(AppManager _appManager,address _token,uint256 _duringTime,uint256 _money,address _curve) FutureDaoApp(_appManager) public{
+    constructor(AppManager _appManager,address _token,address _curve,uint256 _monthlyAllocationRatio_1000) FutureDaoApp(_appManager) public{
         curve = ICurve(_curve);
         token = IERC20(_token);
-        crowdFundStartTime = now;
-        if(_duringTime>0 && _money>0){
-            crowdFundDuringTime = _duringTime;
-            crowdFundMoney = _money;
-            crowdFundPrice = curve.getCrowdFundPrice(crowdFundMoney);
-        }else{
-            during_crowdfunding = false;
-        }
+        assetAddress = _appManager.assetAddress();
+        monthlyAllocationRatio_1000 = _monthlyAllocationRatio_1000;
     }
 
     /// @notice 判断是不是已经开始募资
     modifier isStart(){
         require(started == true,"need start");
-        _;
-    }
-
-    /// @notice 判断是不是在众筹期
-    modifier isCrowdfunding(){
-        require(during_crowdfunding == true,"need to be in a crowdfunding period");
-        _;
-    }
-
-    /// @notice 判断不在众筹期
-    modifier isNotCrowdfunding(){
-        require(during_crowdfunding == false,"Need not be in crowdfunding period");
+        preSendTimestamp = now;
         _;
     }
 
@@ -164,125 +119,78 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         started = true;
     }
 
-    /// @notice 预挖矿
-    function preMint(address who,uint256 amount,uint256 timestamp) public auth(FundPool_PreMint){
-        require(started == false,"cant start");
-        address govern = appManager.getGovernShareManager();
-        token.mint(govern,amount);
-        IGovernShareManager(govern).mintBinding(who,amount,timestamp);
-        emit OnPreMint(who,amount,timestamp);
-    }
-
-    /// @notice 众筹失败，清退
-    /// @dev 如果在众筹阶段，是不允许清退的
-    function windingUp() public isStart() isCrowdfunding() {
-        require(crowdFundingEth[msg.sender] > 0,"need has eth");
-        require(now.sub(crowdFundStartTime) > crowdFundDuringTime, "need beyond the corwdfunding period");
-        uint256 value = crowdFundingEth[msg.sender];
-        msg.sender.transfer(value);
-        crowdFundingEth[msg.sender] = 0;
-        //吧token也销毁了
-        token.burn(msg.sender,token.totalSupply());
-        emit OnWindingUp(msg.sender,value);
-    }
-
-    /// @notice 众筹
-    /// @dev 众筹期间价格是固定的，不需要走购买曲线,期间所有的钱都进入储备池，需要考虑的是零界点的处理
-    function crowdfunding(bool needBack,uint256 tag) public payable isStart() isCrowdfunding(){
-        uint256 invest = msg.value;
-        require(invest > 0,"value need more than 0");
-        require(now.sub(crowdFundStartTime) <= crowdFundDuringTime,"need in the corwdfunding period");
-        uint256 balance = address(this).balance;
-        if(balance < crowdFundMoney){//如果没有达到众筹要求
-            uint256 fdtAmount = invest.div(crowdFundPrice);
-            token.mint(msg.sender,fdtAmount);
-            sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
-            crowdFundingEth[msg.sender] = crowdFundingEth[msg.sender].add(invest);
-        }
-        else if(balance == crowdFundMoney){//如果正好达到众筹要求
-            during_crowdfunding = false;
-            uint256 fdtAmount = invest.div(crowdFundPrice);
-            token.mint(msg.sender,fdtAmount);
-            sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
-            crowdFundingEth[msg.sender] = crowdFundingEth[msg.sender].add(invest);
-        }
-        else if(needBack){//如果超出了众筹要求且超出部分要求退回
-            during_crowdfunding = false;
-            uint256 needValue = invest.sub(address(this).balance.sub(crowdFundMoney));
-            uint256 fdtAmount = needValue.div(crowdFundPrice);
-            token.mint(msg.sender,fdtAmount);
-            //退还超出的eth
-            msg.sender.transfer(invest.sub(needValue));
-            sellReserve = sellReserve.add(curve.getVauleToReserve(needValue));
-            crowdFundingEth[msg.sender] = crowdFundingEth[msg.sender].add(needValue);
-        }
-        else{//超出了众筹要求，超出部分不需要退回，继续走曲线购买
-            during_crowdfunding = false;
-            uint256 needValue = invest.sub(address(this).balance.sub(crowdFundMoney));
-            uint256 fdtAmount = needValue.div(crowdFundPrice);
-            token.mint(msg.sender,fdtAmount);
-            uint256 fdtAmount2 = curve.getBuyAmount(invest.sub(needValue),token.totalSupply());
-            token.mint(msg.sender,fdtAmount2);
-            sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
-            crowdFundingEth[msg.sender] = crowdFundingEth[msg.sender].add(invest);
-        }
-        emit OnEvent(tag);
+    function changeRatio(uint256 _ratio) public auth(FundPool_ChangeRatio) {
+        //每次的修改不能超过50%
+        uint256 _d = monthlyAllocationRatio_1000 > _ratio ? monthlyAllocationRatio_1000 - _ratio : _ratio - monthlyAllocationRatio_1000;
+        require(_d.mul(1000).div(monthlyAllocationRatio_1000) < 500, "Over the limit");
+        monthlyAllocationRatio_1000 = _ratio;
     }
 
     /// @notice 投资者购买
-    function buy(uint256 _minBuyToken,uint256 tag) public payable isStart() isNotCrowdfunding(){
-        require(msg.value > 0,"value need more than 0");
-        uint256 invest = msg.value;
-        uint256 fdtAmount = curve.getBuyAmount(invest,token.totalSupply());
-        token.mint(msg.sender,fdtAmount);
-        require(fdtAmount >= _minBuyToken,"fdtAmount need more than _minBuyToken");
+    function buy(uint256 _assetValue,uint256 _minBuyToken,uint256 tag) public payable isStart() {
+        /// 给合约转钱
+        transferFrom(msg.sender,address(this),_assetValue);
+        uint256 sharesAmount = curve.getBuyAmount(_assetValue,token.totalSupply());
+        token.mint(msg.sender,sharesAmount);
+        require(sharesAmount >= _minBuyToken,"fdtAmount need more than _minBuyToken");
         //存在本合约储备池里的钱
-        sellReserve = sellReserve.add(curve.getVauleToReserve(invest));
-        emit OnBuy(msg.sender,msg.value,fdtAmount);
+        sellReserve = sellReserve.add(curve.getVauleToReserve(_assetValue));
+        emit OnBuy(msg.sender,msg.value,sharesAmount);
         emit OnEvent(tag);
     }
 
     /// @notice 投资者出售
     /// @dev 如果在众筹阶段，是不允许出售股份的
     /// @param _amount 出售的股份数
-    function sell(uint256 _amount,uint256 _minGasValue) public isStart() isNotCrowdfunding(){
+    function sell(uint256 _amount,uint256 _minGasValue) public isStart() {
         require(_amount > 0,"amount need more than 0");
         uint256 withdraw = curve.getSellValue(_amount,sellReserve,token.totalSupply());
         sellReserve = sellReserve.sub(withdraw);
         require(sellReserve >= 0,"sellReserve need more than 0");
         require(withdraw >= _minGasValue,"withdraw need less than _maxGasValue");
         token.burn(msg.sender,_amount);
-        msg.sender.transfer(withdraw);
+        transfer(msg.sender, withdraw);
         emit OnSell(msg.sender,withdraw,_amount);
     }
 
     /// @notice 投资的项目盈利，用这个接口购买股份
     /// @dev 钱直接冲进reserve 不产生fdt
-    function revenue() public payable isStart() isNotCrowdfunding(){
-        require(msg.value > 0,"value need more 0");
-        uint256 invest = msg.value;
+    function revenue(uint256 _assetValue) public payable isStart(){
+        /// 给合约转钱
+        transferFrom(msg.sender,address(this),_assetValue);
         //存在本合约储备池里的钱
-        sellReserve = sellReserve.add(invest);
-        emit OnRevenue(msg.sender,invest);
+        sellReserve = sellReserve.add(_assetValue);
+        emit OnRevenue(msg.sender,_assetValue);
     }
 
-    /// @notice 动用合约的钱  需要权限验证
-    function sendEth(address payable _who,uint256 _value) public isStart() isNotCrowdfunding() auth(FundPool_SendEth){
-        //需要确保不能用到 储备池 中的钱
-        require(address(this).balance.sub(_value) >= sellReserve, "not sufficient funds");
-        _who.transfer(_value);
-        emit OnSendEth(_who,_value);
+    /// @notice 申请资金转给自治部分
+    function sendToGovern() public isStart(){
+        /// 周期数
+        uint256 periods = now.sub(preSendTimestamp).div(30 days);
+        /// 时间到了没有
+        require(periods > 0,"It's not time yet");
+        uint256 sendValue = 0;
+        uint256 balanceOfCanSend = balance().sub(sellReserve);
+        for(uint256 i = 0;i<periods;i++){
+            uint256 _v = balanceOfCanSend.mul(monthlyAllocationRatio_1000).div(1000);
+            sendValue += _v;
+            balanceOfCanSend -= _v;
+        }
+        /// 发钱
+        transfer(appManager.getGovernShareManager(),sendValue);
+        preSendTimestamp = preSendTimestamp.add(periods.mul(30 days));
+        emit OnSendToGovern(msg.sender,_assetValue);
     }
 
-    /// @notice 清退  ratio 乘以了 10 ** 9
-    function clearing(address payable _clearingContractAddress,uint256 _ratio)
-    public isStart() isNotCrowdfunding() auth(FundPool_Clearing){
-        require(_ratio<=10**9,"ratio is wrong");
-        uint256 _value_reserve = (sellReserve).mul(_ratio).div(10**9);
-        uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio).div(10**9);
+    /// @notice 清退  ratio 乘以了 10 ** 3
+    function clearing(address payable _clearingContractAddress,uint256 _ratio_1000)
+    public isStart() auth(FundPool_Clearing){
+        require(_ratio<=10**6,"ratio is wrong");
+        uint256 _value_reserve = (sellReserve).mul(_ratio).div(10**3);
+        uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio).div(10**3);
         sellReserve = sellReserve.sub(_value_reserve);
         uint256 v = _value_reserve.add(_value_govern);
-        _clearingContractAddress.transfer(v);
+        transfer(_clearingContractAddress, v);
         emit OnClearing(_clearingContractAddress,_ratio,_value_reserve,_value_govern);
     }
 
