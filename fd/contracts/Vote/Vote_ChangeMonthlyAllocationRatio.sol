@@ -76,11 +76,10 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
     function getProposalBaseInfoByIndex(uint256 _proposalIndex)
     public
     view
-    returns(string memory _proposalName,address _proposer,string memory _detail)
+    returns(address _proposer,string memory _detail)
     {
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
-        _proposalName = proposal.proposalName;
         _proposer = proposal.proposer;
         _detail = proposal.detail;
     }
@@ -100,7 +99,7 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
     }
 
     /// @notice 申请提议
-    /// @param ，_detail 提议的详情
+    /// @param _detail 提议的详情
     function applyProposal(
         uint256 _ratio,
         string memory _detail
@@ -109,7 +108,7 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
     payable
     ownShares()
     {
-        transferFrom(msg.sender,address(this),proposalFee + deposit);
+        transferF(msg.sender,address(this),proposalFee + deposit);
 
         Proposal memory proposal = Proposal({
             index : proposalQueue.length + 1,
@@ -133,7 +132,7 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         );
     }
 
-    function vote(uint256 _proposalIndex,uint8 result,uint256 sharesAmount) public ownFdt() {
+    function vote(uint256 _proposalIndex,uint8 result,uint256 sharesAmount) public ownShares() {
         //提议首先要存在
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
@@ -178,7 +177,7 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
         //投票已经过了公示期
-        require(now > proposal.startTime + votingPeriodLength + publicityPeriodLength,"Should exceed the publicity period");
+        require(now > proposal.votingStartTime + votingPeriodLength + publicityPeriodLength,"Should exceed the publicity period");
         //提议应该是通过的
         require(proposal.pass == true,"proposal need pass");
         //没有被处理过
@@ -191,9 +190,9 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         ITradeFundPool(tradeAddress).changeRatio(proposal.ratio);
 
         //处理提议的人可以得到一比奖励
-        transfer(msg.sender,proposalFee);
+        transferM(msg.sender,proposalFee);
         //发起人拿回押金
-        transfer(proposal.proposer,deposit);
+        transferM(proposal.proposer,deposit);
     }
 
     function getSharesBack(uint256[] memory _proposalIndexs) public {
@@ -203,7 +202,7 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
             uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
             Proposal storage proposal = proposalQueue[queueIndex];
             //需要提议是 已经通过了或者没有通过但是超出了投票期
-            require(proposal.pass == true || now >= proposal.startTime + votingPeriodLength,"proposal need process ||need time out");
+            require(proposal.pass == true || now >= proposal.votingStartTime + votingPeriodLength,"proposal need process ||need time out");
             bool r = IERC20(sharesAddress).transfer(msg.sender,proposal.voteDetails[msg.sender].sharesAmount);
             proposal.voteDetails[msg.sender].sharesAmount = 0;
             require(r,"shares transfer error");

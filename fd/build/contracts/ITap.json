@@ -31,14 +31,14 @@
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
     "exportedSymbols": {
       "ITap": [
-        2057
+        1301
       ]
     },
-    "id": 2058,
+    "id": 1302,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2050,
+        "id": 1294,
         "literals": [
           "solidity",
           ">=",
@@ -49,7 +49,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:32:7"
+        "src": "0:32:8"
       },
       {
         "baseContracts": [],
@@ -57,9 +57,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 2057,
+        "id": 1301,
         "linearizedBaseContracts": [
-          2057
+          1301
         ],
         "name": "ITap",
         "nodeType": "ContractDefinition",
@@ -67,26 +67,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2053,
+            "id": 1297,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoney",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2051,
+              "id": 1295,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "77:2:7"
+              "src": "77:2:8"
             },
             "returnParameters": {
-              "id": 2052,
+              "id": 1296,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "96:0:7"
+              "src": "96:0:8"
             },
-            "scope": 2057,
-            "src": "60:37:7",
+            "scope": 1301,
+            "src": "60:37:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -94,49 +94,49 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2056,
+            "id": 1300,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoneyBackToFund",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2054,
+              "id": 1298,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "132:2:7"
+              "src": "132:2:8"
             },
             "returnParameters": {
-              "id": 2055,
+              "id": 1299,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "151:0:7"
+              "src": "151:0:8"
             },
-            "scope": 2057,
-            "src": "105:47:7",
+            "scope": 1301,
+            "src": "105:47:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 2058,
-        "src": "36:119:7"
+        "scope": 1302,
+        "src": "36:119:8"
       }
     ],
-    "src": "0:155:7"
+    "src": "0:155:8"
   },
   "legacyAST": {
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
     "exportedSymbols": {
       "ITap": [
-        2057
+        1301
       ]
     },
-    "id": 2058,
+    "id": 1302,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2050,
+        "id": 1294,
         "literals": [
           "solidity",
           ">=",
@@ -147,7 +147,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:32:7"
+        "src": "0:32:8"
       },
       {
         "baseContracts": [],
@@ -155,9 +155,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 2057,
+        "id": 1301,
         "linearizedBaseContracts": [
-          2057
+          1301
         ],
         "name": "ITap",
         "nodeType": "ContractDefinition",
@@ -165,26 +165,26 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2053,
+            "id": 1297,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoney",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2051,
+              "id": 1295,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "77:2:7"
+              "src": "77:2:8"
             },
             "returnParameters": {
-              "id": 2052,
+              "id": 1296,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "96:0:7"
+              "src": "96:0:8"
             },
-            "scope": 2057,
-            "src": "60:37:7",
+            "scope": 1301,
+            "src": "60:37:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
@@ -192,36 +192,36 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2056,
+            "id": 1300,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoneyBackToFund",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2054,
+              "id": 1298,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "132:2:7"
+              "src": "132:2:8"
             },
             "returnParameters": {
-              "id": 2055,
+              "id": 1299,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "151:0:7"
+              "src": "151:0:8"
             },
-            "scope": 2057,
-            "src": "105:47:7",
+            "scope": 1301,
+            "src": "105:47:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 2058,
-        "src": "36:119:7"
+        "scope": 1302,
+        "src": "36:119:8"
       }
     ],
-    "src": "0:155:7"
+    "src": "0:155:8"
   },
   "compiler": {
     "name": "solc",
@@ -229,7 +229,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-09-04T08:58:42.660Z",
+  "updatedAt": "2019-11-19T07:22:37.284Z",
   "devdoc": {
     "methods": {}
   },

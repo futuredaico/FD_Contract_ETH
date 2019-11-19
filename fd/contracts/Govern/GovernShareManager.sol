@@ -34,7 +34,7 @@ contract GovernShareManager is FutureDaoApp , IGovernShareManager{
         //计算退出的部分 可以分到多少asset
         uint256 _v = _amount.mul(balance(address(this))).div(IERC20(token).totalSupply());
         IERC20(token).burn(_amount);
-        transfer(msg.sender, _v);
+        transferM(msg.sender, _v);
         return true;
     }
 

@@ -17,7 +17,6 @@ contract Vote_ApplySharesA is VoteApp{
     /// @notice 一个提议的结构
     struct Proposal{
         uint256 index;//提议的序号
-        string proposalName; //提议的名字
         address payable proposer; //提议人
         uint256 sharesAmount; //索要sharesA的数量
         uint256 assetValue; //给予的资产数
@@ -34,7 +33,6 @@ contract Vote_ApplySharesA is VoteApp{
     /// @notice 申请提议
     event OnApplyProposal(
         uint256 index,
-        string proposalName,
         address payable proposaler,
         uint256 sharesAmount, //索要sharesA的数量
         uint256 assetValue, //给予的资产数
@@ -86,11 +84,10 @@ contract Vote_ApplySharesA is VoteApp{
     function getProposalInfoByIndex(uint256 _proposalIndex)
     public
     view
-    returns(string memory _proposalName,address _proposer,uint256 _sharesAmount,uint256 _assetValue,string memory _detail)
+    returns(address _proposer,uint256 _sharesAmount,uint256 _assetValue,string memory _detail)
     {
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
-        _proposalName = proposal.proposalName;
         _proposer = proposal.proposer;
         _detail = proposal.detail;
         _sharesAmount = proposal.sharesAmount;
@@ -114,9 +111,8 @@ contract Vote_ApplySharesA is VoteApp{
     }
 
     /// @notice 申请提议
-    /// @param _name 提议的名字，_detail 提议的详情
+    /// @param _detail 提议的详情
     function applyProposal(
-        string memory _name,
         uint256 _sharesAmount,
         uint256 _assetValue,
         string memory _detail
@@ -125,11 +121,10 @@ contract Vote_ApplySharesA is VoteApp{
     payable
     ownShares()
     {
-        transferFrom(msg.sender,address(this),_assetValue + proposalFee + deposit);
+        transferF(msg.sender,address(this),_assetValue + proposalFee + deposit);
 
         Proposal memory proposal = Proposal({
             index : proposalQueue.length + 1,
-            proposalName : _name,
             proposer : msg.sender,
             sharesAmount : _sharesAmount,
             assetValue : _assetValue,
@@ -144,7 +139,6 @@ contract Vote_ApplySharesA is VoteApp{
 
         emit OnApplyProposal(
             proposal.index,
-            proposal.proposalName,
             proposal.proposer,
             proposal.sharesAmount,
             proposal.assetValue,
@@ -207,12 +201,12 @@ contract Vote_ApplySharesA is VoteApp{
         require(r,"enter faild");
         //如果有捐赠，则将捐赠也赋予govern
         if (proposal.assetValue > 0) {
-            transfer(address(govern),proposal.assetValue);
+            transferM(address(govern),proposal.assetValue);
         }
         //处理提议的人可以得到一比奖励
-        transfer(msg.sender,proposalFee);
+        transferM(msg.sender,proposalFee);
         //发起人拿回押金
-        transfer(proposal.proposer,deposit);
+        transferM(proposal.proposer,deposit);
     }
 
     /// @notice 如果提议没有通过 那么需要拿回抵押的财产
@@ -224,13 +218,13 @@ contract Vote_ApplySharesA is VoteApp{
         //有钱可以退
         require(proposal.assetValue > 0,"No money to back");
         //把钱退给提议人
-        transfer(proposal.proposer,proposal.assetValue);
+        transferM(proposal.proposer,proposal.assetValue);
         emit OnGetAssetBack(_proposalIndex,proposal.assetValue);
         proposal.assetValue = 0;
         //处理提议的人可以得到一比奖励
-        transfer(msg.sender,proposalFee);
+        transferM(msg.sender,proposalFee);
         //发起人拿回押金
-        transfer(proposal.proposer,deposit);
+        transferM(proposal.proposer,deposit);
     }
 
 

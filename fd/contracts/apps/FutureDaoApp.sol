@@ -29,12 +29,12 @@ contract FutureDaoApp {
         return IERC20(assetAddress).balanceOf(_addr);
     }
 
-    function transferFrom(address from,address to,uint256 amount) internal {
+    function transferF(address from,address to,uint256 amount) internal {
         bool r = IERC20(assetAddress).transferFrom(from,to,amount);
         require(r,"asset transferFrom error");
     }
 
-    function transfer(address to,uint256 amount) internal {
+    function transferM(address to,uint256 amount) internal {
         bool r = IERC20(assetAddress).transfer(to,amount);
         require(r,"asset transferFrom error");
     }

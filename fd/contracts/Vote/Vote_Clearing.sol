@@ -37,7 +37,7 @@ contract Vote_Clearing is VoteApp{
     /// @param who 投票人
     /// @param index 提议的序列号
     /// @param voteResult 投什么票
-    /// @param fndAmount 有多少股
+    /// @param sharesAmount 有多少股
     event OnVoteClearingProposal(
         address who,
         uint256 index,
@@ -63,7 +63,7 @@ contract Vote_Clearing is VoteApp{
         //只能允许一个清算提议
         require(cur_clearingProposal.proposer == address(0),"Only one proposal is allowed");
         //发起提议的人需要转给本合约一定的费用奖励处理者
-        transferFrom(msg.sender, address(this), proposalFee + deposit);
+        transferF(msg.sender, address(this), proposalFee + deposit);
 
         ClearingFundPool _clearingFundPool = new ClearingFundPool(address(this),appManager.getAssetAddress());
 
@@ -73,7 +73,7 @@ contract Vote_Clearing is VoteApp{
             totalSharesAmount : 0,
             startTime : now,
             pass : false,
-            process :false,
+            process : false,
             address_clearingFundPool : address(_clearingFundPool)
         });
 
@@ -86,7 +86,7 @@ contract Vote_Clearing is VoteApp{
     }
 
     /// @notice 参与清算提议
-    function voteClearingProposal(uint256 _amount) public ownFdt(){
+    function voteClearingProposal(uint256 _amount) public ownShares(){
         //需要在投票期间
         require(now <= cur_clearingProposal.startTime + votingPeriodLength,"time out");
         //将投票的股份转移到本合约
@@ -94,7 +94,7 @@ contract Vote_Clearing is VoteApp{
         require(r, "transferFrom error");
 
         cur_clearingProposal.clearingList[msg.sender] += _amount;
-        cur_clearingProposal.totalFndAmount += _amount;
+        cur_clearingProposal.totalSharesAmount += _amount;
 
         ClearingFundPool(cur_clearingProposal.address_clearingFundPool).register(msg.sender,_amount);
 
@@ -129,7 +129,7 @@ contract Vote_Clearing is VoteApp{
             index : 0,
             proposer : address(0),
             address_clearingFundPool : address(0),
-            totalFndAmount : 0,
+            totalSharesAmount : 0,
             startTime : 0,
             pass : false,
             process : false

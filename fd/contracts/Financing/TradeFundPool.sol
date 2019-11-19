@@ -81,7 +81,6 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     event OnEvent(uint256 tag);
 
     /// @notice 构造函数
-    /// @param _duringTime 众筹的时间，_money 众筹的目标资金
     constructor(AppManager _appManager,address _token,address _curve,uint256 _monthlyAllocationRatio_1000) FutureDaoApp(_appManager) public{
         curve = ICurve(_curve);
         token = IERC20(_token);
@@ -129,7 +128,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @notice 投资者购买
     function buy(uint256 _assetValue,uint256 _minBuyToken,uint256 tag) public payable isStart() {
         /// 给合约转钱
-        transferFrom(msg.sender,address(this),_assetValue);
+        transferF(msg.sender,address(this),_assetValue);
         uint256 sharesAmount = curve.getBuyAmount(_assetValue,token.totalSupply());
         token.mint(msg.sender,sharesAmount);
         require(sharesAmount >= _minBuyToken,"fdtAmount need more than _minBuyToken");
@@ -149,7 +148,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         require(sellReserve >= 0,"sellReserve need more than 0");
         require(withdraw >= _minGasValue,"withdraw need less than _maxGasValue");
         token.burn(msg.sender,_amount);
-        transfer(msg.sender, withdraw);
+        transferM(msg.sender, withdraw);
         emit OnSell(msg.sender,withdraw,_amount);
     }
 
@@ -157,7 +156,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @dev 钱直接冲进reserve 不产生fdt
     function revenue(uint256 _assetValue) public payable isStart(){
         /// 给合约转钱
-        transferFrom(msg.sender,address(this),_assetValue);
+        transferF(msg.sender,address(this),_assetValue);
         //存在本合约储备池里的钱
         sellReserve = sellReserve.add(_assetValue);
         emit OnRevenue(msg.sender,_assetValue);
@@ -170,28 +169,28 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         /// 时间到了没有
         require(periods > 0,"It's not time yet");
         uint256 sendValue = 0;
-        uint256 balanceOfCanSend = balance().sub(sellReserve);
+        uint256 balanceOfCanSend = balance(address(this)).sub(sellReserve);
         for(uint256 i = 0;i<periods;i++){
             uint256 _v = balanceOfCanSend.mul(monthlyAllocationRatio_1000).div(1000);
             sendValue += _v;
             balanceOfCanSend -= _v;
         }
         /// 发钱
-        transfer(appManager.getGovernShareManager(),sendValue);
+        transferM(appManager.getGovernShareManager(),sendValue);
         preSendTimestamp = preSendTimestamp.add(periods.mul(30 days));
-        emit OnSendToGovern(msg.sender,_assetValue);
+        emit OnSendToGovern(msg.sender,sendValue);
     }
 
     /// @notice 清退  ratio 乘以了 10 ** 3
     function clearing(address payable _clearingContractAddress,uint256 _ratio_1000)
     public isStart() auth(FundPool_Clearing){
-        require(_ratio<=10**6,"ratio is wrong");
-        uint256 _value_reserve = (sellReserve).mul(_ratio).div(10**3);
-        uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio).div(10**3);
+        require(_ratio_1000<=10**3,"ratio is wrong");
+        uint256 _value_reserve = (sellReserve).mul(_ratio_1000).div(10**3);
+        uint256 _value_govern = (address(this)).balance.sub(sellReserve).mul(_ratio_1000).div(10**3);
         sellReserve = sellReserve.sub(_value_reserve);
         uint256 v = _value_reserve.add(_value_govern);
-        transfer(_clearingContractAddress, v);
-        emit OnClearing(_clearingContractAddress,_ratio,_value_reserve,_value_govern);
+        transferM(_clearingContractAddress, v);
+        emit OnClearing(_clearingContractAddress,_ratio_1000,_value_reserve,_value_govern);
     }
 
     function() external payable{
