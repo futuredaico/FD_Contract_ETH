@@ -95,10 +95,22 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     );
 
     /// @notice 构造函数
-    constructor(AppManager _appManager,address _shares,address _curve,uint256 _monthlyAllocationRatio_1000) FutureDaoApp(_appManager) public{
+    constructor(
+        AppManager _appManager,
+        address _shares,
+        address _curve,
+        uint256 _monthlyAllocationRatio_1000,
+        uint256 _monthlyAllocationMaxValue,
+        uint256 _monthlyAllocationMinValue
+        )
+    FutureDaoApp(_appManager)
+    public
+    {
         curve = ICurve(_curve);
         shares = IERC20(_shares);
         assetAddress = _appManager.assetAddress();
+        monthlyAllocationMinValue = _monthlyAllocationMinValue;
+        monthlyAllocationMaxValue = _monthlyAllocationMaxValue;
         monthlyAllocationRatio_1000 = _monthlyAllocationRatio_1000;
     }
 

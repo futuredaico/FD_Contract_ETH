@@ -14,6 +14,9 @@ contract Vote_Clearing is VoteApp{
 
     address public tradeAddress;
 
+    //清退达成最低要求的同意比例
+    uint256 public minApproveRatio_1000;
+
     /// @notice 清算提议
     struct ClearingProposal{
         uint256 index;
@@ -50,10 +53,18 @@ contract Vote_Clearing is VoteApp{
         bool pass
     );
 
-    constructor(AppManager _appManager,address _sharesAddress,address _tradeAddress,uint256 _voteRatio,uint256 _approveRatio)
-    VoteApp(_appManager,_sharesAddress,_voteRatio,_approveRatio)
+    constructor(
+        AppManager _appManager,
+        address _sharesAddress,
+        address _tradeAddress,
+        uint256 _minApproveRatio_1000,
+        uint256 _votingStartTime,
+        uint256 _publicityStartTime
+    )
+    VoteApp(_appManager,_sharesAddress,_votingStartTime,_publicityStartTime)
     public
     {
+        minApproveRatio_1000 = _minApproveRatio_1000;
         tradeAddress = _tradeAddress;
     }
 
@@ -106,10 +117,10 @@ contract Vote_Clearing is VoteApp{
         //已经过了投票期了
         require(now > cur_clearingProposal.startTime + votingPeriodLength,"it's within the expiry date");
         require(cur_clearingProposal.process == false,"needs proposals have not been addressed");
-        (bool r,uint256 voteRatio_1000,) = canPass(cur_clearingProposal.totalSharesAmount, 0);
-        if(r){
+        uint256 approveRatio_1000 = cur_clearingProposal.totalSharesAmount.mul(1000).div(getTotalSupply());
+        if(approveRatio_1000 >= minApproveRatio_1000){
             cur_clearingProposal.pass = true;
-            ITradeFundPool(tradeAddress).clearing(cur_clearingProposal.address_clearingFundPool,voteRatio_1000);
+            ITradeFundPool(tradeAddress).clearing(cur_clearingProposal.address_clearingFundPool,approveRatio_1000);
         }
         else{
             cur_clearingProposal.pass = false;

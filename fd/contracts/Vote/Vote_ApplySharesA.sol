@@ -171,14 +171,6 @@ contract Vote_ApplySharesA is VoteApp{
             proposal.refuseVotes = proposal.refuseVotes + sharesAmount;
         }
         emit OnVote(msg.sender,_proposalIndex,result,sharesAmount);
-        bool r;
-        (r,,) = canPass(proposal.approveVotes,proposal.refuseVotes);
-        //判断提议是否可以通过
-        if(r){//已经满足要求进入公示期
-            proposal.pass = true;
-            proposal.publicityStartTime = now;
-            emit OnPass(proposal.index);
-        }
     }
 
     /// @notice 处理提议
@@ -188,45 +180,35 @@ contract Vote_ApplySharesA is VoteApp{
         Proposal storage proposal = proposalQueue[queueIndex];
         //投票已经过了公示期
         require(now > proposal.votingStartTime + votingPeriodLength + publicityPeriodLength,"Should exceed the publicity period");
-        //提议应该是通过的
-        require(proposal.pass == true,"proposal need pass");
         //没有被处理过
         require(proposal.process == false,"proposal has been process");
         proposal.process = true;
 
         emit OnProcess(_proposalIndex);
 
-        ////这里是给提议人增发A股的逻辑
-        bool r = IGovernShareManager(govern).enter(proposal.proposer,proposal.sharesAmount);
-        require(r,"enter faild");
-        //如果有捐赠，则将捐赠也赋予govern
-        if (proposal.assetValue > 0) {
-            transferM(address(govern),proposal.assetValue);
+        if (proposal.approveVotes >= proposal.refuseVotes) {
+            proposal.pass = true;
+            ////这里是给提议人增发A股的逻辑
+            bool r = IGovernShareManager(govern).enter(proposal.proposer,proposal.sharesAmount);
+            require(r,"enter faild");
+            //如果有捐赠，则将捐赠也赋予govern
+            if (proposal.assetValue > 0) {
+                transferM(address(govern),proposal.assetValue);
+            }
+            emit OnPass(proposal.index);
+        } else {
+            if (proposal.assetValue > 0) {
+                //把钱退给提议人
+                transferM(proposal.proposer,proposal.assetValue);
+            }
         }
+
+
         //处理提议的人可以得到一比奖励
         transferM(msg.sender,proposalFee);
         //发起人拿回押金
         transferM(proposal.proposer,deposit);
     }
-
-    /// @notice 如果提议没有通过 那么需要拿回抵押的财产
-    function getAssetBack(uint256 _proposalIndex) public {
-        uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
-        Proposal storage proposal = proposalQueue[queueIndex];
-        //已经过了投票期，并且没有达到要求
-        require(now >= proposal.votingStartTime + votingPeriodLength && proposal.pass == false,"Still on the ballot or passed");
-        //有钱可以退
-        require(proposal.assetValue > 0,"No money to back");
-        //把钱退给提议人
-        transferM(proposal.proposer,proposal.assetValue);
-        emit OnGetAssetBack(_proposalIndex,proposal.assetValue);
-        proposal.assetValue = 0;
-        //处理提议的人可以得到一比奖励
-        transferM(msg.sender,proposalFee);
-        //发起人拿回押金
-        transferM(proposal.proposer,deposit);
-    }
-
 
     function proposalIndexToQueueIndex(uint256 _proposalIndex) private view returns(uint256){
         //提议首先要存在

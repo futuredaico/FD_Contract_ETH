@@ -60,8 +60,8 @@ contract Vote_ChangeMonthlyAllocation is VoteApp{
         uint256 index
     );
 
-    constructor(AppManager _appManager,address _sharesAddress,address _tradeAddress,uint256 _voteRatio,uint256 _approveRatio)
-    VoteApp(_appManager,_sharesAddress,_voteRatio,_approveRatio)
+    constructor(AppManager _appManager,address _sharesAddress,address _tradeAddress,uint256 _votingPeriodLength,uint256 _publicityPeriodLength)
+    VoteApp(_appManager,_sharesAddress,_votingPeriodLength,_publicityPeriodLength)
     public
     {
         sharesAddress = _sharesAddress;
@@ -170,15 +170,6 @@ contract Vote_ChangeMonthlyAllocation is VoteApp{
         }
 
         emit OnVote(msg.sender,_proposalIndex,result,sharesAmount);
-
-        //判断提议是否可以通过
-        uint256 _voteRatio = (proposal.approveVotes.add(proposal.refuseVotes)).div(getTotalSupply());
-        uint256 _approveRatio = proposal.approveVotes.div(proposal.approveVotes.add(proposal.refuseVotes));
-        if(_voteRatio >= voteRatio && _approveRatio >= approveRatio){//已经满足要求进入公示期
-            proposal.pass = true;
-            proposal.publicityStartTime = now;
-            emit OnPass(proposal.index);
-        }
     }
 
     /// @notice 处理提议
@@ -187,17 +178,19 @@ contract Vote_ChangeMonthlyAllocation is VoteApp{
         uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
         Proposal storage proposal = proposalQueue[queueIndex];
         //投票已经过了公示期
-        require(now > proposal.votingStartTime + votingPeriodLength + publicityPeriodLength,"Should exceed the publicity period");
-        //提议应该是通过的
-        require(proposal.pass == true,"proposal need pass");
+        require(now >= proposal.votingStartTime + votingPeriodLength + publicityPeriodLength,"Should exceed the publicity period");
         //没有被处理过
         require(proposal.process == false,"proposal has been process");
         proposal.process = true;
 
         emit OnProcess(_proposalIndex);
 
-        ////这里是修改ratio的逻辑
-        ITradeFundPool(tradeAddress).changeRatio(proposal.ratio,proposal.minValue,proposal.maxValue);
+        if (proposal.approveVotes >= proposal.refuseVotes) {
+            proposal.pass = true;
+            ////这里是修改ratio的逻辑
+            ITradeFundPool(tradeAddress).changeRatio(proposal.ratio,proposal.minValue,proposal.maxValue);
+            emit OnPass(proposal.index);
+        }
 
         //处理提议的人可以得到一比奖励
         transferM(msg.sender,proposalFee);
