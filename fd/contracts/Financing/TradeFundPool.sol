@@ -18,6 +18,10 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
 
     /// @notice 每个月非储备部分流出的百分比   乘以了1000
     uint256 public monthlyAllocationRatio_1000;
+    /// @notice 每个月限制最大流出的金额
+    uint256 public monthlyAllocationMaxValue;
+    /// @notice 每个月限制最小流出的金额
+    uint256 public monthlyAllocationMinValue;
 
     /// @notice 上一次领月供时的时间
     uint256 public preSendTimestamp;
@@ -36,7 +40,7 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     ICurve private curve;
 
     /// @notice 发行的股份币的合约地址
-    IERC20 private token;
+    IERC20 private shares;
 
     /* events */
     /// @notice 购买
@@ -78,12 +82,22 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 ethGovernAmount
     );
 
-    event OnEvent(uint256 tag);
+    event OnEvent(string tag);
+
+    /// @notice 更改每月分配的比例和最大最小金额
+    /// @param ratio 每月分配的比例
+    /// @param minValue 最小的金额
+    /// @param maxValue 最大的金额
+    event OnChangeMonthlyAllocation(
+        uint256 ratio,
+        uint256 minValue,
+        uint256 maxValue
+    );
 
     /// @notice 构造函数
-    constructor(AppManager _appManager,address _token,address _curve,uint256 _monthlyAllocationRatio_1000) FutureDaoApp(_appManager) public{
+    constructor(AppManager _appManager,address _shares,address _curve,uint256 _monthlyAllocationRatio_1000) FutureDaoApp(_appManager) public{
         curve = ICurve(_curve);
-        token = IERC20(_token);
+        shares = IERC20(_shares);
         assetAddress = _appManager.assetAddress();
         monthlyAllocationRatio_1000 = _monthlyAllocationRatio_1000;
     }
@@ -105,8 +119,8 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     }
 
     /// @notice 查询股份币合约的地址
-    function getFdTokenAddress() public view returns(address){
-        return address(token);
+    function getSharesAddress() public view returns(address){
+        return address(shares);
     }
 
     /////////////////
@@ -118,19 +132,22 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         started = true;
     }
 
-    function changeRatio(uint256 _ratio) public auth(FundPool_ChangeRatio) {
+    function changeMonthlyAllocation(uint256 _ratio,uint256 _minValue,uint256 _maxValue) public auth(FundPool_ChangeRatio) {
         //每次的修改不能超过50%
         uint256 _d = monthlyAllocationRatio_1000 > _ratio ? monthlyAllocationRatio_1000 - _ratio : _ratio - monthlyAllocationRatio_1000;
         require(_d.mul(1000).div(monthlyAllocationRatio_1000) < 500, "Over the limit");
         monthlyAllocationRatio_1000 = _ratio;
+        monthlyAllocationMaxValue = _maxValue;
+        monthlyAllocationMinValue = _minValue;
+        emit OnChangeMonthlyAllocation(_ratio,_minValue,_maxValue);
     }
 
     /// @notice 投资者购买
-    function buy(uint256 _assetValue,uint256 _minBuyToken,uint256 tag) public payable isStart() {
+    function buy(uint256 _assetValue,uint256 _minBuyToken,string memory tag) public payable isStart() {
         /// 给合约转钱
         transferF(msg.sender,address(this),_assetValue);
-        uint256 sharesAmount = curve.getBuyAmount(_assetValue,token.totalSupply());
-        token.mint(msg.sender,sharesAmount);
+        uint256 sharesAmount = curve.getBuyAmount(_assetValue,shares.totalSupply());
+        shares.mint(msg.sender,sharesAmount);
         require(sharesAmount >= _minBuyToken,"fdtAmount need more than _minBuyToken");
         //存在本合约储备池里的钱
         sellReserve = sellReserve.add(curve.getVauleToReserve(_assetValue));
@@ -143,11 +160,11 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
     /// @param _amount 出售的股份数
     function sell(uint256 _amount,uint256 _minGasValue) public isStart() {
         require(_amount > 0,"amount need more than 0");
-        uint256 withdraw = curve.getSellValue(_amount,sellReserve,token.totalSupply());
+        uint256 withdraw = curve.getSellValue(_amount,sellReserve,shares.totalSupply());
         sellReserve = sellReserve.sub(withdraw);
         require(sellReserve >= 0,"sellReserve need more than 0");
         require(withdraw >= _minGasValue,"withdraw need less than _maxGasValue");
-        token.burn(msg.sender,_amount);
+        shares.burn(msg.sender,_amount);
         transferM(msg.sender, withdraw);
         emit OnSell(msg.sender,withdraw,_amount);
     }
@@ -172,6 +189,8 @@ contract TradeFundPool is ITradeFundPool , FutureDaoApp{
         uint256 balanceOfCanSend = balance(address(this)).sub(sellReserve);
         for(uint256 i = 0;i<periods;i++){
             uint256 _v = balanceOfCanSend.mul(monthlyAllocationRatio_1000).div(1000);
+            _v = _v > monthlyAllocationMaxValue ? monthlyAllocationMaxValue : _v;
+            _v = _v < monthlyAllocationMinValue ? monthlyAllocationMinValue : _v;
             sendValue += _v;
             balanceOfCanSend -= _v;
         }

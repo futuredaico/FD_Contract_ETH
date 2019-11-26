@@ -5,7 +5,7 @@ import "../Tap/Tap.sol";
 import "../Interface/IDateTime.sol";
 import "../Interface/ITradeFundPool.sol";
 
-contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
+contract Vote_ChangeMonthlyAllocation is VoteApp{
 
     /// @notice 所有的提议
     Proposal[] private proposalQueue;
@@ -19,6 +19,8 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         uint256 index;//提议的序号
         address payable proposer; //提议人
         uint256 ratio;
+        uint256 minValue;
+        uint256 maxValue;
         uint256 approveVotes; //同意的票数
         uint256 refuseVotes; //否决的票数
         bool process; //是否已经处理提议
@@ -34,6 +36,8 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         uint256 index,
         address payable proposaler,
         uint256 ratio,
+        uint256 minValue,
+        uint256 maxValue,
         uint256 votingStartTime
     );
 
@@ -102,6 +106,8 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
     /// @param _detail 提议的详情
     function applyProposal(
         uint256 _ratio,
+        uint256 _minValue,
+        uint256 _maxValue,
         string memory _detail
     )
     public
@@ -118,6 +124,8 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
             process : false,
             pass : false,
             ratio : _ratio,
+            minValue : _minValue,
+            maxValue : _maxValue,
             detail : _detail,
             votingStartTime : now,
             publicityStartTime : 0
@@ -128,6 +136,8 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
             proposal.index,
             proposal.proposer,
             proposal.ratio,
+            proposal.minValue,
+            proposal.maxValue,
             proposal.votingStartTime
         );
     }
@@ -144,13 +154,13 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         require(proposal.pass == false,"proposal cant pass");
         //投票的状态是默认（弃权）状态
         require(proposal.voteDetails[msg.sender].result == enumVoteResult.waiver,"Votes have been cast");
+        //投票的人要拥有这么多的票数
+        uint256 balance = IERC20(sharesAddress).balanceOf(msg.sender);
+        require(balance >= sharesAmount,"not enough shares");
         //保存投票相关信息
         enumVoteResult voteResult = enumVoteResult(result);
         proposal.voteDetails[msg.sender].result = voteResult;
         proposal.voteDetails[msg.sender].sharesAmount = sharesAmount;
-        //将投票的币锁进本合约的地址里
-        bool r = IERC20(sharesAddress).transferFrom(msg.sender,address(this),sharesAmount);
-        require(r,"shares transfer error");
 
         if(voteResult == enumVoteResult.approve){
             proposal.approveVotes = proposal.approveVotes + sharesAmount;
@@ -187,26 +197,12 @@ contract Vote_ChangeMonthlyAllocationRatio is VoteApp{
         emit OnProcess(_proposalIndex);
 
         ////这里是修改ratio的逻辑
-        ITradeFundPool(tradeAddress).changeRatio(proposal.ratio);
+        ITradeFundPool(tradeAddress).changeRatio(proposal.ratio,proposal.minValue,proposal.maxValue);
 
         //处理提议的人可以得到一比奖励
         transferM(msg.sender,proposalFee);
         //发起人拿回押金
         transferM(proposal.proposer,deposit);
-    }
-
-    function getSharesBack(uint256[] memory _proposalIndexs) public {
-        for(uint256 i = 0;i<_proposalIndexs.length;i++){
-            uint256 _proposalIndex = _proposalIndexs[i];
-            require(_proposalIndex <= proposalQueue.length && _proposalIndex>0,"proposal does not exist");
-            uint256 queueIndex = proposalIndexToQueueIndex(_proposalIndex);
-            Proposal storage proposal = proposalQueue[queueIndex];
-            //需要提议是 已经通过了或者没有通过但是超出了投票期
-            require(proposal.pass == true || now >= proposal.votingStartTime + votingPeriodLength,"proposal need process ||need time out");
-            bool r = IERC20(sharesAddress).transfer(msg.sender,proposal.voteDetails[msg.sender].sharesAmount);
-            proposal.voteDetails[msg.sender].sharesAmount = 0;
-            require(r,"shares transfer error");
-        }
     }
 
     function proposalIndexToQueueIndex(uint256 _proposalIndex) private view returns(uint256){

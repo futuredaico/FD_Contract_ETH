@@ -31,14 +31,14 @@
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
     "exportedSymbols": {
       "ITap": [
-        1301
+        1349
       ]
     },
-    "id": 1302,
+    "id": 1350,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1294,
+        "id": 1342,
         "literals": [
           "solidity",
           ">=",
@@ -57,9 +57,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1301,
+        "id": 1349,
         "linearizedBaseContracts": [
-          1301
+          1349
         ],
         "name": "ITap",
         "nodeType": "ContractDefinition",
@@ -67,25 +67,25 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1297,
+            "id": 1345,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoney",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1295,
+              "id": 1343,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "77:2:8"
             },
             "returnParameters": {
-              "id": 1296,
+              "id": 1344,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "96:0:8"
             },
-            "scope": 1301,
+            "scope": 1349,
             "src": "60:37:8",
             "stateMutability": "payable",
             "superFunction": null,
@@ -94,32 +94,32 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1300,
+            "id": 1348,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoneyBackToFund",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1298,
+              "id": 1346,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "132:2:8"
             },
             "returnParameters": {
-              "id": 1299,
+              "id": 1347,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "151:0:8"
             },
-            "scope": 1301,
+            "scope": 1349,
             "src": "105:47:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 1302,
+        "scope": 1350,
         "src": "36:119:8"
       }
     ],
@@ -129,14 +129,14 @@
     "absolutePath": "/D/_______work/FD_Contract_ETH/fd/contracts/Interface/ITap.sol",
     "exportedSymbols": {
       "ITap": [
-        1301
+        1349
       ]
     },
-    "id": 1302,
+    "id": 1350,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1294,
+        "id": 1342,
         "literals": [
           "solidity",
           ">=",
@@ -155,9 +155,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1301,
+        "id": 1349,
         "linearizedBaseContracts": [
-          1301
+          1349
         ],
         "name": "ITap",
         "nodeType": "ContractDefinition",
@@ -165,25 +165,25 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1297,
+            "id": 1345,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoney",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1295,
+              "id": 1343,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "77:2:8"
             },
             "returnParameters": {
-              "id": 1296,
+              "id": 1344,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "96:0:8"
             },
-            "scope": 1301,
+            "scope": 1349,
             "src": "60:37:8",
             "stateMutability": "payable",
             "superFunction": null,
@@ -192,32 +192,32 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1300,
+            "id": 1348,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "GetMoneyBackToFund",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1298,
+              "id": 1346,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "132:2:8"
             },
             "returnParameters": {
-              "id": 1299,
+              "id": 1347,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "151:0:8"
             },
-            "scope": 1301,
+            "scope": 1349,
             "src": "105:47:8",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 1302,
+        "scope": 1350,
         "src": "36:119:8"
       }
     ],
@@ -229,7 +229,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-11-19T07:22:37.284Z",
+  "updatedAt": "2019-11-26T08:42:37.966Z",
   "devdoc": {
     "methods": {}
   },
